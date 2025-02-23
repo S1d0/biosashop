@@ -3,8 +3,9 @@ import Link from "next/link";
 import Image from "next/image";
 import {Button} from "@/components/ui/button";
 import ProductPrice from "@/components/shared/products/product-price";
+import {Product} from "@/lib/product/types";
 
-export default function ProductCard({product}: {product: any}) {
+export default function ProductCard({product}: {product: Product}) {
 
   return (
       <Card className={"w-full max-w-sm"}>
@@ -32,7 +33,7 @@ export default function ProductCard({product}: {product: any}) {
   )
 };
 
-const PriceElement = ({product}: {product: any}) => {
+const PriceElement = ({product}: {product: Product}) => {
   return (
       <div className="flex justify-between">
         <ProductPrice value={product.price} className={"flex gap-0.5 tracking-tight font-bold"} />
