@@ -1,7 +1,8 @@
 import ProductCard from "@/components/shared/products/product-card";
+import {Product} from "@/lib/product/types";
 
 export default function ProductList({data, title, limit, showFavourites=false}: {
-  data: any,
+  data: Product[],
   title?: string,
   limit?: number,
   showFavourites?:boolean,

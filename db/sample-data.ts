@@ -8,10 +8,11 @@ export const products = [
     images: [
         '/products/terra/terra20L.jpg',
     ],
-    price: '159.99',
+    price: 15999,
     brand: 'Prace polowe',
     isFeatured: true,
     favourite: true,
+    banner: 'banner-1.jpg',
     stock: 20
   },
   {
@@ -22,9 +23,10 @@ export const products = [
     images: [
       '/products/terra/terra10L.jpg',
     ],
-    price: '129.99',
+    price: 12999,
     brand: 'Prace ogrodowe',
     isFeatured: true,
+    favourite: false,
     banner: 'banner-1.jpg',
     stock: 20
   },
@@ -36,7 +38,7 @@ export const products = [
     images: [
       '/products/terra/terra5L.jpg',
     ],
-    price: '75.99',
+    price: 7599,
     brand: 'Do grządek',
     banner: 'banner-1.jpg',
     isFeatured: true,
@@ -51,7 +53,7 @@ export const products = [
     images: [
       '/products/terra/terra1L.jpg',
     ],
-    price: '75.99',
+    price: 7599,
     brand: 'Prace doniczkowe',
     banner: 'banner-1.jpg',
     isFeatured: true,
@@ -66,7 +68,7 @@ export const products = [
     images: [
       '/products/aqua/aqua20L.jpg',
     ],
-    price: '255.99',
+    price: 25599,
     brand: 'Stawy rybne',
     banner: 'banner-1.jpg',
     isFeatured: true,
@@ -81,10 +83,11 @@ export const products = [
     images: [
       '/products/aqua/aqua10L.jpg',
     ],
-    price: '135.99',
+    price: 13599,
     brand: 'Oczka wodne',
     banner: 'banner-1.jpg',
     isFeatured: true,
+    favourite: false,
     stock: 10
   },
   {
@@ -95,7 +98,7 @@ export const products = [
     images: [
       '/products/aqua/aqua5L.jpg',
     ],
-    price: '75.99',
+    price: 7599,
     brand: 'Akwaria',
     banner: 'banner-1.jpg',
     isFeatured: true,
@@ -110,7 +113,7 @@ export const products = [
     images: [
       '/products/aqua/aqua1L.jpg',
     ],
-    price: '75.99',
+    price: 7599,
     brand: 'Akwaria',
     banner: 'banner-1.jpg',
     isFeatured: true,
