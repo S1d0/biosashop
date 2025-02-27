@@ -8,7 +8,7 @@ export default function RootLayout({
     return (
         <div className={"flex h-screen flex-col"}>
             <Header />
-            <main className="flex-1 max-w-7xl lg:mx-auto p-5 md:px-10 w-full">
+            <main className="flex-1 max-w-7xl lg:mx-auto py-10 md:px-10 w-full">
                 {children}
             </main>
         </div>
