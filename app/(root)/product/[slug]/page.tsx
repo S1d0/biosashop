@@ -25,12 +25,12 @@ export default async function ProductDetailsPage(props: {
                 <div className="col-span-2">
                  <div className="flex flex-col gap-6">
                      <div className={"flex flex-col gap-2"}>
-                         <p className={"text-sm"}>{product.brand} {product.category}</p>
+                         <p className={"text-sm"}>{product.category}/{product.brand} </p>
                          <h1 className={"font-bold text-4xl"}>{product.name}</h1>
                      </div>
                      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                          <ProductPrice value={product.price}
-                                       className={"w-24 tracking-wider rounded-full bg-green-100 text-green-500 py-2 px-5"} />
+                                       className={"w-32 flex justify-center font-bold rounded-xl bg-green-100 text-green-600 py-2 px-2"} />
                      </div>
                      <h3 className={"font-bold text-xl"}>Opis produktu</h3>
                      <p>{product.description}</p>
