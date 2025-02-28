@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {Button} from "@/components/ui/button";
 import ProductPrice from "@/components/shared/products/product-price";
-import {Product} from "@/lib/product/types";
+import {Product} from "@/types/product";
 
 export default function ProductCard({product}: {product: Product}) {
 
