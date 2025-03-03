@@ -1,35 +1,29 @@
-'use server'
+"use cache"
 
-import {Product} from "@/types/product";
+import {ProductFamily, ProductVariant} from "@/types/product";
 import {convertToPlain} from "@/lib/utils";
 import {prisma} from "@/db/db";
 import {notFound} from "next/navigation";
-import {cache} from 'react';
 
-export const getLatestProducts = cache(async (): Promise<Product[]> => {
-    const data = await prisma.product.findMany({
-        orderBy: { createdAt: 'desc'}
+export async function getProductFamilies(): Promise<ProductFamily[]> {
+    const rawData = await prisma.productFamily.findMany({
+        orderBy: { createdAt: "desc" },
+        include: {
+            variants: true,
+        },
     })
 
-    return convertToPlain(data);
-});
+    return convertToPlain(rawData)
+}
 
-// export async function getLatestProducts(): Promise<Product[]>  {
-//     const data = await prisma.product.findMany({
-//         orderBy: { createdAt: 'desc'}
-//     })
-//
-//     return convertToPlain(data);
-// }
-
-// Get single product by slug
-export async function getProductBySlug(slug: string): Promise<Product> {
-
-    const rawProd = await prisma.product.findFirst({
-        where: {slug: slug}
+export async function getProductVariant(slug: string): Promise<ProductVariant> {
+    const rawData = await prisma.productVariant.findFirst({
+        where: { slug : slug }
     })
-    if(!rawProd){
+
+    if(!rawData) {
         notFound()
     }
-    return convertToPlain(rawProd);
+
+    return convertToPlain(rawData);
 }

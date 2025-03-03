@@ -31,11 +31,13 @@ const testimonials: Testimony[] = [
 export default function Testimonial() {
 
     return (
-        <section id="testimonials" className="w-full py-12 md:py-24 lg:py-32 bg-gray-50">
+        <section id="testimonials" className="w-full py-12 md:py-12 lg:py-12 bg-gray-50">
             <div className="container px-4 md:px-6">
                 <div className="flex flex-col items-center justify-center space-y-4 text-center">
                     <div className="space-y-2">
-                        <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Co Mówią Nasi Klienci</h2>
+                        <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Co mówią
+                            <span className={"font-bold text-primary/80"}> nasi </span>
+                            Klienci</h2>
                         <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                             Posłuchaj klientów z całego świata, którzy doświadczyli różnicy, jaką wprowadzają nasze
                             produkty.
@@ -54,7 +56,7 @@ export default function Testimonial() {
                                 <CardDescription>{testimonial.location}</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-muted-foreground">"{testimonial.text}"</p>
+                                <p className="text-muted-foreground">{testimonial.text}</p>
                             </CardContent>
                         </Card>
                     ))}

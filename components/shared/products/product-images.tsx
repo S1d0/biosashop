@@ -2,12 +2,18 @@
 import {useState} from "react";
 import Image from "next/image";
 import {cn} from "@/lib/utils"
+import {ImageModal} from "@/components/shared/images/image-modal";
 
 export default function ProductImages({images}:{images: string[]}) {
     const [currentIdx, setCurrentIdx] = useState(0);
+    const [viewImg, setViewImg] = useState(false);
+
+    const handleImageClick = () => {
+        setViewImg(!viewImg);
+    };
 
     return (
-        <div className={"space-y-4"}>
+        <div className={"space-y-4 cursor-pointer"} onClick={() => handleImageClick()}>
             <Image src={images[currentIdx]}
                    alt="Zdjecie produktu"
                    height={1000}
@@ -17,13 +23,19 @@ export default function ProductImages({images}:{images: string[]}) {
             <div className={"flex justify-betweent gap-2"}>
                 {images.map((image, index) => (
                    <div key={index}
-                        className={ cn("cursor-pointer border hover:border-e-green-500", currentIdx === index && "border-green-400") }
+                        className={ cn("cursor-pointer border hover:border-e-green-500 p-2", currentIdx === index && "border-green-400") }
                         onClick={()=>setCurrentIdx(index)}
                    >
                        <Image src={image} alt={"Zdjecie"} height={100} width={100}/>
                     </div>
                 ))}
             </div>
+            <ImageModal
+                isOpen={viewImg}
+                onClose={() => handleImageClick()}
+                images={images}
+                altText={"Zdjęcie wariantu produktu"}
+            />
         </div>
     )
 }

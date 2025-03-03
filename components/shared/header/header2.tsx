@@ -18,18 +18,18 @@ export default function Header() {
 
                 {/* Desktop navigation */}
                 <nav className="hidden md:flex items-center gap-6">
-                   <Link href="#categories" className="text-sm font-medium hover:underline underline-offset-4">
-                        Kategorie
-                    </Link>
-                    <Link href="/products" className="text-sm font-medium hover:underline underline-offset-4">
+                   {/*<Link href="#categories" className="text-sm font-medium hover:underline underline-offset-4">*/}
+                   {/*     Kategorie*/}
+                   {/* </Link>*/}
+                    <Link href="/products" className="text-sm font-medium hover:underline hover:text-primary underline-offset-4">
                         Produkty
                     </Link>
-                    <Link href="/about" className="text-sm font-medium hover:underline underline-offset-4">
+                    <Link href="/about" className="text-sm font-medium hover:underline underline-offset-4 hover:text-primary">
                         O Nas
                     </Link>
-                    <Link href="#testimonials" className="text-sm font-medium hover:underline underline-offset-4">
-                        Opinie
-                    </Link>
+                    {/*<Link href="#testimonials" className="text-sm font-medium hover:underline underline-offset-4">*/}
+                    {/*    Opinie*/}
+                    {/*</Link>*/}
                     <Button variant="outline" size="icon">
                         <ShoppingCart className="h-4 w-4"/>
                         <span className="sr-only">Koszyk</span>
