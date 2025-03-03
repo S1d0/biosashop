@@ -3,19 +3,17 @@ import Link from "next/link";
 import {Button} from "@/components/ui/button";
 
 export default function Hero() {
-
-    const heroTitle = "Naturalne Rozwiązania dla Zdrowszej Planety"
     const heroDescription =`Rodzinna firma tworząca produkty premium dla gleby i wody, którym zaufano w ponad 20
     krajach na
     całym świecie.`
     return (
-        <section className="w-full py-8 md:py-12 lg:py-32 bg-gradient-to-b from-green-50 to-white">
+        <section className="w-full py-4 md:py-8 lg:py-12 bg-gradient-to-b from-emerald-50 to-white">
             <div className="container px-4 md:px-6">
                 <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
                     <div className="flex flex-col justify-center space-y-4">
                         <div className="space-y-2">
                             <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                                {heroTitle}
+                            Naturalne <span className={"text-emerald-500"}>Rozwiązania</span> dla zdrowszej planety
                             </h1>
                             <p className="max-w-[600px] text-muted-foreground md:text-xl">
                                 {heroDescription}

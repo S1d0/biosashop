@@ -1,5 +1,6 @@
 import {DropletIcon, Globe, Leaf} from "lucide-react";
 import Link from "next/link";
+import {headers} from "next/headers";
 
 type Category = {
     id: string;
@@ -34,7 +35,9 @@ const categories: Category[] = [
         description: "Zrównoważone rozwiązania dla bardziej zielonej planety",
     },
 ]
-export default function Footer() {
+export default async function Footer() {
+    const headerList = await headers()
+    const currentDate = new Date(headerList.get('x-timestamp') || Date.now().toString())
     return (
         <footer className="w-full border-t bg-background py-6 md:py-12">
             <div className="container px-4 md:px-6">
@@ -87,7 +90,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-                    <p>&copy; {new Date().getFullYear()} Eco Family. Wszelkie prawa zastrzeżone.</p>
+                    <p>&copy; {currentDate.getFullYear()} Eco Family. Wszelkie prawa zastrzeżone.</p>
                 </div>
             </div>
         </footer>
