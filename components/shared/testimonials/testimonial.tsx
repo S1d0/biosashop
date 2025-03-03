@@ -1,35 +1,8 @@
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
+import {getTestimonies} from "@/lib/actions/testimony/actions";
 
-type Testimony = {
-    id: string;
-    name: string;
-    location: string;
-    text: string;
-}
-
-const testimonials: Testimony[] = [
-    {
-        name: "Adam Nowak",
-        id: "abc1",
-        location: "Stany Zjednoczone",
-        text: "Rewitalizator Gleby EcoSoil całkowicie odmienił mój ogród! Moje rośliny rozwijają się jak nigdy dotąd.",
-    },
-    {
-        name: "Barbara Ożarowska",
-        id: "abc2",
-        location: "Włochy",
-        text: "AquaPure znacząco poprawił jakość naszej wody. Gorąco polecam!",
-    },
-    {
-        name: "Yuki Tanaka",
-        id: "abc3",
-        location: "Japonia",
-        text: "Jako profesjonalny ogrodnik wypróbowałem wiele produktów, ale EcoSoil wyróżnia się skutecznością i zrównoważonym podejściem.",
-    },
-]
-
-export default function Testimonial() {
-
+export default async function Testimonial() {
+    const testimonials = await getTestimonies(4)
     return (
         <section id="testimonials" className="w-full py-12 md:py-24 lg:py-32 bg-gray-50">
             <div className="container px-4 md:px-6">
