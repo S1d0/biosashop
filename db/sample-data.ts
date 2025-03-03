@@ -108,3 +108,21 @@ export const productFamilies = [
         ],
     },
 ]
+
+export const testimonials = [
+    {
+        name: "Adam Nowak",
+        location: "Stany Zjednoczone",
+        text: "Rewitalizator Gleby EcoSoil całkowicie odmienił mój ogród! Moje rośliny rozwijają się jak nigdy dotąd.",
+    },
+    {
+        name: "Barbara Ożarowska",
+        location: "Włochy",
+        text: "AquaPure znacząco poprawił jakość naszej wody. Gorąco polecam!",
+    },
+    {
+        name: "Yuki Tanaka",
+        location: "Japonia",
+        text: "Jako profesjonalny ogrodnik wypróbowałem wiele produktów, ale EcoSoil wyróżnia się skutecznością i zrównoważonym podejściem.",
+    },
+]

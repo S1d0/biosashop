@@ -8,12 +8,8 @@ export default function ProductImages({images}:{images: string[]}) {
     const [currentIdx, setCurrentIdx] = useState(0);
     const [viewImg, setViewImg] = useState(false);
 
-    const handleImageClick = () => {
-        setViewImg(!viewImg);
-    };
-
     return (
-        <div className={"space-y-4 cursor-pointer"} onClick={() => handleImageClick()}>
+        <div className={"space-y-4 cursor-pointer"} onClick={() => setViewImg(true)}>
             <Image src={images[currentIdx]}
                    alt="Zdjecie produktu"
                    height={1000}
@@ -32,7 +28,7 @@ export default function ProductImages({images}:{images: string[]}) {
             </div>
             <ImageModal
                 isOpen={viewImg}
-                onClose={() => handleImageClick()}
+                onClose={() => setViewImg(false)}
                 images={images}
                 altText={"Zdjęcie wariantu produktu"}
             />
