@@ -1,7 +1,14 @@
 import { z } from 'zod'
-import { insertProductSchema } from "@/lib/validators";
+import {insertProductFamilySchema, insertProductVariantSchema} from "@/lib/validators";
 
-export type Product = z.infer<typeof insertProductSchema> & {
+export type ProductVariant = z.infer<typeof insertProductVariantSchema> & {
     id: string;
     createdAt: Date;
+    familyId: string;
+}
+
+export type ProductFamily = z.infer<typeof insertProductFamilySchema> & {
+    id: string;
+    createdAt: Date;
+    variants: ProductVariant[];
 }

@@ -66,7 +66,7 @@ export default function AboutPage() {
                         <div className="grid gap-8 md:grid-cols-3">
                             <div className="flex flex-col items-center text-center">
                                 <div className="mb-4 rounded-full bg-primary/10 p-4">
-                                    <Leaf className="h-6 w-6 text-primary"/>
+                                <Leaf className="h-6 w-6 text-emerald-500"/>
                                 </div>
                                 <h3 className="text-xl font-bold">Zrównoważony Rozwój</h3>
                                 <p className="mt-2 text-muted-foreground">
@@ -76,7 +76,7 @@ export default function AboutPage() {
                             </div>
                             <div className="flex flex-col items-center text-center">
                                 <div className="mb-4 rounded-full bg-primary/10 p-4">
-                                    <Star className="h-6 w-6 text-primary"/>
+                                    <Star className="h-6 w-6 text-primary text-emerald-500"/>
                                 </div>
                                 <h3 className="text-xl font-bold">Jakość</h3>
                                 <p className="mt-2 text-muted-foreground">
@@ -86,7 +86,7 @@ export default function AboutPage() {
                             </div>
                             <div className="flex flex-col items-center text-center">
                                 <div className="mb-4 rounded-full bg-primary/10 p-4">
-                                    <Users className="h-6 w-6 text-primary"/>
+                                    <Users className="h-6 w-6 text-primary text-emerald-500"/>
                                 </div>
                                 <h3 className="text-xl font-bold">Rodzina</h3>
                                 <p className="mt-2 text-muted-foreground">

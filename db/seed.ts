@@ -1,12 +1,40 @@
 import {PrismaClient} from "@prisma/client"
-import {products} from "@/db/sample-data";
+import {productFamilies} from "@/db/sample-data";
+import dotenv from "dotenv";
+
+const prismaClient = new PrismaClient();
+dotenv.config();
 
 async function seed() {
-    const prismaClient = new PrismaClient();
 
-    await prismaClient.product.deleteMany();
+    await prismaClient.productVariant.deleteMany();
+    await prismaClient.productFamily.deleteMany();
 
-    await prismaClient.product.createMany({data: products});
+    console.log("Seeding data");
+    const createdFamilies = await Promise.all(
+        productFamilies.map(async (family) => {
+            const { variants, ...familyData } = family;
+            const createdFamily = await prismaClient.productFamily.create({
+                data: familyData
+            });
+            return { createdFamily, variants };
+        })
+    );
+
+    // Step 2: Create variants with references to their families
+    for (const { createdFamily, variants } of createdFamilies) {
+        await Promise.all(
+            variants.map(async (variant) => {
+                // Extract size from variant data if needed for your schema
+                await prismaClient.productVariant.create({
+                    data: {
+                        ...variant,
+                        familyId: createdFamily.id,
+                    },
+                });
+            })
+        );
+    }
 
     console.log("Database seeded successfully.");
 }
