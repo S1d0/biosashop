@@ -3,7 +3,7 @@
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { sendContact } from "@/lib/actions/contact/contact"
+import {sendContact} from "@/lib/actions/contact/contact"
 import { useFormStatus } from "react-dom"
 import { Textarea } from "@/components/ui/textarea"
 import { Loader2 } from "lucide-react"
@@ -11,11 +11,13 @@ import { useActionState } from "react"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { toast } from "sonner"
+import {ContactEnquiryState} from "@/types/customer-enquiry";
 
-const initialState = {
+
+const initialState: ContactEnquiryState = {
     success: false,
-    errors: {},
-    message: "",
+    errors: null,
+    message: ""
 }
 
 export function EnquiryForm({ onSuccess }: { onSuccess?: () => void }) {
@@ -32,7 +34,7 @@ export function EnquiryForm({ onSuccess }: { onSuccess?: () => void }) {
             // Show success toast immediately
             toast.success("Wiadomość wysłana!", {
                 description: "Dziękujemy za wiadomość! Odpowiemy najszybciej jak to możliwe.",
-                duration: 1000,
+                duration: 2000,
             })
 
             if(onSuccess) {
