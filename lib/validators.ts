@@ -19,3 +19,12 @@ export const insertProductVariantSchema = z.object({
     stock: z.number().nonnegative("Ilość produktów nie może być mniejsza niż -1"),
     size: z.string().min(2, 'Rozmiar musi zawierać co najmniej 2 znaki')
 })
+
+export const EnquiryStatus = z.enum(["PENDING", "IN_PROGRESS", "RESPONDED", "RESOLVED", "SPAM"]);
+export const insertCustomerEnquirySchema = z.object({
+    name: z.string().min(2, 'Imię musi mieć co najmniej 2 znaki'),
+    email: z.string().nonempty('Email nie może być pusty'),
+    message: z.string().nonempty('Wiadomość nie może być pusta'),
+    phone: z.string().min(9, 'Numer telefonu nie może być pusty'),
+    status: z.optional(EnquiryStatus),
+})

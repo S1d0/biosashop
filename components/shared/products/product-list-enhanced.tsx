@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import ProductListItem from "@/components/shared/products/product-list-items";
-import {ProductVariant} from "@/types/product";
+import {ProductVariant } from "@/types/product";
 import ProductVariantPage from "@/components/shared/products/product-variant";
 
 export default function ProductListEnhanced({
@@ -14,7 +14,7 @@ export default function ProductListEnhanced({
     data: ProductVariant[],
     title?: string,
     limit?: number,
-    viewMode?: 'grid' | 'list'
+    viewMode: string
 }) {
     const [mode, setMode] = useState(viewMode);
 

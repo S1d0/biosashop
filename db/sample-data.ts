@@ -9,14 +9,14 @@ export const productFamilies = [
         variants: [
             {
                 name: "Mały (do 5 m2)",
-                categories: ["terra","kwiaty", "ogródek"],
+                categories: ["terra", "kwiaty", "ogródek"],
                 description: "Idealny do małych ogródków i roślin doniczkowych. Wystarcza na około 10m² powierzchni.",
                 images: ["/products/terra/terra1L.jpg"],
                 price: 3499,
                 size: "1L",
                 sku: "ter-bio-comp-01l",
                 slug: "terra1l",
-                stock:  100,
+                stock: 100,
             },
             {
                 name: "Średni (do 50 m2)",
@@ -27,7 +27,7 @@ export const productFamilies = [
                 size: "5L",
                 slug: "terra5l",
                 sku: "ter-bio-comp-05l",
-                stock:  40,
+                stock: 40,
             },
             {
                 name: "Duży (do 100 m2)",
@@ -38,7 +38,7 @@ export const productFamilies = [
                 size: "10L",
                 slug: "terra10l",
                 sku: "ter-bio-comp-10l",
-                stock:  20
+                stock: 20
             },
             {
                 name: "Przemysłowy (20L)",
@@ -49,7 +49,7 @@ export const productFamilies = [
                 size: "20L",
                 slug: "terra20l",
                 sku: "ter-bio-comp-20l",
-                stock:  10
+                stock: 10
             },
         ],
     },
@@ -63,7 +63,7 @@ export const productFamilies = [
         variants: [
             {
                 name: "Mały (do 10L)",
-                categories:  ["aqua", "oczka", "doniczkowe"],
+                categories: ["aqua", "oczka", "doniczkowe"],
                 description: "Idealny do małych oczek wodnych i systemów nawadniania roślin domowych.",
                 images: ["/products/aqua/aqua1L.jpg"],
                 price: 8999,
@@ -107,4 +107,19 @@ export const productFamilies = [
             },
         ],
     },
+]
+
+export const contactInquries = [
+    {
+        name: "Michał Kowal",
+        phone: "518-123-123",
+        email: "kowal.michal@test.com",
+        message: "dzien dobry pisze z pytaniem o terra biose, czy jest mozliwosc otrzymania testera?"
+    },
+    {
+        name: "Anna",
+        phone: "699123423",
+        email: "ana.zaj@test.com",
+        message: "Witam co polecacie na kwiatki i bluszcze? Ogrodek wielkosci 100 m2"
+    }
 ]

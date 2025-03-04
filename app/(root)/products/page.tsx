@@ -1,6 +1,6 @@
 import ProductsFiltersServer from "@/components/shared/products/products-filters-server";
 import {getProductFamilies} from "@/lib/actions/product/actions";
-import ProductListEnhanced from "@/components/shared/products/product-list-enhanced";
+import ProductDisplay from "@/components/shared/products/product-display";
 
 export default async function ProductsPage() {
     const mainTitle = "Wszystkie Produkty";
@@ -35,7 +35,7 @@ export default async function ProductsPage() {
 
                         {/* Products grid */}
                         <div className="md:col-span-3">
-                            <ProductListEnhanced data={mergeProducts} viewMode={"list"}/>
+                            <ProductDisplay products={mergeProducts} />
                         </div>
                     </div>
                 </div>

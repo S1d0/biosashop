@@ -1,5 +1,5 @@
 import {PrismaClient} from "@prisma/client"
-import {productFamilies} from "@/db/sample-data";
+import {contactInquries, productFamilies} from "@/db/sample-data";
 import dotenv from "dotenv";
 
 const prismaClient = new PrismaClient();
@@ -9,6 +9,7 @@ async function seed() {
 
     await prismaClient.productVariant.deleteMany();
     await prismaClient.productFamily.deleteMany();
+    await prismaClient.customerEnquiry.deleteMany();
 
     console.log("Seeding data");
     const createdFamilies = await Promise.all(
@@ -36,6 +37,12 @@ async function seed() {
         );
     }
 
+    console.log("Seeding customers enquiries...");
+    const customerEnquiries = await prismaClient.customerEnquiry.createMany({
+        data: contactInquries
+    })
+
+    console.log("[+] Success seeding customers:");
     console.log("Database seeded successfully.");
 }
 
