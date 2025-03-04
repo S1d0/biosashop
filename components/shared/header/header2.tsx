@@ -9,29 +9,31 @@ export default function Header() {
 
     return (
         <header
-            className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            className="sticky top-0 z-50 w-full border-b border-accent border-white bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-gradient-to-t from-primary to-white">
             <div className="container flex h-16 items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <Leaf className="h-6 w-6 text-green-600"/>
-                    <span className="text-xl font-bold">{COMPANY_NAME}</span>
-                </div>
+                <Link href="/">
+                    <div className="flex items-center gap-2">
+                        <Leaf className="h-6 w-6 text-green-600"/>
+                        <span className="text-xl font-bold">{COMPANY_NAME}</span>
+                    </div>
+                </Link>
 
                 {/* Desktop navigation */}
                 <nav className="hidden md:flex items-center gap-6">
-                   {/*<Link href="#categories" className="text-sm font-medium hover:underline underline-offset-4">*/}
-                   {/*     Kategorie*/}
-                   {/* </Link>*/}
-                    <Link href="/products" className="text-sm font-medium hover:underline hover:text-primary underline-offset-4">
+                    <Link href="#categories" className="text-sm font-medium hover:text-foreground hover:underline underline-offset-4">
+                        Kategorie
+                    </Link>
+                    <Link href="/products" className="text-sm font-medium hover:underline hover:text-foreground underline-offset-4">
                         Produkty
                     </Link>
-                    <Link href="/about" className="text-sm font-medium hover:underline underline-offset-4 hover:text-primary">
+                    <Link href="/about" className="text-sm font-medium hover:underline hover:text-foreground underline-offset-4">
                         O Nas
                     </Link>
-                    {/*<Link href="#testimonials" className="text-sm font-medium hover:underline underline-offset-4">*/}
-                    {/*    Opinie*/}
-                    {/*</Link>*/}
-                    <Button variant="outline" size="icon">
-                        <ShoppingCart className="h-4 w-4"/>
+                    <Link href="#testimonials" className="text-sm font-medium hover:underline hover:text-foreground underline-offset-4">
+                       FAQ
+                    </Link>
+                    <Button variant="outline" size="icon" className={"group bg-white"}>
+                        <ShoppingCart className="h-4 w-4 group-hover:text-green-700"/>
                         <span className="sr-only">Koszyk</span>
                     </Button>
                 </nav>

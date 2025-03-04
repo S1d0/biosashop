@@ -12,3 +12,8 @@ export type ProductFamily = z.infer<typeof insertProductFamilySchema> & {
     createdAt: Date;
     variants: ProductVariant[];
 }
+
+export const viewModeEnum = {
+    LIST: "list",
+    GRID: "grid"
+}

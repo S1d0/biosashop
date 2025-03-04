@@ -6,7 +6,7 @@ export default function ProductsLayout({
     return (
         <>
             {/* Hero section for products */}
-            <div className="relative bg-gradient-to-b from-green-50 to-white py-8">
+            <div className="relative bg-gradient-to-b from-primary to-white py-8">
                 <div className="container mx-auto px-4">
                     <h1 className="text-4xl md:text-5xl font-bold text-center mb-2">Nasze Produkty</h1>
                     <p className="text-center text-muted-foreground max-w-2xl mx-auto">
@@ -14,8 +14,6 @@ export default function ProductsLayout({
                     </p>
                 </div>
             </div>
-
-            {/* Main content */}
             {children}
         </>
     );
