@@ -3,7 +3,7 @@
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { sendContact } from "@/lib/actions/contact/contact"
+import {sendContact} from "@/lib/actions/contact/contact"
 import { useFormStatus } from "react-dom"
 import { Textarea } from "@/components/ui/textarea"
 import { Loader2 } from "lucide-react"
@@ -11,11 +11,13 @@ import { useActionState } from "react"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { toast } from "sonner"
+import {ContactEnquiryState} from "@/types/customer-enquiry";
 
-const initialState = {
+
+const initialState: ContactEnquiryState = {
     success: false,
-    errors: {},
-    message: "",
+    errors: null,
+    message: ""
 }
 
 export function EnquiryForm({ onSuccess }: { onSuccess?: () => void }) {
@@ -32,32 +34,22 @@ export function EnquiryForm({ onSuccess }: { onSuccess?: () => void }) {
             // Show success toast immediately
             toast.success("Wiadomość wysłana!", {
                 description: "Dziękujemy za wiadomość! Odpowiemy najszybciej jak to możliwe.",
-                duration: 5000, // Show for 5 seconds
+                duration: 2000,
             })
 
-            // Add a longer delay before navigation to ensure toast is visible
-            const timer = setTimeout(() => {
-                // If onSuccess callback is provided, use it
-                // Otherwise, navigate to home
-                if (onSuccess) {
-                    onSuccess()
-                } else {
-                    router.push("/")
-                }
-            }, 1000) // Longer delay to ensure toast is visible
-
-            return () => clearTimeout(timer)
+            if(onSuccess) {
+                onSuccess()
+            } else {
+                router.push("/")
+            }
         }
     }, [state.success, router, onSuccess])
 
     return (
-        <div className="max-w-md mx-auto">
-            <h2 className="text-2xl font-bold mb-4">Skontaktuj się z nami</h2>
-
+        <div className="w-full">
             {state.message && !state.success && (
                 <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-md">{state.message}</div>
             )}
-
             <form action={formAction} className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="name">Imię</Label>
@@ -78,7 +70,6 @@ export function EnquiryForm({ onSuccess }: { onSuccess?: () => void }) {
                         </p>
                     )}
                 </div>
-
                 <div className="space-y-2">
                     <Label htmlFor="phone">Numer telefonu (opcjonalnie)</Label>
                     <Input id="phone" name="phone" placeholder="+48 123 456 789" aria-describedby="phone-error" />
@@ -88,7 +79,6 @@ export function EnquiryForm({ onSuccess }: { onSuccess?: () => void }) {
                         </p>
                     )}
                 </div>
-
                 <div className="space-y-2">
                     <Label htmlFor="message">Wiadomość</Label>
                     <Textarea
@@ -104,7 +94,6 @@ export function EnquiryForm({ onSuccess }: { onSuccess?: () => void }) {
                         </p>
                     )}
                 </div>
-
                 <SubmitButton />
             </form>
         </div>
