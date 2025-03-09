@@ -1,4 +1,5 @@
 import {hashSync} from "bcrypt-ts-edge";
+import {hashPassword} from "@/lib/actions/auth/hasher";
 
 export const productFamilies = [
     {
@@ -130,13 +131,13 @@ export const users = [
     {
         name: 'Sebastian',
         email: 'admin@test.com',
-        password: hashSync("testPassword", 10),
+        password: await hashPassword("testPassword"),
         role: 'admin',
     },
     {
         name: 'Basia',
         email: 'basia@test.com',
-        password: hashSync("testPassword", 10),
+        password: await hashPassword("testPassword"),
         role: 'user',
     }
 ]

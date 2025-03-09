@@ -1,4 +1,4 @@
-"use cache"
+"use server"
 
 import {ProductFamily, ProductVariant} from "@/types/product";
 import {prisma} from "@/db/db";

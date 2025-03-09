@@ -2,6 +2,7 @@ import {EllipsisVertical, Leaf, ShoppingCart, UserIcon} from "lucide-react";
 import Link from "next/link";
 import {Button} from "@/components/ui/button";
 import {Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
+import {AuthDialog} from "@/components/auth/auth-dialog";
 
 export default function Header() {
 
@@ -32,6 +33,9 @@ export default function Header() {
                     <Link href="#testimonials" className="text-sm font-medium hover:underline hover:text-foreground underline-offset-4">
                        FAQ
                     </Link>
+                    <AuthDialog className={"text-black py-0 my-0"} triggerLabel={"Twoje zakupy"}/>
+
+                    <UserIcon className={"h-6 w-6 text-white"}/>
                     <Button variant="outline" size="icon" className={"group bg-white"}>
                         <ShoppingCart className="h-4 w-4 group-hover:text-green-700"/>
                         <span className="sr-only">Koszyk</span>
