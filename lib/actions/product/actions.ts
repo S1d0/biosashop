@@ -1,9 +1,9 @@
-"use cache"
+"use server"
 
 import {ProductFamily, ProductVariant} from "@/types/product";
-import {convertToPlain} from "@/lib/utils";
 import {prisma} from "@/db/db";
 import {notFound} from "next/navigation";
+import {convertToPlain} from "@/lib/converters/prisma-converters";
 
 export async function getProductFamilies(): Promise<ProductFamily[]> {
     const rawData = await prisma.productFamily.findMany({

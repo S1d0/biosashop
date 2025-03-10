@@ -1,3 +1,6 @@
+import {hashSync} from "bcrypt-ts-edge";
+import {hashPassword} from "@/lib/actions/auth/hasher";
+
 export const productFamilies = [
     {
         name: "Rewitalizator Gleby Terra Biosa Composter",
@@ -121,5 +124,20 @@ export const contactInquries = [
         phone: "699123423",
         email: "ana.zaj@test.com",
         message: "Witam co polecacie na kwiatki i bluszcze? Ogrodek wielkosci 100 m2"
+    }
+]
+
+export const users = [
+    {
+        name: 'Sebastian',
+        email: 'admin@test.com',
+        password: await hashPassword("testPassword"),
+        role: 'admin',
+    },
+    {
+        name: 'Basia',
+        email: 'basia@test.com',
+        password: await hashPassword("testPassword"),
+        role: 'user',
     }
 ]

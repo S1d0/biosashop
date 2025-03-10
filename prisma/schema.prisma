@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Main information about the product, main category which also relates to all child variants
 model ProductFamily {
   id          String           @id @default(uuid()) @db.Uuid
   name        String
@@ -36,15 +37,16 @@ model ProductVariant {
   @@index([familyId])
 }
 
+// Contact form entry
 model CustomerEnquiry {
-id          String    @id @default(uuid()) @db.Uuid
-name        String
-email       String
-phone       String?   // Optional field
-message     String    @db.Text  // Using Text type for longer messages
-status      EnquiryStatus @default(PENDING)
-createdAt   DateTime  @default(now()) @db.Timestamp(6)
-updatedAt   DateTime  @updatedAt
+  id        String        @id @default(uuid()) @db.Uuid
+  name      String
+  email     String
+  phone     String? // Optional field
+  message   String        @db.Text // Using Text type for longer messages
+  status    EnquiryStatus @default(PENDING)
+  createdAt DateTime      @default(now()) @db.Timestamp(6)
+  updatedAt DateTime      @updatedAt
 
   @@index([email])
   @@index([status])
@@ -59,3 +61,74 @@ enum EnquiryStatus {
   SPAM
 }
 
+model User {
+  id            String          @id @default(uuid()) @db.Uuid
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  password      String?
+  role          String
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
+}
+
+model Account {
+  userId            String  @db.Uuid
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @id
+  userId       String   @db.Uuid
+  expires      DateTime @db.Timestamp(6)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String  @db.Uuid
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
+}
