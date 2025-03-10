@@ -1,14 +1,16 @@
 'use server'
 import {signIn} from "@/auth";
+import {AuthError} from "next-auth";
+import {revalidatePath} from "next/cache";
 
-export async function signGoogle(initState, formData: FormData) {
-    try{
+export async function signGoogle() {
+    try {
         await signIn("google")
-        return {
-            message: "Udało się"
-        }
+        revalidatePath("/account")
     } catch(err){
-        console.log(err)
-        throw new Error("Ups cos poszło nie tak")
+        if (err instanceof AuthError) {
+            console.log("Error while signing in by google")
+        }
+        throw err;
     }
 }

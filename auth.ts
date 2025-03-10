@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import NextAuth, {AuthError} from "next-auth"
 import Credentials from "@auth/core/providers/credentials";
 import {compare} from "bcrypt-ts-edge";
 import {z} from "zod";
@@ -28,7 +28,7 @@ const credentialsProvider = Credentials({
         const validatedCreds = credentialsSchema.safeParse(credentials);
 
         if (!validatedCreds.success) {
-            return null
+            throw new AuthError(validatedCreds.error.flatten().fieldErrors)
         }
 
         const {email, password} = validatedCreds.data;
@@ -41,7 +41,6 @@ const credentialsProvider = Credentials({
 
         const isMatch = await compare(password, user.password)
         if (!isMatch) {
-            console.log("Haslo nie sa takie same")
             return null;
         }
         return {

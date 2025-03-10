@@ -3,6 +3,8 @@
 import {signIn} from "@/auth";
 import {SignInResponse} from "next-auth/react";
 import {SignInFormState, SignInSchema} from "@/types/auth/signin";
+import {SignInError} from "@auth/core/errors";
+import {CredentialsSignin} from "next-auth";
 
 export async function signInAction(prevState: SignInFormState, formData: FormData): Promise<SignInFormState> {
     const validateFields = SignInSchema.safeParse({
@@ -38,7 +40,13 @@ export async function signInAction(prevState: SignInFormState, formData: FormDat
             success: true,
         }
     } catch(err) {
-        console.log(err)
+        if(err instanceof CredentialsSignin) {
+            return {
+                errors: {
+                    _form: ["Ups... Błędny email lub hasło"]
+                }
+            }
+        }
         return {
             errors: {
                 _form: ["Ups coś poszło nie tak... Daj nam szansę i spróbuj jeszcze raz"]
