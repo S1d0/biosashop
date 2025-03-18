@@ -41,3 +41,9 @@ Run
 ``
 npx tsx ./db/seed.ts
 ``
+
+
+## Task list
+1. Refactor email https://supabase.com/dashboard/project/lwvfhuheqzmilhakvlyu/auth/templates
+2. Create nice login page
+3. Handle Errors with login
