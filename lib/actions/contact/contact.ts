@@ -2,12 +2,10 @@
 
 import {revalidatePath} from "next/cache";
 import {prisma} from "@/db/db";
-import {convertToPlain} from "@/lib/utils";
-import {CustomerEnquiry} from "@/types/customer";
-import {insertCustomerEnquirySchema} from "@/lib/validators";
+import {ContactEnquiryState, CustomerEnquiry, insertCustomerEnquirySchema} from "@/types/customer-enquiry";
+import {parseEnquiries} from "@/lib/converters/prisma-converters";
 
-
-export async function sendContact(prevState: any, formData: FormData) {
+export async function sendContact(initialState: ContactEnquiryState , formData: FormData) {
         const validatedFields = insertCustomerEnquirySchema.safeParse({
             name: formData.get("name"),
             email: formData.get("email"),
@@ -49,5 +47,5 @@ export async function getEnquiries(): Promise<CustomerEnquiry[]> {
         orderBy: {updatedAt: "desc"},
     })
 
-    return convertToPlain(rawData)
+    return parseEnquiries(rawData)
 }

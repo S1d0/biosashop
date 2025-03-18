@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 const prismaClient = new PrismaClient();
 dotenv.config();
 
-async function seed() {
+export async function seed() {
 
     await prismaClient.productVariant.deleteMany();
     await prismaClient.productFamily.deleteMany();

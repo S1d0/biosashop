@@ -8,7 +8,7 @@
       <jdbc-url>jdbc:postgresql://db.lwvfhuheqzmilhakvlyu.supabase.co/postgres</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="microbiosa@localhost" uuid="9cf4612c-405a-4f9c-92f8-d008d91c2a62">
+    <data-source source="LOCAL" name="biosa" uuid="9cf4612c-405a-4f9c-92f8-d008d91c2a62">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <remarks>aUJjwXLPPMnnwqdsartjsdh</remarks>
