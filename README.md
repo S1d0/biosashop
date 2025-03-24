@@ -47,3 +47,13 @@ npx tsx ./db/seed.ts
 1. Refactor email https://supabase.com/dashboard/project/lwvfhuheqzmilhakvlyu/auth/templates
 2. Create nice login page
 3. Handle Errors with login
+
+## Supabase oauth settings, 
+Add Redirect url to point vercel, under redirect url's and site url
+https://supabase.com/dashboard/project/lwvfhuheqzmilhakvlyu/auth/url-configuration
+
+In google console setup supabase url
+https://console.cloud.google.com/auth/clients?inv=1&invt=Abs1Aw&project=zeta-feat-380609
+
+1. Set Autoryzowane identyfikatory URI przekierowania
+2. Autoryzowane źródła JavaScriptu - points to site URL 

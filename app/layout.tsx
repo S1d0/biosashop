@@ -22,9 +22,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
                                        children,
-                                       modal,
                                    }: Readonly<{
-    modal: React.ReactNode
     children: React.ReactNode
 }>) {
     return (
@@ -33,7 +31,6 @@ export default function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
         {children}
-        {modal}
         <Toaster richColors position="bottom-right" />
         </body>
         </html>
