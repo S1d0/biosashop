@@ -1,13 +1,12 @@
 'use client'
-import {useState, useEffect} from "react"
 import Image from "next/image"
 import Link from "next/link"
-import {motion} from "framer-motion"
+import React, {useEffect, useRef} from "react";
+import {motion, useInView, useAnimation} from "framer-motion"
 import {ArrowRight, ChevronDown, ShoppingCart, Leaf, Droplets} from "lucide-react"
 
 import {Button} from "@/components/ui/button"
 import {ProductFamily} from "@/types/product";
-import LandingProduct from "@/components/landing/products-landing";
 import ProductFamilyPage from "@/components/shared/products/product-family2";
 
 interface LandingPage2Props {
@@ -15,20 +14,30 @@ interface LandingPage2Props {
 }
 
 export default function LandingPage2({products}: LandingPage2Props) {
-    const [scrollY, setScrollY] = useState(0)
-
+    const ref= useRef(null)
+    const isInView = useInView(ref, {once: true})
+    const animationControls = useAnimation()
     useEffect(() => {
-        const handleScroll = () => {
-            setScrollY(window.scrollY)
+        if(isInView) {
+            // Fire animation
+            animationControls.start("visible");
         }
+    }, [isInView, animationControls]);
 
-        window.addEventListener("scroll", handleScroll)
-        return () => window.removeEventListener("scroll", handleScroll)
-    }, [])
+    {/* Scroll Indicator */}
+    const scrollToSection = (elementId: string) => {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    };
 
     return (
         <>
-            <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
+            <section className="relative h-[90vh] flex items-center justify-center overflow-hidden scroll-auto">
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0">
                     <Image src="/hero/hero.jpg" alt="Wheat Field" fill className="object-cover" priority/>
@@ -71,8 +80,11 @@ export default function LandingPage2({products}: LandingPage2Props) {
                     animate={{y: [0, 10, 0]}}
                     transition={{repeat: Number.POSITIVE_INFINITY, duration: 2}}
                     className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+                    onClick={() => scrollToSection('products')}
                 >
-                    <ChevronDown className="h-8 w-8 text-white drop-shadow-lg"/>
+                    <Link href="#products">
+                        <ChevronDown className="h-8 w-8 text-white drop-shadow-lg"/>
+                    </Link>
                 </motion.div>
             </section>
 
@@ -199,10 +211,14 @@ export default function LandingPage2({products}: LandingPage2Props) {
 
             {/* Terra Product Section */}
             <section id="terra" className="py-20 relative">
-                <div className="container px-4 md:px-6">
+                <div className="container px-4 md:px-6" ref={ref}>
                     <motion.div
-                        initial={{opacity: 0}}
-                        animate={{opacity: scrollY > 200 ? 1 : 0}}
+                            variants={{
+                                hidden: {opacity: 0, y: 75},
+                                visible: {opacity: 1, y: 0},
+                            }}
+                        initial="hidden"
+                        animate={animationControls}
                         transition={{duration: 0.8}}
                         className="grid md:grid-cols-2 gap-12 items-center"
                     >
@@ -249,7 +265,7 @@ export default function LandingPage2({products}: LandingPage2Props) {
 
             {/* Aqua Product Section */}
             <section id="aqua" className="py-20 relative bg-primary text-primary-foreground">
-                <div className="container px-4 md:px-6">
+                <div className="container px-4 md:px-6" ref={ref}>
                     <motion.div
                         initial={{opacity: 0}}
                         animate={{opacity: scrollY > 600 ? 1 : 0}}

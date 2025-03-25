@@ -38,7 +38,7 @@ export async function seed() {
     }
 
     console.log("Seeding customers enquiries...");
-    const customerEnquiries = await prismaClient.customerEnquiry.createMany({
+    await prismaClient.customerEnquiry.createMany({
         data: contactInquries
     })
 

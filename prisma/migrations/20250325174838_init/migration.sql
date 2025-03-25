@@ -19,7 +19,7 @@ CREATE TABLE "ProductVariant" (
     "id" UUID NOT NULL,
     "familyId" UUID NOT NULL,
     "name" TEXT NOT NULL,
-    "categories" TEXT[],
+    "features" TEXT[],
     "description" TEXT NOT NULL,
     "images" TEXT[],
     "price" INTEGER NOT NULL DEFAULT 0,

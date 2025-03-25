@@ -38,18 +38,13 @@ export default function ProductFamilyPage({ family }: { family: ProductFamily })
                         </CardHeader>
                         <CardContent className="p-4 pt-0">
                             <div className="flex flex-wrap gap-2">
-                                {/*{variant.sizes?.map((size) => (*/}
-                                {/*    <Badge key={size} variant="secondary" className="bg-muted text-muted-foreground">*/}
-                                {/*        {size}*/}
-                                {/*    </Badge>*/}
-                                {/*))}*/}
                                 <Badge variant={'secondary'} className={"bg-muted text-muted-foreground"}>
                                     {variant.size}
                                 </Badge>
                             </div>
-                            {variant.categories && (
+                            {variant.features && (
                                 <ul className="mt-4 space-y-1 text-sm text-muted-foreground">
-                                    {variant.categories.map((feature, index) => (
+                                    {variant.features.map((feature, index) => (
                                         <li key={index} className="flex items-center">
                                             <span className="text-primary mr-2">•</span>
                                             {feature}
