@@ -1,68 +1,74 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-    ArrowRightToLine,
-    LucideStore
+     ChevronDown,
+     ShoppingCart
 } from "lucide-react";
 import React from "react";
+import {motion} from "framer-motion";
+import {Button} from "@/components/ui/button";
 
 export default function Hero() {
-    const heroDescription =`Rodzinna firma tworząca produkty premium dla gleby i wody, którym zaufano w ponad 20
-    krajach na
-    całym świecie.`
+    const scrollToSection = (elementId: string) => {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    };
+
     return (
-        <section className="w-full py-4 md:py-8 lg:py-12 relative bg-gradient-to-b from-primary to-stone-50">
-            <div className="container px-4 md:px-6">
-                <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
-                    <div className="flex flex-col justify-center space-y-4">
-                        <div className="space-y-2">
-                            <h1 className="text-3xl text-zinc-800 font-bold tracking-tighter sm:text-5xl xl:text-7xl/none">
-                            Naturalne <span className={"text-white font-extrabold"}>rozwiązania</span> dla zdrowszej planety
-                            </h1>
-                            <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                                {heroDescription}
-                            </p>
-                        </div>
-                        <div className="flex flex-col min-[400px]:flex-row">
-                            <CallToAction />
+        <section className="relative h-[90vh] flex items-center justify-center overflow-hidden scroll-auto">
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0">
+                <Image src="/hero/hero.jpg" alt="Wheat Field" fill className="object-cover" priority/>
+            </div>
+
+            {/* Glass Effect Container */}
+            <div className="relative z-10 container mx-auto px-4 md:px-6 flex items-center justify-center h-[90%]">
+                <motion.div
+                    initial={{opacity: 0, scale: 1}}
+                    animate={{opacity: 1, scale: 1}}
+                    transition={{duration: 0.8}}
+                    className="backdrop-blur-sm bg-zinc-900/20 p-8 md:p-12 rounded-xl border border-white/30 shadow-xl w-full h-full max-w-5xl mx-auto flex items-center justify-center"
+                >
+                    <div className="text-center">
+                        <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white drop-shadow-md">
+                            <span className="text-primary">Microbiosa</span> - Harnessing Nature's Power
+                        </h1>
+                        <p className="text-lg md:text-xl mb-8 text-white/90 drop-shadow">
+                            Discover the revolutionary products that transform your environment, naturally.
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                            <Button size="lg"
+                                    className="bg-primary/90 hover:bg-primary text-primary-foreground backdrop-blur-sm text-white">
+                                Shop Now <ShoppingCart className="ml-2 h-4 w-4"/>
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="lg"
+                                className="bg-transparent border-white text-white hover:bg-white/20 hover:text-white"
+                            >
+                                Learn More
+                            </Button>
                         </div>
                     </div>
-                        <Image
-                            src="/hero.jpg"
-                            width={350}
-                            height={350}
-                            alt="Ekologiczne produkty dla gleby i wody"
-                            className="mx-auto aspect-square overflow-hidden rounded-xl object-cover sm:w-full lg:order-last shadow-2xl"
-                        />
-                </div>
+                </motion.div>
             </div>
-        </section>
-    )
-}
 
-function CallToAction() {
-    return (
-        <div className={"relative group"}>
-            <div className={"absolute -inset-0.5 group-hover:-inset-1 bg-gradient-to-r from-lime-500 to-yellow-500 rounded-lg blur opacity-50 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"}></div>
-            <div
-                className={"relative flex bg-slate-800 rounded-lg leading-none items-center divide-x divide-gray-300 px-6 py-3"}>
-                <div className={"group/products"}>
-                    <Link className={"pr-6 text-yellow-400 font-medium group-hover/products:text-stone-50"}
-                          href="/products">
-                        <LucideStore className={"text-sm text-lime-400 inline-flex group-hover/products:text-stone-50 pr-2"}/>
-                        Przejdź do sklepu
-                    </Link>
-                </div>
-                <div className="group/about">
-                    <Link
-                        className={"pl-6 text-lime-400 font-medium group-hover/about:text-stone-50 transition-colors duration-200 flex items-center"}
-                        href="/#categories">
-                        <span>Dowiedz się więcej</span>
-                        <ArrowRightToLine
-                            className={"text-lg text-amber-400 group-hover/about:text-stone-50 ml-2 transition-colors duration-200"}/>
-                    </Link>
-                </div>
-            </div>
-        </div>
-    )
+            {/* Scroll Indicator */}
+            <motion.div
+                animate={{y: [0, 10, 0]}}
+                transition={{repeat: Number.POSITIVE_INFINITY, duration: 2}}
+                className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+                onClick={() => scrollToSection('products')}
+            >
+                <Link href="#products">
+                    <ChevronDown className="h-8 w-8 text-white drop-shadow-lg"/>
+                </Link>
+            </motion.div>
+        </section>
+)
 }
