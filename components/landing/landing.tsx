@@ -1,21 +1,62 @@
-import Hero from "@/components/landing/hero";
-import LandingProduct from "@/components/landing/products-landing";
-import Categories from "@/components/shared/categories/categories";
-import CtaPage from "@/components/landing/cta";
-import Testimonial from "@/components/shared/testimonials/testimonial";
-import {getProductFamilies} from "@/lib/actions/product/actions";
+'use client'
 
-export default async function LandingPage() {
-    const products = await getProductFamilies();
+import React, {useEffect, useRef} from "react";
+import { useInView, useAnimation} from "framer-motion"
+import {ProductFamily} from "@/types/product";
+import TestimonialsPage from "@/components/landing/testimonials";
+import Hero from "@/components/landing/hero";
+import LandingProducts from "@/components/landing/landing-products";
+import CtaPage from "@/components/landing/cta";
+import AboutPage from "@/components/landing/about";
+import TerraSection from "@/components/landing/terra-section";
+import BenefitSection from "@/components/landing/benefits-section";
+import AquaSection from "@/components/landing/aqua-section";
+import {CartSheet} from "@/components/shared/cart/cart-sheet";
+
+interface LandingPage2Props {
+    products?: ProductFamily[]
+}
+
+export default function LandingPage({products}: LandingPage2Props) {
+    const ref= useRef(null)
+    const isInView = useInView(ref, {once: true})
+    const animationControls = useAnimation()
+
+    useEffect(() => {
+        if(isInView) {
+            // Fire animation
+            animationControls.start("visible");
+        }
+    }, [isInView, animationControls]);
 
     return (
-        <div>
+        <>
+            {/* Hero Section */}
             <Hero />
-            <Categories/>
-            <LandingProduct products={products}/>
-            <Testimonial/>
-            <CtaPage/>
-        </div>
-    )
 
+            {/* Product Section */}
+            <LandingProducts products={products} />
+
+            {/* Product Benefits Overview */}
+            <BenefitSection />
+
+            {/* Terra Product Section */}
+            <TerraSection />
+
+            {/* Aqua Product Section */}
+            <AquaSection/>
+
+            {/* About Section */}
+            <AboutPage />
+
+            {/* Testimonials */}
+            <TestimonialsPage className="py-20 bg-background"/>
+
+            {/* CTA Section */}
+            <CtaPage />
+
+            {/* Cart */}
+            <CartSheet />
+        </>
+    );
 }

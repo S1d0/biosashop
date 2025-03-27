@@ -4,8 +4,9 @@ import {ProductFamily, ProductVariant} from "@/types/product";
 import {convertToPlain} from "@/lib/utils";
 import {prisma} from "@/db/db";
 import {notFound} from "next/navigation";
+import {cache} from "react";
 
-export async function getProductFamilies(): Promise<ProductFamily[]> {
+export const getProductFamilies: () => Promise<ProductFamily[]> = cache(async () => {
     const rawData = await prisma.productFamily.findMany({
         orderBy: { createdAt: "desc" },
         include: {
@@ -14,7 +15,7 @@ export async function getProductFamilies(): Promise<ProductFamily[]> {
     })
 
     return convertToPlain(rawData)
-}
+})
 
 export async function getProductVariant(slug: string): Promise<ProductVariant> {
     const rawData = await prisma.productVariant.findFirst({

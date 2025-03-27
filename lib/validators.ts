@@ -10,7 +10,7 @@ export const insertProductFamilySchema = z.object({
 
 export const insertProductVariantSchema = z.object({
     name: z.string().min(2, 'Nazwa musi zawierać co najmniej 3 znaki'),
-    categories: z.array(z.string()).min(1, "Kategoria musi zawierać co najmniej 3 znaki"),
+    features: z.array(z.string()).min(1, "Kategoria musi zawierać co najmniej 3 znaki"),
     description: z.string().min(10, "Opis musi zawierac co najmniej 10 znaków"),
     images: z.array(z.string()).min(1, "Wariant produktu musi mieć co najmniej jedno zdjęcie"),
     price: z.coerce.number().nonnegative("Cena nie może być mniejsza niż -1"),

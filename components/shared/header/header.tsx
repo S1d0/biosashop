@@ -5,9 +5,11 @@ import {ChevronDown, ChevronRight, Droplets, Leaf, Menu, ShoppingCart, X} from "
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import Image from "next/image";
+import {useCart} from "@/components/shared/cart/cart-provider";
 
-export default function Header3() {
+export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const {totalItems, setIsCartOpen} = useCart()
 
     return (
         <header className="sticky top-0 z-50 bg-background/70 backdrop-blur-lg border-b border-border/50">
@@ -74,13 +76,16 @@ export default function Header3() {
                             About
                         </Link>
 
-                        <Link href="#" className="relative text-muted-foreground hover:text-primary transition-colors">
-                            <ShoppingCart className="h-5 w-5"/>
-                            <span
-                                className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  2
-                </span>
-                        </Link>
+                        <button onClick={()=>setIsCartOpen(true)}>
+                            <Link href="#" className="relative text-muted-foreground hover:text-primary transition-colors">
+                                <ShoppingCart className="h-5 w-5"/>
+                                { totalItems > 0 &&
+                                    <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                {totalItems}
+                            </span>
+                                }
+                            </Link>
+                        </button>
                     </nav>
                 </div>
             </div>
