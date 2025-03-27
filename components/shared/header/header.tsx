@@ -6,7 +6,7 @@ import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Header3() {
+export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     return (
