@@ -56,7 +56,6 @@ export default function LandingPage({products}: LandingPage2Props) {
             <CtaPage />
 
             {/* Cart */}
-            <CartSheet />
         </>
     );
 }

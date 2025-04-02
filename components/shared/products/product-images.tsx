@@ -1,41 +1,55 @@
-'use client'
-import {useState} from "react";
-import Image from "next/image";
-import {cn} from "@/lib/utils"
-import {ImageModal} from "@/components/shared/images/image-modal";
+"use client"
 
-export default function ProductImages({images}:{images: string[]}) {
-    const [currentIdx, setCurrentIdx] = useState(0);
-    const [viewImg, setViewImg] = useState(false);
+import { useState } from "react"
+import Image from "next/image"
+import { cn } from "@/lib/utils"
 
-    const handleImageClick = () => {
-        setViewImg(!viewImg);
-    };
+interface ProductImagesProps {
+    images: string[]
+}
+
+export default function ProductImages({ images }: ProductImagesProps) {
+    const [selectedImage, setSelectedImage] = useState(0)
+
+    // If no images provided, use a placeholder
+    const imageUrls = images.length > 0 ? images : ["/placeholder.svg?height=600&width=600"]
 
     return (
-        <div className={"space-y-4 cursor-pointer"} onClick={() => handleImageClick()}>
-            <Image src={images[currentIdx]}
-                   alt="Zdjecie produktu"
-                   height={1000}
-                   width={1000}
-                   className={"min-h-[300] object-cover object-center"}
-            />
-            <div className={"flex justify-betweent gap-2"}>
-                {images.map((image, index) => (
-                   <div key={index}
-                        className={ cn("cursor-pointer border hover:border-e-green-500 p-2", currentIdx === index && "border-green-400") }
-                        onClick={()=>setCurrentIdx(index)}
-                   >
-                       <Image src={image} alt={"Zdjecie"} height={100} width={100}/>
-                    </div>
-                ))}
+        <div className="space-y-4">
+            {/* Main image */}
+            <div className="relative aspect-square overflow-hidden rounded-lg border border-white/10 bg-card/50">
+                <Image
+                    src={imageUrls[selectedImage] || "/placeholder.svg"}
+                    alt="Product image"
+                    fill
+                    className="object-cover"
+                    priority
+                />
             </div>
-            <ImageModal
-                isOpen={viewImg}
-                onClose={() => handleImageClick()}
-                images={images}
-                altText={"Zdjęcie wariantu produktu"}
-            />
+
+            {/* Thumbnail images */}
+            {imageUrls.length > 1 && (
+                <div className="flex space-x-2 overflow-x-auto pb-2">
+                    {imageUrls.map((image, index) => (
+                        <button
+                            key={index}
+                            className={cn(
+                                "relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border",
+                                selectedImage === index ? "border-primary" : "border-white/10 hover:border-white/30",
+                            )}
+                            onClick={() => setSelectedImage(index)}
+                        >
+                            <Image
+                                src={image || "/placeholder.svg"}
+                                alt={`Product thumbnail ${index + 1}`}
+                                fill
+                                className="object-cover"
+                            />
+                        </button>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }
+

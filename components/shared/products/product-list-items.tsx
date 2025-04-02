@@ -34,9 +34,9 @@ export default function ProductListItem({ product }: { product: ProductVariant }
                     </div>
 
                     <div className="flex items-center gap-2">
-                        {product.categories.map((category, index) => (
+                        {product.features.map((feature, index) => (
                             <div key={index}>
-                                <Badge variant={"outline"}>{category}</Badge>
+                                <Badge variant={"outline"}>{feature}</Badge>
                             </div>
                         ))}
                     </div>

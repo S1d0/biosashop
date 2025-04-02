@@ -3,6 +3,7 @@ import {Toaster} from "@/components/ui/toaster";
 import React from "react";
 import Header from "@/components/shared/header/header";
 import {CartProvider} from "@/components/shared/cart/cart-provider";
+import {CartSheet} from "@/components/shared/cart/cart-sheet";
 
 export default function RootLayout({
                                        children,
@@ -18,6 +19,7 @@ export default function RootLayout({
                     <Footer/>
                 </div>
                 <Toaster/>
+                <CartSheet />
             </CartProvider>
         </>
     );
