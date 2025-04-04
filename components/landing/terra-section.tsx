@@ -35,8 +35,8 @@ export default function TerraSection() {
                                 <span>Promotes sustainable agriculture</span>
                             </li>
                         </ul>
-                        <Button>
-                            Explore Terra <ArrowRight className="ml-2 h-4 w-4"/>
+                        <Button className='group'>
+                            Explore Terra <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"/>
                         </Button>
                     </div>
                     <motion.div

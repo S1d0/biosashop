@@ -7,6 +7,20 @@ import { Button } from "@/components/ui/button"
 import { Minus, Plus, Trash2, ShoppingBag, AlertCircle } from "lucide-react"
 import {formatPricePLN} from "@/lib/utils"
 
+function ContinueShoppingButton() {
+    const {setIsCartOpen} = useCart()
+
+    return (
+        <Button
+            variant="outline"
+            className="w-full border-border text-foreground hover:bg-primary/10 hover:text-primary"
+            onClick={() => setIsCartOpen(false)}
+        >
+            Kontynuuj zakupy
+        </Button>
+    )
+}
+
 export function CartSheet() {
     const { items, isCartOpen, setIsCartOpen, updateQuantity, removeItem, totalPrice, totalItems } = useCart()
 
@@ -26,13 +40,7 @@ export function CartSheet() {
                             <ShoppingBag className="h-12 w-12 mb-4 text-slate-400/50" />
                             <p className="mb-2">Twój koszyk jest pusty</p>
                             <p className="text-sm">Dodaj produkty, aby rozpocząć zakupy</p>
-                            <Button
-                                variant="outline"
-                                className="mt-4 border-white/20 text-white hover:bg-white/10"
-                                onClick={() => setIsCartOpen(false)}
-                            >
-                                Kontynuuj zakupy
-                            </Button>
+                            <ContinueShoppingButton />
                         </div>
                     ) : (
                         <ul className="space-y-4">
@@ -181,13 +189,7 @@ export function CartSheet() {
                             <Button className="w-full bg-primary/90 hover:bg-primary text-primary-foreground">
                                 Przejdź do płatności
                             </Button>
-                            <Button
-                                variant="outline"
-                                className="w-full border-border text-foreground hover:bg-primary/10 hover:text-primary"
-                                onClick={() => setIsCartOpen(false)}
-                            >
-                                Kontynuuj zakupy
-                            </Button>
+                            <ContinueShoppingButton />
                         </SheetFooter>
                     </div>
                 )}
