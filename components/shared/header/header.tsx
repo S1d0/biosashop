@@ -1,18 +1,21 @@
-'use client'
+"use client"
 
-import {useState} from "react";
-import {ChevronDown, ChevronRight, Droplets, Leaf, Menu, ShoppingCart, X} from "lucide-react";
-import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
-import Link from "next/link";
-import Image from "next/image";
-import {useCart} from "@/components/shared/cart/cart-provider";
+import { useState } from "react"
+import Image from "next/image"
+import Link from "next/link"
+import { ChevronDown, ShoppingCart, Menu, X, ChevronRight, Leaf, Droplets } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useCart } from "@/components/shared/cart/cart-provider"
+import { ThemeToggle } from "@/components/theme/theme-toggle"
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    const {totalItems, setIsCartOpen} = useCart()
+
+    // Initialize cartState with default values
+    const { setIsCartOpen, totalItems } = useCart()
 
     return (
-        <header className="sticky top-0 z-50 bg-background/70 backdrop-blur-lg border-b border-border/50">
+        <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-lg border-b border-border/50 shadow-sm">
             <div className="container mx-auto px-4 md:px-6">
                 <div className="flex items-center justify-between h-16">
                     {/* Mobile menu button */}
@@ -20,7 +23,7 @@ export default function Header() {
                         className="md:hidden text-muted-foreground hover:text-primary focus:outline-none"
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                     >
-                        {mobileMenuOpen ? <X className="h-6 w-6"/> : <Menu className="h-6 w-6"/>}
+                        {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                     </button>
 
                     {/* Logo - Left Side */}
@@ -40,20 +43,19 @@ export default function Header() {
                     {/* Desktop Navigation - Right Side */}
                     <nav className="hidden md:flex items-center space-x-8">
                         <DropdownMenu>
-                            <DropdownMenuTrigger
-                                className="flex items-center text-muted-foreground hover:text-primary transition-colors">
-                                Products <ChevronDown className="ml-1 h-4 w-4"/>
+                            <DropdownMenuTrigger className="flex items-center font-medium text-foreground hover:text-primary transition-colors">
+                                Products <ChevronDown className="ml-1 h-4 w-4" />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuItem>
-                                    <Link href="#terra" className="flex items-center w-full">
-                                        <Leaf className="mr-2 h-4 w-4 text-primary"/>
+                                    <Link href="/#terra" className="flex items-center w-full">
+                                        <Leaf className="mr-2 h-4 w-4 text-primary" />
                                         Microbiosa Terra
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <Link href="#aqua" className="flex items-center w-full">
-                                        <Droplets className="mr-2 h-4 w-4 text-primary"/>
+                                    <Link href="/#aqua" className="flex items-center w-full">
+                                        <Droplets className="mr-2 h-4 w-4 text-primary" />
                                         Microbiosa Aqua
                                     </Link>
                                 </DropdownMenuItem>
@@ -61,9 +63,8 @@ export default function Header() {
                         </DropdownMenu>
 
                         <DropdownMenu>
-                            <DropdownMenuTrigger
-                                className="flex items-center text-muted-foreground hover:text-primary transition-colors">
-                                Categories <ChevronDown className="ml-1 h-4 w-4"/>
+                            <DropdownMenuTrigger className="flex items-center font-medium text-foreground hover:text-primary transition-colors">
+                                Categories <ChevronDown className="ml-1 h-4 w-4" />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuItem>Soil Enhancement</DropdownMenuItem>
@@ -72,20 +73,26 @@ export default function Header() {
                             </DropdownMenuContent>
                         </DropdownMenu>
 
-                        <Link href="#about" className="text-muted-foreground hover:text-primary transition-colors">
+                        <Link href="/#about" className="font-medium text-foreground hover:text-primary transition-colors">
                             About
                         </Link>
 
-                        <button onClick={()=>setIsCartOpen(true)}>
-                            <Link href="#" className="relative text-muted-foreground hover:text-primary transition-colors">
-                                <ShoppingCart className="h-5 w-5"/>
-                                { totalItems > 0 &&
+                        <div className="flex items-center space-x-4">
+                            <ThemeToggle />
+
+                            <button
+                                className="relative text-foreground hover:text-primary transition-colors"
+                                onClick={() => setIsCartOpen(true)}
+                                aria-label="Open shopping cart"
+                            >
+                                <ShoppingCart className="h-5 w-5" />
+                                {totalItems > 0 && (
                                     <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                                {totalItems}
-                            </span>
-                                }
-                            </Link>
-                        </button>
+                    {totalItems}
+                  </span>
+                                )}
+                            </button>
+                        </div>
                     </nav>
                 </div>
             </div>
@@ -97,24 +104,24 @@ export default function Header() {
                         <nav className="flex flex-col space-y-3">
                             <div className="py-2 border-b border-border">
                                 <div className="flex justify-between items-center mb-2">
-                                    <span className="text-foreground font-medium">Products</span>
-                                    <ChevronRight className="h-4 w-4 text-muted-foreground"/>
+                                    <span className="text-foreground font-semibold">Products</span>
+                                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
                                 </div>
                                 <div className="pl-4 space-y-2">
                                     <Link
-                                        href="#terra"
+                                        href="/#terra"
                                         className="flex items-center text-muted-foreground hover:text-primary"
                                         onClick={() => setMobileMenuOpen(false)}
                                     >
-                                        <Leaf className="mr-2 h-4 w-4 text-primary"/>
+                                        <Leaf className="mr-2 h-4 w-4 text-primary" />
                                         Microbiosa Terra
                                     </Link>
                                     <Link
-                                        href="#aqua"
+                                        href="/#aqua"
                                         className="flex items-center text-muted-foreground hover:text-primary"
                                         onClick={() => setMobileMenuOpen(false)}
                                     >
-                                        <Droplets className="mr-2 h-4 w-4 text-primary"/>
+                                        <Droplets className="mr-2 h-4 w-4 text-primary" />
                                         Microbiosa Aqua
                                     </Link>
                                 </div>
@@ -122,8 +129,8 @@ export default function Header() {
 
                             <div className="py-2 border-b border-border">
                                 <div className="flex justify-between items-center mb-2">
-                                    <span className="text-foreground font-medium">Categories</span>
-                                    <ChevronRight className="h-4 w-4 text-muted-foreground"/>
+                                    <span className="text-foreground font-semibold">Categories</span>
+                                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
                                 </div>
                                 <div className="pl-4 space-y-2">
                                     <Link href="#" className="block text-muted-foreground hover:text-primary">
@@ -139,25 +146,38 @@ export default function Header() {
                             </div>
 
                             <Link
-                                href="#about"
+                                href="/#about"
                                 className="py-2 text-foreground hover:text-primary border-b border-border"
                                 onClick={() => setMobileMenuOpen(false)}
                             >
                                 About
                             </Link>
 
-                            <Link href="#" className="py-2 flex items-center text-foreground hover:text-primary">
-                                <ShoppingCart className="h-5 w-5 mr-2"/>
+                            <div className="py-2 flex items-center justify-between border-b border-border">
+                                <span className="text-foreground">Theme</span>
+                                <ThemeToggle />
+                            </div>
+
+                            <button
+                                className="py-2 flex items-center text-foreground hover:text-primary"
+                                onClick={() => {
+                                    setMobileMenuOpen(false)
+                                    setIsCartOpen(true)
+                                }}
+                            >
+                                <ShoppingCart className="h-5 w-5 mr-2" />
                                 Shopping Cart
-                                <span
-                                    className="ml-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    2
+                                {totalItems > 0 && (
+                                    <span className="ml-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {totalItems}
                   </span>
-                            </Link>
+                                )}
+                            </button>
                         </nav>
                     </div>
                 </div>
             )}
         </header>
-    );
+    )
 }
+

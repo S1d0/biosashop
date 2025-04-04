@@ -13,8 +13,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 38 92% 65%; /* amber-300 */
-    --primary-foreground: 210 40% 98%;
+    --primary: 38 92% 50%; /* amber-500 for light mode - slightly darker for better contrast */
+    --primary-foreground: 0 0% 0%; /* Black text on amber buttons for better contrast */
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -30,7 +30,7 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 38 92% 65%; /* amber-300 */
+    --ring: 38 92% 50%; /* amber-500 */
 
     --radius: 0.5rem;
   }
@@ -45,8 +45,8 @@
     --popover: 222 47% 3%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 38 92% 65%; /* amber-300 */
-    --primary-foreground: 222 47% 5%; /* dark text on amber buttons */
+    --primary: 38 92% 65%; /* amber-300 for dark mode */
+    --primary-foreground: 0 0% 0%; /* Black text on amber buttons for better contrast */
 
     --secondary: 215 25% 20%; /* lighter than background */
     --secondary-foreground: 210 40% 98%;
