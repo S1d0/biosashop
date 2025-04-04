@@ -12,7 +12,7 @@ const categories = [
 
 export default function ProductsFiltersServer() {
     return (
-        <div className="bg-white p-4 rounded-lg border sticky top-20">
+        <div className="bg-muted p-4 rounded-lg border sticky top-20">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold">Filtry</h2>
                 <Button variant="ghost" size="sm" asChild>

@@ -1,9 +1,8 @@
 import Image from "next/image";
 import Link from "next/link"; // Import Link from Next.js
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart } from "lucide-react";
 import { ProductVariant } from "@prisma/client";
+import AddCartButton from "@/components/shared/cart/add-cart-button";
 
 export default function ProductListItem({ product }: { product: ProductVariant }) {
     return (
@@ -34,9 +33,9 @@ export default function ProductListItem({ product }: { product: ProductVariant }
                     </div>
 
                     <div className="flex items-center gap-2">
-                        {product.categories.map((category, index) => (
+                        {product.features.map((feature, index) => (
                             <div key={index}>
-                                <Badge variant={"outline"}>{category}</Badge>
+                                <Badge variant={"outline"}>{feature}</Badge>
                             </div>
                         ))}
                     </div>
@@ -59,10 +58,7 @@ export default function ProductListItem({ product }: { product: ProductVariant }
 
                     {/* Action Button */}
                     {product.stock > 0 && (
-                        <Button className="w-auto" size="sm">
-                            <ShoppingCart className="mr-2 h-4 w-4" />
-                            Dodaj do Koszyka
-                        </Button>
+                        <AddCartButton product={product} />
                     )}
                 </div>
             </div>

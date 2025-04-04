@@ -2,16 +2,16 @@
 
 import {ProductVariant} from "@/types/product";
 import Image from "next/image";
-import {Button} from "@/components/ui/button";
 import {ImageModal} from "@/components/shared/images/image-modal";
 import {useState} from "react";
 import ProductPrice from "@/components/shared/products/product-price";
+import AddCartButton from "@/components/shared/cart/add-cart-button";
 
 export default function ProductVariantPage({variant}: {variant: ProductVariant}) {
     const [viewImg, setViewImg] = useState(false)
     const img = variant.images[0];
     return (
-        <div className={`rounded-lg border p-4 transition-shadow hover:shadow-lg flex flex-col h-full`}>
+        <div className={`rounded-lg border p-4 transition-shadow hover:shadow-lg flex flex-col h-full bg-muted`}>
             <div className="flex-1 space-y-4">
                 <div className="aspect-square overflow-hidden rounded-lg">
                     <Image
@@ -32,9 +32,7 @@ export default function ProductVariantPage({variant}: {variant: ProductVariant})
                 </div>
             </div>
             <div className="pt-4 mt-4 border-t">
-                <Button className="w-full" size="sm">
-                    Dodaj do Koszyka
-                </Button>
+                <AddCartButton product={variant} />
             </div>
             <ImageModal
                 isOpen={viewImg}

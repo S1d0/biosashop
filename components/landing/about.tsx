@@ -31,7 +31,7 @@ export default function AboutPage() {
                         <p className="text-muted-foreground">
                             We harness the power of beneficial microorganisms to create products that work with
                             nature, not against
-                            it, providing sustainable solutions for today's environmental challenges.
+                            it, providing sustainable solutions for today&apos;s environmental challenges.
                         </p>
                     </div>
 

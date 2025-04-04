@@ -1,3 +1,5 @@
+'use client'
+
 import ProductFamilyPage from "@/components/shared/products/v2/product-family";
 import React from "react";
 import {ProductFamily} from "@/types/product";
@@ -7,7 +9,6 @@ interface LandingProductsProps {
 }
 
 export default function LandingProducts({products}: LandingProductsProps) {
-
     return (
         <section id="products" className="w-full py-12 md:py-16 lg:py-20 bg-muted">
             <div className="container px-4 md:px-6">

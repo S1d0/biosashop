@@ -58,3 +58,17 @@ enum EnquiryStatus {
   RESOLVED
   SPAM
 }
+
+model Cart {
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String?
+  sessionCartId String
+  items         Json[]   @default([]) @db.Json
+  itemsPrice    Int
+  totalPrice    Int
+  shippingPrice Int
+  createdAt     DateTime @default(now()) @db.Timestamp(6)
+
+  @@index([userId])
+  @@index([sessionCartId])
+}

@@ -36,7 +36,7 @@ export default function Hero() {
                 >
                     <div className="text-center">
                         <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white drop-shadow-md">
-                            <span className="text-primary">Microbiosa</span> - Harnessing Nature's Power
+                            <span className="text-primary">Microbiosa</span> - Harnessing Nature&apos;s Power
                         </h1>
                         <p className="text-lg md:text-xl mb-8 text-white/90 drop-shadow">
                             Discover the revolutionary products that transform your environment, naturally.

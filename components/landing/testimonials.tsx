@@ -28,11 +28,11 @@ export default function TestimonialsPage({className}: {className: string}) {
                                     </div>
                                 </div>
                                 <p className="text-muted-foreground">
-                                    "The results were incredible. After using
+                                    &ldquo;The results were incredible. After using
                                     Microbiosa {i % 2 === 0 ? "Terra" : "Aqua"} for just a few
                                     weeks, I noticed a significant improvement in
                                     my {i % 2 === 0 ? "garden" : "pond"}. Highly
-                                    recommended!"
+                                    recommended!&ldquo;
                                 </p>
                                 <div className="mt-4 flex">
                                     {[...Array(5)].map((_, j) => (

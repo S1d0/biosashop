@@ -20,6 +20,7 @@ export default function LandingPage({products}: LandingPage2Props) {
     const ref= useRef(null)
     const isInView = useInView(ref, {once: true})
     const animationControls = useAnimation()
+
     useEffect(() => {
         if(isInView) {
             // Fire animation
@@ -52,6 +53,8 @@ export default function LandingPage({products}: LandingPage2Props) {
 
             {/* CTA Section */}
             <CtaPage />
+
+            {/* Cart */}
         </>
     );
 }
