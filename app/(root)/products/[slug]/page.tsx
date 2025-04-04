@@ -15,13 +15,14 @@ import ProductPrice from "@/components/shared/products/product-price"
 import AddCartButton from "@/components/shared/cart/add-cart-button";
 
 interface ProductPageProps {
-    params: {
+    params: Promise<{
         slug: string
-    }
+    }>
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-    const {slug} = await params
+    const resolvedParams = await params
+    const { slug } = resolvedParams
     const product = await getProductVariant(slug)
 
     if (!product) {

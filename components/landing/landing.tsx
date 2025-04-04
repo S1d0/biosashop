@@ -11,7 +11,6 @@ import AboutPage from "@/components/landing/about";
 import TerraSection from "@/components/landing/terra-section";
 import BenefitSection from "@/components/landing/benefits-section";
 import AquaSection from "@/components/landing/aqua-section";
-import {CartSheet} from "@/components/shared/cart/cart-sheet";
 
 interface LandingPage2Props {
     products?: ProductFamily[]

@@ -15,8 +15,8 @@ export default async function ProductsPage() {
         );
 
     return (
-        <main className="flex min-h-screen flex-col">
-            <section className="w-full py-12 md:py-24 bg-white">
+        <main className="flex min-h-screen flex-col bg-background">
+            <section className="w-full py-12 md:py-24">
                 <div className="container px-4 md:px-6">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
                         <div>
