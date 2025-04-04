@@ -18,7 +18,6 @@ export default function ProductVariantPage({variant}: ProductVariantProps) {
     const {addItem} = useCart();
 
     return (
-        <>
             <Card
                 key={variant.id}
                 className="overflow-hidden bg-card/80 backdrop-blur-sm border border-white/10 transition-all hover:shadow-lg flex flex-col group"
@@ -86,6 +85,5 @@ export default function ProductVariantPage({variant}: ProductVariantProps) {
                     </div>
                 </CardFooter>
             </Card>
-        </>
     )
 }

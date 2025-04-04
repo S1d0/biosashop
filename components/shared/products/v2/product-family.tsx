@@ -20,7 +20,9 @@ export default function ProductFamilyPage({ family }: { family: ProductFamily })
                 </Button>
             </div>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-                {family.variants.map((variant) => (
+                {family.variants
+                    .sort((a,b)=> a.price > b.price ? 1 : -1)
+                    .map((variant) => (
                     <ProductVariant key={variant.id} variant={variant} />
                 ))}
             </div>
