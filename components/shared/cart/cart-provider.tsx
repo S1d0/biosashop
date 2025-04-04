@@ -1,4 +1,3 @@
-
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
@@ -23,11 +22,36 @@ type CartContextType = {
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
+const setLocalStorage = (key: string, value: CartItem[]) => {
+    try {
+        localStorage.setItem(key, JSON.stringify(value))
+    } catch (e) {
+        console.error("Error setting localStorage", e);
+    }
+}
+
+// Add a function to safely interact with localStorage (to avoid SSR issues)
+const getLocalStorage = (key: string, defaultValue: CartItem[]) => {
+    try {
+        const value = localStorage.getItem(key)
+        return value ? JSON.parse(value) : defaultValue
+    } catch (error) {
+        console.error("Error accessing localStorage:", error)
+        return defaultValue
+    }
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
     const [items, setItems] = useState<CartItem[]>([])
     const [isCartOpen, setIsCartOpen] = useState(false)
     const [totalItems, setTotalItems] = useState(0)
     const [totalPrice, setTotalPrice] = useState(0)
+
+    // Set items from localstorage
+    useEffect(() => {
+        const cartData = getLocalStorage("cart", [])
+        setItems(cartData)
+    }, []);
 
     // Calculate totals whenever items change
     useEffect(() => {
@@ -36,6 +60,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
         setTotalItems(itemCount)
         setTotalPrice(price)
+
+        // setLocalStorage whenever items change
+        setLocalStorage("cart", items)
     }, [items])
 
     // Add item to cart
