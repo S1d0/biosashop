@@ -18,7 +18,6 @@ export default function ProductVariantPage({variant}: ProductVariantProps) {
     const {addItem} = useCart();
 
     return (
-        <>
             <Card
                 key={variant.id}
                 className="overflow-hidden bg-card/80 backdrop-blur-sm border border-white/10 transition-all hover:shadow-lg flex flex-col group"
@@ -66,7 +65,7 @@ export default function ProductVariantPage({variant}: ProductVariantProps) {
                 <CardFooter className="p-4 mt-auto flex items-center justify-between border-t border-white/5">
                     <div className="font-bold text-lg">{formatPricePLN(variant.price)}</div>
                     <div className="flex gap-2">
-                        <Link href={`/products/${variant.id}`}>
+                        <Link href={`/products/${variant.slug}`}>
                             <Button size="sm" variant="outline" className="border-white/10 hover:border-white/30">
                                 <ExternalLink className="h-4 w-4" />
                                 <span className="sr-only">Zobacz produkt</span>
@@ -86,6 +85,5 @@ export default function ProductVariantPage({variant}: ProductVariantProps) {
                     </div>
                 </CardFooter>
             </Card>
-        </>
     )
 }

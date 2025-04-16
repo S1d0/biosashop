@@ -6,6 +6,9 @@ import {ImageModal} from "@/components/shared/images/image-modal";
 import {useState} from "react";
 import ProductPrice from "@/components/shared/products/product-price";
 import AddCartButton from "@/components/shared/cart/add-cart-button";
+import Link from "next/link";
+import {Button} from "@/components/ui/button";
+import {ExternalLink} from "lucide-react";
 
 export default function ProductVariantPage({variant}: {variant: ProductVariant}) {
     const [viewImg, setViewImg] = useState(false)
@@ -31,8 +34,16 @@ export default function ProductVariantPage({variant}: {variant: ProductVariant})
                     <p className="text-sm text-muted-foreground">{variant.description}</p>
                 </div>
             </div>
-            <div className="pt-4 mt-4 border-t">
-                <AddCartButton product={variant} />
+            <div className='flex items-center justify-between pt-4 mt-4 border-t gap-2'>
+                <Link href={`/products/${variant.slug}`} className='h-full'>
+                    <Button size="sm" variant="outline" className="border-white/10 hover:border-white/30">
+                        <ExternalLink className="h-4 w-4" />
+                        <span className="sr-only">Zobacz produkt</span>
+                    </Button>
+                </Link>
+                <div className='grow'>
+                    <AddCartButton product={variant}/>
+                </div>
             </div>
             <ImageModal
                 isOpen={viewImg}

@@ -44,8 +44,8 @@ export default function AquaSection() {
                                 <span>Sustainable water management solution</span>
                             </li>
                         </ul>
-                        <Button variant="secondary">
-                            Explore Aqua <ArrowRight className="ml-2 h-4 w-4"/>
+                        <Button variant="secondary" className='group'>
+                            Explore Aqua <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"/>
                         </Button>
                     </div>
                 </div>

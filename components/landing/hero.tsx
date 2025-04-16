@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import {
      ChevronDown,
      ShoppingCart
@@ -39,19 +38,21 @@ export default function Hero() {
                             <span className="text-primary">Microbiosa</span> - Harnessing Nature&apos;s Power
                         </h1>
                         <p className="text-lg md:text-xl mb-8 text-white/90 drop-shadow">
-                            Discover the revolutionary products that transform your environment, naturally.
+                            Odkryj rewolucyjne produkty, które w naturalny sposób zmieniają Twoje otoczenie.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Button size="lg"
-                                    className="bg-primary/90 hover:bg-primary text-primary-foreground backdrop-blur-sm text-white">
-                                Shop Now <ShoppingCart className="ml-2 h-4 w-4"/>
+                            <Button
+                                onClick={() => scrollToSection("products")}
+                                size="lg" className="bg-primary/90 hover:bg-primary font-semibold tracking-wider text-primary-foreground backdrop-blur-sm text-white">
+                                Do sklepu <ShoppingCart className="ml-2 h-4 w-4"/>
                             </Button>
                             <Button
+                                onClick={() => scrollToSection("benefits")}
                                 variant="outline"
                                 size="lg"
-                                className="bg-transparent border-white text-white hover:bg-white/20 hover:text-white"
+                                className="bg-transparent border-white text-white tracking-wider font-semibold hover:bg-white/20 hover:text-white"
                             >
-                                Learn More
+                                Dowiedz się wiecej
                             </Button>
                         </div>
                     </div>
@@ -65,9 +66,9 @@ export default function Hero() {
                 className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
                 onClick={() => scrollToSection('products')}
             >
-                <Link href="#products">
-                    <ChevronDown className="h-8 w-8 text-white drop-shadow-lg"/>
-                </Link>
+                <button onClick={() => "#products"} className='group'>
+                    <ChevronDown className="h-8 w-8 text-white drop-shadow-lg group-hover:text-primary"/>
+                </button>
             </motion.div>
         </section>
 )

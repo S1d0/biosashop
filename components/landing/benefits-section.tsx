@@ -5,7 +5,7 @@ import React from "react";
 
 export default function BenefitSection() {
     return (
-        <section className="py-12 bg-muted">
+        <section id="benefits" className="py-24 bg-muted">
             <div className="container px-4 md:px-6 mx-auto">
                 <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
                     Our <span className="text-primary">Revolutionary</span> Products
