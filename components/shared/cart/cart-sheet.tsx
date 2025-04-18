@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { ShoppingBag, AlertCircle } from "lucide-react"
 import {formatPricePLN} from "@/lib/utils"
 import CartItemPreview from "@/components/shared/cart/CartItemPreview";
+import {createCheckout} from "@/lib/actions/checkout/action";
+import {useState} from "react";
 
 function ContinueShoppingButton() {
     const {setIsCartOpen} = useCart()
@@ -23,6 +25,18 @@ function ContinueShoppingButton() {
 
 export function CartSheet() {
     const { items, isCartOpen, setIsCartOpen, totalPrice, totalItems } = useCart()
+    const [isLoading, setIsLoading] = useState(false)
+
+    const handleCheckout = async () => {
+        try {
+        setIsLoading(true)
+        await createCheckout(items)
+        } catch (error) {
+            console.error('Checkout failed:', error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     return (
         <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
@@ -77,7 +91,10 @@ export function CartSheet() {
                                 <AlertCircle className="h-3 w-3 mr-1" />
                                 <span>Podatki i koszty dostawy obliczone przy płatności</span>
                             </div>
-                            <Button className="w-full bg-primary/90 hover:bg-primary text-primary-foreground">
+                            <Button className="w-full bg-primary/90 hover:bg-primary text-primary-foreground"
+                            onClick={handleCheckout}
+                           disabled={isLoading}
+                            >
                                 Przejdź do płatności
                             </Button>
                             <ContinueShoppingButton />
