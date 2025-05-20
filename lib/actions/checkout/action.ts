@@ -2,7 +2,9 @@
 import {CartItem} from "@/components/shared/cart/cart-provider";
 import {CreateOrder, CreateOrderItem, createOrderItemSchema, createOrderSchema, Order} from "@/types/order";
 import {prisma} from "@/db/db";
-
+import {convertToPlain} from "@/lib/utils";
+import { createClient } from '@/supabase/server'
+import {redirect} from "next/navigation";
 
 export async function createCheckout(items: CartItem[]): Promise<void> {
     // 1. Create order items
@@ -27,37 +29,38 @@ export async function createCheckout(items: CartItem[]): Promise<void> {
         totalPrice: totalPrice,
         payed: false,
         delivered: false,
-        items: orderItems
     });
 
-    // 3. Save order with items
+    // 3 Add user
+    const supabase = await createClient();
+    const {data, error} = await  supabase.auth.signInAnonymously()
+    if(error) {
+        console.error("Error occured while signInAnonymously:", error)
+        throw error;
+    }
+
+    if(data.user === null) {
+        console.error("User not created");
+        throw  error;
+    }
+
+    order.userId = data.user.id;
+
+    // 4. Save order with items
     try {
-        // const created = await prisma.order.create({
-        //     data: {
-        //         totalPrice: order.totalPrice,
-        //         payed: order.payed,
-        //         delivered: order.delivered,
-        //         items: {
-        //             create: orderItems.map((item) => ({
-        //                 name: item.name,
-        //                 productId: item.productId,
-        //                 image: item.image,
-        //                 price: item.price,
-        //                 quantity: item.quantity,
-        //                 totalPrice: item.totalPrice
-        //         })),
-        //         },
-        //     },
-        //     include: {
-        //         items: true
-        //     }
-        // })
-        const created: Order = await prisma.order.create({
-            data: order,
+        const rawOrder = await prisma.order.create({
+            data: {
+                ...order,
+                items: {
+                    create: orderItems
+                }
+            },
             include: {
                 items: true
             }
         })
+        const createdOrder: Order = convertToPlain(rawOrder) as Order
+        redirect(`/checkout/${createdOrder.id}`)
     } catch (error) {
         console.error('Error while creating order: ', error)
         throw error;

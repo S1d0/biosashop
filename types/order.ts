@@ -71,7 +71,6 @@ export const createOrderSchema = orderSchema
         items: true
     })
     .extend({
-        items: z.array(createOrderItemSchema),
         userId: z.string().uuid().optional(),
         shippingAddress: shippingAddressSchema.optional(),
         paymentMethod: z.string().optional(),
