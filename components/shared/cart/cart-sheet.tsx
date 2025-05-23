@@ -3,7 +3,7 @@
 import { useCart } from "./cart-provider"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
-import { ShoppingBag, AlertCircle } from "lucide-react"
+import {ShoppingBag, AlertCircle, Loader2} from "lucide-react"
 import {formatPricePLN} from "@/lib/utils"
 import CartItemPreview from "@/components/shared/cart/CartItemPreview";
 import {createCheckout} from "@/lib/actions/checkout/action";
@@ -92,10 +92,10 @@ export function CartSheet() {
                                 <span>Podatki i koszty dostawy obliczone przy płatności</span>
                             </div>
                             <Button className="w-full bg-primary/90 hover:bg-primary text-primary-foreground"
-                            onClick={handleCheckout}
-                           disabled={isLoading}
+                                    onClick={handleCheckout}
+                                    disabled={isLoading}
                             >
-                                Przejdź do płatności
+                                {isLoading ? <>Przetwarzanie <Loader2 className="animate-spin" /> </>: <p>Przejdź do płatności</p>}
                             </Button>
                             <ContinueShoppingButton />
                         </SheetFooter>

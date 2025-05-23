@@ -22,7 +22,6 @@ export async function createCheckout(items: CartItem[]): Promise<void> {
         })
     })
 
-
     // 2. Create order
     const totalPrice = orderItems.reduce((total, orderItem) => total = total + orderItem.totalPrice, 0)
     const order: CreateOrder = createOrderSchema.parse({
@@ -33,18 +32,28 @@ export async function createCheckout(items: CartItem[]): Promise<void> {
 
     // 3 Add user
     const supabase = await createClient();
-    const {data, error} = await  supabase.auth.signInAnonymously()
-    if(error) {
-        console.error("Error occured while signInAnonymously:", error)
-        throw error;
-    }
+    const userResponse = await supabase.auth.getUser();
 
-    if(data.user === null) {
-        console.error("User not created");
-        throw  error;
-    }
+    if(userResponse.data.user) {
+        order.userId = userResponse.data.user.id
+    } else {
+        const anonUserResponse = await supabase.auth.signInAnonymously()
 
-    order.userId = data.user.id;
+        // If there is some error while signIn throw error
+        if(anonUserResponse.error) {
+            console.error("Error occured while signInAnonymously:", anonUserResponse.error.message)
+            throw anonUserResponse.error;
+        }
+
+        // If user failed to be created throw error
+        if(anonUserResponse.data.user === null) {
+            console.error("User not created");
+            throw  anonUserResponse.error;
+        }
+
+        // Set anonymous id of user
+        order.userId = anonUserResponse.data.user.id
+    }
 
     // 4. Save order with items
     try {
