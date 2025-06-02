@@ -88,40 +88,40 @@ export default function CheckoutForm() {
     }
 
     return (
-        <form id="payment-form" onSubmit={handleSubmit} className="space-y-6">
-            <LinkAuthenticationElement id="link-authentication-element" onChange={(e) => setEmail(e.value.email)} />
-
-            <h3 className="text-lg font-medium">Shipping Address</h3>
-            <AddressElement options={
-                {
-                    mode: "shipping",
-                    fields: {
-                        phone: "always"
-                    },
-                    allowedCountries: ["PL"],
-                    validation: {
-                        phone: {
-                            required: "always"
+        <>
+            <form id="payment-form" onSubmit={handleSubmit} className="space-y-6">
+                <h3 className="text-lg font-medium">Shipping Address</h3>
+                <AddressElement options={
+                    {
+                        mode: "shipping",
+                        fields: {
+                            phone: "always"
+                        },
+                        allowedCountries: ["PL"],
+                        validation: {
+                            phone: {
+                                required: "always"
+                            }
                         }
                     }
-                }
-            } />
+                }/>
 
-            <h3 className="text-lg font-medium">Payment Method</h3>
-            <PaymentElement id="payment-element" options={{ layout: "tabs" }} />
+                <h3 className="text-lg font-medium">Payment Method</h3>
+                    <PaymentElement id="payment-element" options={{layout: "tabs"}}/>
 
-            <Button disabled={isLoading || !stripe || !elements} className="w-full" type="submit">
-                {isLoading ? (
-                    <span className="flex items-center">
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Button disabled={isLoading || !stripe || !elements} className="w-full" type="submit">
+                    {isLoading ? (
+                        <span className="flex items-center">
+            <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
             Processing...
           </span>
-                ) : (
-                    <span>Zamów i zapłać</span>
-                )}
-            </Button>
+                    ) : (
+                        <span>Pay now</span>
+                    )}
+                </Button>
 
-            {message && <div className="text-center text-red-500">{message}</div>}
-        </form>
+                {message && <div className="text-center text-red-500">{message}</div>}
+            </form>
+        </>
     )
 }

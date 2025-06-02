@@ -11,9 +11,9 @@ export default function OrderSummary(params: {order: Order}) {
     return (
         <>
             <div className="hidden lg:block">
-                <div className="bg-card border border-border rounded-lg p-6 sticky top-24">
-                    <h2 className="text-xl font-semibold mb-6">Twoje zamówienie</h2>
-                    <div className="space-y-4 mb-6">
+                <div className="sticky">
+                    <h2 className="text-xl font-semibold mb-6">Podsumowanie zamówienia</h2>
+                    <div className="space-y-2 mb-6">
                         {order.items.map((item, index) => (
                             <div key={index} className="flex gap-4">
                                 <div className="relative h-16 w-16 rounded overflow-hidden flex-shrink-0 bg-muted">

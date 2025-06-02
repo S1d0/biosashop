@@ -31,7 +31,7 @@ export async function createCheckoutSessionFromOrder(order: Order) {
             automatic_tax: {enabled: false},
         })
 
-        return session
+        return {clientSecret: session.client_secret}
     } catch(error) {
         console.error("Error creating checkout session:", error)
         throw error // Re-throw to allow handling in the component
@@ -43,9 +43,6 @@ export async function createPaymentIntent(order: Order ) {
     const paymentIntent = await stripe.paymentIntents.create({
         amount: total,
         currency: "pln",
-        // automatic_payment_methods: {
-        //     enabled: true,
-        // },
         receipt_email: "sidzkowski@protonmail.com",
         payment_method_types: ['card', 'blik', 'klarna'],
 
