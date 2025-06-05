@@ -1,7 +1,6 @@
 'use client'
 
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
-import Image from "next/image";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import {ExternalLink, ShoppingCart} from "lucide-react";
@@ -9,6 +8,7 @@ import {ProductVariant} from "@/types/product";
 import {useCart} from "@/components/shared/cart/cart-provider";
 import {formatPricePLN} from "@/lib/utils";
 import Link from "next/link";
+import {CldImage} from "next-cloudinary";
 
 interface ProductVariantProps {
     variant: ProductVariant
@@ -29,7 +29,7 @@ export default function ProductVariantPage({variant}: ProductVariantProps) {
                     Zobacz szczegóły <ExternalLink className="ml-1 h-3 w-3" />
                   </span>
                         </div>
-                        <Image
+                        <CldImage
                             src={variant.images[0] || "/placeholder.svg"}
                             alt={variant.name}
                             fill

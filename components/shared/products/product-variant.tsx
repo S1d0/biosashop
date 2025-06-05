@@ -1,7 +1,6 @@
 'use client'
 
 import {ProductVariant} from "@/types/product";
-import Image from "next/image";
 import {ImageModal} from "@/components/shared/images/image-modal";
 import {useState} from "react";
 import ProductPrice from "@/components/shared/products/product-price";
@@ -9,6 +8,7 @@ import AddCartButton from "@/components/shared/cart/add-cart-button";
 import Link from "next/link";
 import {Button} from "@/components/ui/button";
 import {ExternalLink} from "lucide-react";
+import {CldImage} from "next-cloudinary";
 
 export default function ProductVariantPage({variant}: {variant: ProductVariant}) {
     const [viewImg, setViewImg] = useState(false)
@@ -17,7 +17,7 @@ export default function ProductVariantPage({variant}: {variant: ProductVariant})
         <div className={`rounded-lg border p-4 transition-shadow hover:shadow-lg flex flex-col h-full bg-muted`}>
             <div className="flex-1 space-y-4">
                 <div className="aspect-square overflow-hidden rounded-lg">
-                    <Image
+                    <CldImage
                         onClick={() => setViewImg(true)}
                         src={img || "/placeholder.svg"}
                         alt={`${variant.name} - ${variant.size}`}

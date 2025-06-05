@@ -32,6 +32,7 @@ model ProductVariant {
   stock       Int           @default(0)
   size        String
   createdAt   DateTime      @default(now()) @db.Timestamp(6)
+  cldImage    String        @default("")
 
   @@index([familyId])
 }

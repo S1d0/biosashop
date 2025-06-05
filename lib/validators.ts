@@ -17,7 +17,8 @@ export const insertProductVariantSchema = z.object({
     sku: z.string(),
     slug: z.string().min(3, 'Slug musi zawierać co najmniej 3 znaki'),
     stock: z.number().nonnegative("Ilość produktów nie może być mniejsza niż -1"),
-    size: z.string().min(2, 'Rozmiar musi zawierać co najmniej 2 znaki')
+    size: z.string().min(2, 'Rozmiar musi zawierać co najmniej 2 znaki'),
+    cldImage: z.string().regex(/^https:\/\/res\.cloudinary\.com\//, "Must be a valid cloudinary address")
 })
 
 export const EnquiryStatus = z.enum(["PENDING", "IN_PROGRESS", "RESPONDED", "RESOLVED", "SPAM"]);

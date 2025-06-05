@@ -1,8 +1,8 @@
 'use client'
 
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
-import Image from "next/image"
 import { useState, useEffect } from "react";
+import {CldImage} from "next-cloudinary";
 
 interface ImageModalProps {
     isOpen: boolean
@@ -38,7 +38,7 @@ export function ImageModal({ isOpen, onClose, images, altText }: ImageModalProps
             <DialogTitle className="hidden">{altText}</DialogTitle>
             <DialogContent className="max-w-[90vw] p-0" onClick={(e) => e.stopPropagation()}>
                 <div className="relative h-[90vh] w-full">
-                    <Image
+                    <CldImage
                         src={img || "/placeholder.svg"}
                         alt={altText}
                         fill
@@ -57,7 +57,7 @@ export function ImageModal({ isOpen, onClose, images, altText }: ImageModalProps
                                     onClick={(e) => handleThumbnailClick(image, e)}
                                 >
                                     <div className="relative h-16 w-16">
-                                        <Image
+                                        <CldImage
                                             src={image}
                                             alt={`Preview ${index + 1}`}
                                             fill
