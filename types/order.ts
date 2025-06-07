@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 
 // OrderItem Zod schema
@@ -98,3 +97,18 @@ export type Order = z.infer<typeof orderSchema>;
 export type CreateOrder = z.infer<typeof createOrderSchema>;
 export type ShippingAddress = z.infer<typeof shippingAddressSchema>;
 export type PaymentResult = z.infer<typeof paymentResultSchema>;
+
+// Order Summary type for payment verification results
+export type OrderSummary = {
+    success: boolean
+    paymentStatus?: string
+    customerEmail?: string
+    order?: Order
+    error?: PaymentError
+}
+
+// Error type for payment verification errors
+export type PaymentError = {
+    error: string
+    details?: string
+}

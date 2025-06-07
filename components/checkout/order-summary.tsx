@@ -1,8 +1,10 @@
+"use client"
+
 import {Order} from "@/types/order";
-import Image from "next/image";
 import {formatPricePLN} from "@/lib/utils";
 import {ShieldCheck, Truck} from "lucide-react";
 import React from "react";
+import {CldImage} from "next-cloudinary";
 
 export default function OrderSummary(params: {order: Order}) {
     const {order} = params;
@@ -17,7 +19,7 @@ export default function OrderSummary(params: {order: Order}) {
                         {order.items.map((item, index) => (
                             <div key={index} className="flex gap-4">
                                 <div className="relative h-16 w-16 rounded overflow-hidden flex-shrink-0 bg-muted">
-                                    <Image
+                                    <CldImage
                                         src={item.image || "/placeholder.svg?height=64&width=64"}
                                         alt={item.name}
                                         fill

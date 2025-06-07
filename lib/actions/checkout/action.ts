@@ -10,7 +10,7 @@ export async function createCheckout(items: CartItem[]): Promise<void> {
     // 1. Create order items
     const orderItems: CreateOrderItem[] = items.map(cartItem => {
         const total = cartItem.quantity * cartItem.product.price;
-        const image = cartItem.product.images[0]
+        const image = cartItem.product.cldImage
         return createOrderItemSchema.parse({
             name: cartItem.product.name,
             productId: cartItem.product.id,
