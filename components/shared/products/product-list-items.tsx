@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link"; // Import Link from Next.js
 import { Badge } from "@/components/ui/badge";
 import { ProductVariant } from "@prisma/client";

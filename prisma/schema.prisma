@@ -74,37 +74,19 @@ model Cart {
   @@index([sessionCartId])
 }
 
-model OrderItem {
-  id         String @id @default(uuid()) @db.Uuid
-  productId  String @db.Uuid
-  orderId    String @db.Uuid
-  order      Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  name       String
-  image      String
-  price      Int
-  quantity   Int
-  totalPrice Int
-
-  @@index([orderId])
-  @@index([productId])
-}
-
 model Order {
-  id              String      @id @default(uuid()) @db.Uuid
-  userId          String?     @db.Uuid
-  shippingAddress Json?       @db.Json
-  paymentMethod   String?
-  paymentResult   Json?       @db.Json
-  items           OrderItem[]
+  id              String   @id @default(uuid()) @db.Uuid
+  status          String   @default("pending") // pending, paid, shipped, delivered, cancelled
+  userId          String?  @db.Uuid
+  shippingAddress Json?    @db.Json
+  items           Json     @db.Json // Array of OrderItem objects
   totalPrice      Int
-  shippingPrice   Int?
-  payed           Boolean     @default(false)
-  payedAt         DateTime?
-  deliveryStatus  String      @default("PROCESSING")
-  delivered       Boolean     @default(false)
-  deliveredAt     DateTime?
-  createdAt       DateTime    @default(now()) @db.Timestamp(6)
-  updatedAt       DateTime    @updatedAt
+  deliveryInfo    Json?    @db.Json // DeliveryInfo object
+  paymentInfo     Json?    @db.Json // PaymentInfo object
+  createdAt       DateTime @default(now()) @db.Timestamp(6)
+  updatedAt       DateTime @updatedAt @db.Timestamp(6)
 
   @@index([userId])
+  @@index([status])
+  @@index([createdAt])
 }

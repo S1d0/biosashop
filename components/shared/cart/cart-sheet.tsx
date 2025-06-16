@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button"
 import {ShoppingBag, AlertCircle, Loader2} from "lucide-react"
 import {formatPricePLN} from "@/lib/utils"
 import CartItemPreview from "@/components/shared/cart/CartItemPreview";
-import {createCheckout} from "@/lib/actions/checkout/action";
 import {useState} from "react";
+import {createOrder} from "@/lib/actions/order/action";
+import { useRouter } from 'next/navigation'
 
 function ContinueShoppingButton() {
     const {setIsCartOpen} = useCart()
@@ -24,13 +25,16 @@ function ContinueShoppingButton() {
 }
 
 export function CartSheet() {
+    const router = useRouter()
     const { items, isCartOpen, setIsCartOpen, totalPrice, totalItems } = useCart()
     const [isLoading, setIsLoading] = useState(false)
 
     const handleCheckout = async () => {
         try {
         setIsLoading(true)
-        await createCheckout(items)
+        const orderId = await createOrder(items)
+        router.push(`/checkout/${orderId}`)
+        setIsCartOpen(false)
         } catch (error) {
             console.error('Checkout failed:', error)
         } finally {

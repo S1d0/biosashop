@@ -3,8 +3,6 @@
 import {AddressElement, PaymentElement, useCheckout} from "@stripe/react-stripe-js";
 import React, {useEffect, useState} from "react";
 import {Alert, AlertDescription} from "@/components/ui/alert";
-import {Label} from "@/components/ui/label";
-import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {Loader2} from "lucide-react";
 import {StripeCheckoutConfirmResult} from "@stripe/stripe-js";
@@ -14,7 +12,6 @@ export default function CheckoutForm() {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [formattedAmount, setFormattedAmount] = useState<string>("")
-    const [email, setEmail] = useState("")
 
     // Format the amount from the order directly instead of relying on checkout.total
     useEffect(() => {
@@ -31,22 +28,11 @@ export default function CheckoutForm() {
             return
         }
 
-        if (!email) {
-            setError("Email is required")
-            return
-        }
-
         setIsLoading(true)
         setError(null)
 
         try {
-            // Update email first
-            // checkout.updateEmail(email)
-
-            // Confirm the payment with email
-            const confirmResult: StripeCheckoutConfirmResult = await checkout.confirm({
-                email: email,
-            })
+            const confirmResult: StripeCheckoutConfirmResult = await checkout.confirm()
 
             if (confirmResult.type == "error") {
                 setError(confirmResult.error.message || "Payment failed")
@@ -67,30 +53,30 @@ export default function CheckoutForm() {
                     <AlertDescription>{error}</AlertDescription>
                 </Alert>
             )}
-
-            <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="your@email.com"
-                    required
-                />
-            </div>
-
             <div>
                 <h4 className="text-lg font-semibold mb-4">Billing Address</h4>
-                <AddressElement options={{ mode: "shipping" }} />
+                <AddressElement options={{
+                    mode: "billing",
+                    fields: {
+                        phone: "always"
+                    }
+                }} />
             </div>
 
             <div>
                 <h4 className="text-lg font-semibold mb-4">Payment Information</h4>
-                <PaymentElement id="payment-element" />
+                <PaymentElement id="payment-element" options={{
+                    fields: {
+                        billingDetails: {
+                            email: "auto",
+                            phone: "auto",
+                        }
+                    }
+                }
+                }/>
             </div>
 
-            <Button type="submit" disabled={isLoading || !checkout || !email} className="w-full" size="lg">
+            <Button type="submit" disabled={isLoading || !checkout } className="w-full" size="lg">
                 {isLoading ? (
                     <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
