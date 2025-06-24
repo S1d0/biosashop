@@ -3,6 +3,7 @@
 import {Separator} from "@/components/ui/separator"
 import {useOrderCheckout} from "@/components/checkout/v3/checkout-provider";
 import {formatPricePLN} from "@/lib/utils";
+import {CldImage} from "next-cloudinary";
 
 export default function OrderSummary() {
     const {deliveryPrice, deliveryMethod, deliveryOptions, selectedParcelLocker, order} = useOrderCheckout()
@@ -21,9 +22,11 @@ export default function OrderSummary() {
                 <div className="space-y-4">
                     {order.items.map((item, index) => (
                         <div key={index} className="flex gap-3 pb-4 border-b border-border last:border-b-0">
-                            <img
+                            <CldImage
                                 src={item.image || "/placeholder.svg"}
                                 alt={item.name}
+                                width={64}
+                                height={64}
                                 className="w-16 h-16 object-cover rounded-lg"
                             />
                             <div className="flex-1 min-w-0">

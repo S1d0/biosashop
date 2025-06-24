@@ -150,7 +150,7 @@ function getDeliveryDate(deliveryMethod: DeliveryMethod): Date {
 
 export async function updateDelivery(initialState: DeliveryState, formData: FormData): Promise<DeliveryState> {
     const orderId = formData.get("orderId") as string;
-    const method = formData.get("method") as string;
+    const method = formData.get("deliveryMethod") as string;
 
     const deliveryEta = getDeliveryDate(method as DeliveryMethod)
     const price =  getDeliveryPrice(method as DeliveryMethod)
