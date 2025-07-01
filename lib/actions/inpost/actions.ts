@@ -40,96 +40,30 @@ interface InPostApiResponse {
     total_pages: number
 }
 
-export async function searchInPostPoints(query: string): Promise<{
-    success: boolean
-    data?: InPostPoint[]
-    error?: string
-}> {
-    try {
-        if (!query.trim() || query.length < 2) {
-            return {
-                success: false,
-                error: "Zapytanie musi mieć co najmniej 2 znaki",
-            }
-        }
-
-        // Real InPost API endpoint
-        const apiUrl = "https://api-shipx-pl.easypack24.net/v1/points"
-
-        // Build query parameters based on InPost API
-        const params = new URLSearchParams()
-
-        // Check if query looks like a postal code (contains digits and dashes)
-        const isPostalCode = /\d/.test(query) && query.includes("-")
-
-        if (isPostalCode) {
-            // Use relative_post_code for postal code searches
-            params.append("relative_post_code", query.replace(/\s/g, ""))
-        } else {
-            // For city names, we might need to use a different parameter
-            // You may need to adjust this based on InPost API documentation
-            params.append("q", query)
-        }
-
-        params.append("limit", "25")
-        params.append("type", "parcel_locker")
-
-        const response = await fetch(`${apiUrl}?${params}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                // Add authorization header if required by InPost API
-                // 'Authorization': `Bearer ${process.env.INPOST_API_KEY}`,
-            },
-        })
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
-        }
-
-        const data = await response.json()
-
-        // The API might return data in different format, adjust as needed
-        const points: InPostPoint[] = Array.isArray(data) ? data : data.items || []
-
-        return {
-            success: true,
-            data: points,
-        }
-    } catch (error) {
-        console.error("Error searching InPost points:", error)
-        return {
-            success: false,
-            error: "Błąd podczas wyszukiwania punktów InPost. Spróbuj ponownie.",
-        }
-    }
-}
-
-export async function getInPostPoints(initialState: InpostPointState, formData: FormData): Promise<InpostPointState> {
+export async function getInPostPoints(query: string, locationQuery: string | null): Promise<InpostPointState> {
     const apiUrl = "https://api-shipx-pl.easypack24.net/v1/points"
-
-    const query = formData.get("query") as string
-    const isPostalCode = /\d/.test(query) && query.includes("-")
     const params = new URLSearchParams()
 
-    if (isPostalCode) {
-        params.append("relative_post_code", query.replace(/\s/g, ""))
+    console.log("Geolocation ", locationQuery)
+
+    if(locationQuery) {
+        params.append("relative_point", locationQuery.replace(/\s/g, ""))
     } else {
-        params.append("city", query)
+        const isPostalCode = /\d/.test(query) && query.includes("-")
+        if (isPostalCode) {
+            params.append("relative_post_code", query.replace(/\s/g, ""))
+        } else {
+            params.append("city", query)
+        }
     }
 
     params.append("limit", "5")
-
-    console.log("Params: ", params)
     const response = await fetch(`${apiUrl}?${params}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
         },
     })
-
-    console.log(response)
-
     const data: InPostApiResponse = await response.json()
     return {
         success: true,

@@ -113,6 +113,8 @@ export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTab
                     {state.errors?.deliveryMethod && <p className="text-red-500 text-sm">{state.errors.deliveryMethod[0]}</p>}
                 </div>
 
+                {selectedDeliveryMethod === "inpost" && <InpostSelection />}
+
                 <div className="space-y-2">
                     <Label htmlFor="deliveryNotes">Uwagi do dostawy (opcjonalnie)</Label>
                     <Input
@@ -124,14 +126,14 @@ export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTab
                     {state.errors?.deliveryNotes && <p className="text-red-500 text-sm">{state.errors.deliveryNotes[0]}</p>}
                 </div>
 
+
                 {state?.success && <div className="text-green-600 text-sm bg-green-50 p-3 rounded-md">{state.message}</div>}
                 {!state?.success && state.message && (
                     <div className="text-red-600 text-sm bg-red-50 p-3 rounded-md">{state.message}</div>
                 )}
-
                 <SubmitButton />
             </Form>
-            <InpostSelection />
+
         </div>
     )
 }

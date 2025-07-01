@@ -63,17 +63,25 @@ interface InpostSelectionProps {
 }
 
 export default function InpostSelection({ onPointSelect, selectedPoint }: InpostSelectionProps) {
-    const [state, action] = useActionState(getInPostPoints, initialInpostPointState)
+    const [state, setInpostState] = useState<InpostPointState>(initialInpostPointState)
     const [searchQuery, setSearchQuery] = useState("")
+    const [searchGeoPosition, setGeoPosition] = useState("")
+    const [searching, isSearching] = useState(false)
     const [localSelectedPoint, setLocalSelectedPoint] = useState<InPostPoint | null>(selectedPoint || null)
+    const [points, setPoints] = useState<InPostPoint[]>([])
+    const [errors, setErrors] = useState<Record<string, string>>({})
 
     // Use state items or empty array
-    const inpostPoints: InPostPoint[] = state.items || []
+    const inpostPoints: InPostPoint[] = points
 
     // Update local selected point when prop changes
     useEffect(() => {
         setLocalSelectedPoint(selectedPoint || null)
     }, [selectedPoint])
+
+    useEffect(() => {
+        isSearching(false)
+    }, [points]);
 
     const handlePointSelection = (point: InPostPoint) => {
         setLocalSelectedPoint(point)
@@ -85,6 +93,65 @@ export default function InpostSelection({ onPointSelect, selectedPoint }: Inpost
         onPointSelect?.(null)
     }
 
+    const handleSearch = async () => {
+        const inpostPointState = await getInPostPoints(searchQuery, null)
+        isSearching(true)
+        setInpostState(inpostPointState)
+        if(inpostPointState.success) {
+            setPoints(inpostPointState.items)
+        }
+    }
+
+    const handleGeolocation = () => {
+        if (!navigator.geolocation) {
+            setErrors((prev) => ({
+                ...prev,
+                inpost: "Geolokalizacja nie jest obsługiwana przez tę przeglądarkę",
+            }))
+            return
+        }
+
+        setErrors((prev) => ({ ...prev, inpost: "" }))
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const { latitude, longitude } = position.coords
+                const locationQuery = `${latitude.toFixed(3)}, ${longitude.toFixed(3)}`
+                setSearchQuery(locationQuery)
+
+                try {
+                    const result = await getInPostPoints("",locationQuery)
+                    if (result.success && result.items.length > 0) {
+                        setPoints(result.items)
+                        if (result.items.length === 0) {
+                            setErrors((prev) => ({
+                                ...prev,
+                                inpost: "Nie znaleziono paczkomatów w pobliżu",
+                            }))
+                        }
+                    } else {
+                        setPoints([])
+                    }
+                } catch (error) {
+                    setErrors((prev) => ({
+                        ...prev,
+                        inpost: "Błąd podczas wyszukiwania punktów",
+                    }))
+                    console.error(error)
+                }
+            },
+            (error) => {
+                setErrors((prev) => ({
+                    ...prev,
+                    inpost: "Nie udało się pobrać lokalizacji. Sprawdź uprawnienia przeglądarki.",
+                }))
+                console.error(error)
+                isSearching(false)
+            },
+        )
+    }
+
+
     return (
         <>
             <Card className="bg-muted/20">
@@ -93,9 +160,10 @@ export default function InpostSelection({ onPointSelect, selectedPoint }: Inpost
                     <CardDescription>Wpisz kod pocztowy lub nazwę miasta, aby znaleźć najbliższe paczkomaty</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <Form action={action}>
+                    {!selectedPoint && (
                         <div className="space-y-2">
                             <Label htmlFor="query">Wyszukaj paczkomat</Label>
+
                             <div className="flex gap-2">
                                 <Input
                                     id="query"
@@ -103,16 +171,17 @@ export default function InpostSelection({ onPointSelect, selectedPoint }: Inpost
                                     placeholder="np. 01-016 lub Warszawa"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
+                                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                                     className="flex-1"
-                                    required
                                     minLength={2}
                                 />
-                                <SubmitButton disabled={searchQuery.length < 2} />
+                                <Button onClick={handleGeolocation} size="sm" className="flex-shrink-0">
+                                    <MapPin className="h-4 w-4 mr-1" />
+                                </Button>
                             </div>
                             {state.errors?.query && <p className="text-sm text-red-600">{state.errors.query[0]}</p>}
-                        </div>
-                    </Form>
-
+                        </div>)
+                    }
                     {/* Show selected point */}
                     {localSelectedPoint && (
                         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -139,17 +208,13 @@ export default function InpostSelection({ onPointSelect, selectedPoint }: Inpost
                     )}
 
                     {/* Search Results */}
-                    {inpostPoints.length > 0 && (
+                    {inpostPoints.length > 0 && !localSelectedPoint && (
                         <div className="space-y-3 max-h-80 overflow-y-auto">
                             <Label className="text-sm font-medium">Dostępne paczkomaty ({inpostPoints.length}):</Label>
                             {inpostPoints.map((point) => (
                                 <div
                                     key={point.name}
-                                    className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                                        localSelectedPoint?.name === point.name
-                                            ? "border-blue-500 bg-blue-50"
-                                            : "border-border hover:bg-muted/50"
-                                    }`}
+                                    className={`p-4 border rounded-lg cursor-pointer transition-colors `}
                                     onClick={() => handlePointSelection(point)}
                                 >
                                     <div className="flex justify-between items-start">
@@ -181,6 +246,13 @@ export default function InpostSelection({ onPointSelect, selectedPoint }: Inpost
                         </div>
                     )}
 
+                    {!searching && inpostPoints.length < 1 && (
+                        <div className="text-center py-8 text-muted-foreground">
+                            <MapPin className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                            <p>Kliknij przycisk wyszukiwania, aby znaleźć paczkomaty</p>
+                        </div>
+                    )}
+
                     {/* No results message */}
                     {state.success && inpostPoints.length === 0 && searchQuery && (
                         <div className="text-center py-8 text-muted-foreground">
@@ -197,24 +269,5 @@ export default function InpostSelection({ onPointSelect, selectedPoint }: Inpost
                 </CardContent>
             </Card>
         </>
-    )
-}
-
-function SubmitButton({ disabled }: { disabled?: boolean }) {
-    const { pending } = useFormStatus()
-    return (
-        <Button type="submit" variant="outline" disabled={pending || disabled}>
-            {pending ? (
-                <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Szukam...
-                </>
-            ) : (
-                <>
-                    <Search className="mr-2 h-4 w-4" />
-                    Szukaj
-                </>
-            )}
-        </Button>
     )
 }
