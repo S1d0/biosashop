@@ -148,6 +148,13 @@ function getDeliveryDate(deliveryMethod: DeliveryMethod): Date {
 }
 
 
+export async function updateShippmentInfo() {
+
+
+
+
+}
+
 export async function updateDelivery(initialState: DeliveryState, formData: FormData): Promise<DeliveryState> {
     const orderId = formData.get("orderId") as string;
     const method = formData.get("deliveryMethod") as string;

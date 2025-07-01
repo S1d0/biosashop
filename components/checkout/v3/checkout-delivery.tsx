@@ -8,11 +8,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Button } from "@/components/ui/button"
-// import InPostSelector from "@/components/inpost-selector"
 import { updateDelivery } from "@/lib/actions/order/action"
 import { useEffect, useState } from "react"
 import {DeliveryMethod, useOrderCheckout} from "@/components/checkout/v3/checkout-provider";
 import {Order} from "@/types/order";
+import {formatPricePLN} from "@/lib/utils";
+import InpostSelection from "@/components/checkout/v3/inpost/inpost-selection";
 
 export type DeliveryState = {
     success: boolean
@@ -41,7 +42,7 @@ const initialDeliveryState: DeliveryState = {
 
 export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTabAction: (tab: string) => void}) {
     const [state, action] = useActionState(updateDelivery, initialDeliveryState)
-    const { deliveryMethod, setDeliveryMethod, deliveryOptions, setSelectedParcelLocker, updateOrder, order} = useOrderCheckout()
+    const { deliveryMethod, setDeliveryMethod, deliveryOptions, updateOrder, order} = useOrderCheckout()
     const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethod)
 
     // Update context when delivery method changes
@@ -56,21 +57,6 @@ export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTab
             setActiveTabAction("payment")
         }
     }, [state.success, state.updatedOrder, updateOrder, setActiveTabAction])
-
-    const handleParcelLockerSelect = (locker: any) => {
-        // Update hidden inputs when parcel locker is selected
-        const parcelLockerNameInput = document.getElementById("parcelLockerName") as HTMLInputElement
-        const parcelLockerAddressInput = document.getElementById("parcelLockerAddress") as HTMLInputElement
-
-        if (parcelLockerNameInput) parcelLockerNameInput.value = locker.name
-        if (parcelLockerAddressInput) parcelLockerAddressInput.value = locker.address.line1
-
-        // Update context with selected parcel locker
-        setSelectedParcelLocker({
-            name: locker.name,
-            address: locker.address.line1,
-        })
-    }
 
     return (
         <div className="space-y-6">
@@ -105,7 +91,7 @@ export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTab
                                 <div className="font-medium">{deliveryOptions.standard.name}</div>
                                 <div className="text-sm text-muted-foreground">{deliveryOptions.standard.description}</div>
                             </Label>
-                            <div className="font-medium">{deliveryOptions.standard.price.toFixed(2)} zł</div>
+                            <div className="font-medium">{formatPricePLN(deliveryOptions.standard.price)} zł</div>
                         </div>
                         <div className="flex items-center space-x-3 p-4 border border-border rounded-lg hover:bg-muted/30 transition-colors">
                             <RadioGroupItem value="express" id="express" />
@@ -113,7 +99,7 @@ export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTab
                                 <div className="font-medium">{deliveryOptions.express.name}</div>
                                 <div className="text-sm text-muted-foreground">{deliveryOptions.express.description}</div>
                             </Label>
-                            <div className="font-medium">{deliveryOptions.express.price.toFixed(2)} zł</div>
+                            <div className="font-medium">{formatPricePLN(deliveryOptions.express.price)} zł</div>
                         </div>
                         <div className="flex items-center space-x-3 p-4 border border-border rounded-lg hover:bg-muted/30 transition-colors">
                             <RadioGroupItem value="inpost" id="inpost" />
@@ -121,19 +107,11 @@ export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTab
                                 <div className="font-medium">{deliveryOptions.inpost.name}</div>
                                 <div className="text-sm text-muted-foreground">{deliveryOptions.inpost.description}</div>
                             </Label>
-                            <div className="font-medium">{deliveryOptions.inpost.price.toFixed(2)} zł</div>
+                            <div className="font-medium">{formatPricePLN(deliveryOptions.inpost.price)} zł</div>
                         </div>
                     </RadioGroup>
                     {state.errors?.deliveryMethod && <p className="text-red-500 text-sm">{state.errors.deliveryMethod[0]}</p>}
                 </div>
-
-                <InPostSelectorSection
-                    onParcelLockerSelect={handleParcelLockerSelect}
-                    selectedLockerName={state.inputs?.parcelLockerName}
-                    selectedLockerAddress={state.inputs?.parcelLockerAddress}
-                    error={state.errors?.parcelLockerName?.[0]}
-                    showSection={selectedDeliveryMethod === "inpost"}
-                />
 
                 <div className="space-y-2">
                     <Label htmlFor="deliveryNotes">Uwagi do dostawy (opcjonalnie)</Label>
@@ -153,45 +131,9 @@ export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTab
 
                 <SubmitButton />
             </Form>
+            <InpostSelection />
         </div>
     )
-}
-
-interface InPostSelectorSectionProps {
-    onParcelLockerSelect: (locker: any) => void
-    selectedLockerName?: string
-    selectedLockerAddress?: string
-    error?: string
-    showSection?: boolean
-}
-
-function InPostSelectorSection({
-                                   selectedLockerName,
-                                   selectedLockerAddress,
-                                   error,
-                                   showSection = false,
-                               }: InPostSelectorSectionProps) {
-    const selectedLocker = selectedLockerName
-        ? {
-            name: selectedLockerName,
-            address: { line1: selectedLockerAddress || "" },
-        }
-        : null
-
-    return showSection ? (
-        <div className="mt-6 p-6 bg-muted/20 rounded-lg">
-            <h3 className="font-medium mb-4">Wybierz paczkomat InPost</h3>
-            {/*<InPostSelector onSelect={onParcelLockerSelect} selectedLocker={selectedLocker} />*/}
-            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-            {selectedLocker && (
-                <div className="mt-4 p-4 bg-primary/10 rounded-lg">
-                    <div className="font-medium text-sm">Wybrany paczkomat:</div>
-                    <div className="text-sm">{selectedLocker.name}</div>
-                    <div className="text-xs text-muted-foreground">{selectedLocker.address.line1}</div>
-                </div>
-            )}
-        </div>
-    ) : null
 }
 
 function SubmitButton() {

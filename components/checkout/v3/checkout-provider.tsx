@@ -24,6 +24,7 @@ interface CheckoutContextType {
     setSelectedParcelLocker: (locker: { name: string; address: string } | null) => void
     order: Order
     updateOrder: (updates: Partial<Order>) => void
+    setActiveStep: (step: string) => void
 }
 
 const deliveryOptions: Record<DeliveryMethod, DeliveryOption> = {
@@ -59,6 +60,7 @@ export function CheckoutProvider({ children, initialOrder }: CheckoutProviderPro
     const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>('standard')
     const [selectedParcelLocker, setSelectedParcelLocker] = useState<{ name: string; address: string } | null>(null)
     const [order, setOrder] = useState<Order>(initialOrder)
+    const [activeStep, setActiveStep] = useState("address")
 
     // Calculate delivery price based on current method
     const deliveryPrice = useMemo(() => {
@@ -95,6 +97,10 @@ export function CheckoutProvider({ children, initialOrder }: CheckoutProviderPro
         setDeliveryMethod(method)
     }, [])
 
+    const handleSetActiveStep= useCallback((step: string) => {
+        setActiveStep(step)
+    }, [])
+
     const handleSetSelectedParcelLocker = useCallback((locker: { name: string; address: string } | null) => {
         setSelectedParcelLocker(locker)
     }, [])
@@ -109,6 +115,7 @@ export function CheckoutProvider({ children, initialOrder }: CheckoutProviderPro
             setSelectedParcelLocker: handleSetSelectedParcelLocker,
             order,
             updateOrder,
+            setActiveStep: handleSetActiveStep
         }),
         [
             deliveryMethod,
@@ -118,6 +125,7 @@ export function CheckoutProvider({ children, initialOrder }: CheckoutProviderPro
             handleSetSelectedParcelLocker,
             order,
             updateOrder,
+            handleSetActiveStep
         ],
     )
 

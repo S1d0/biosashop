@@ -12,7 +12,7 @@ export default function OrderSummary() {
     const total = subtotal + deliveryPrice
 
     return (
-        <div className="bg-white sticky top-4">
+        <div className="sticky top-4">
             <div className="mb-6">
                 <h2 className="text-2xl font-semibold">Podsumowanie zamówienia</h2>
             </div>
