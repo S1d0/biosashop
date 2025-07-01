@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, useCallback, useMemo, type ReactNode } from "react"
 import type { Order } from "@/types/order"
+import {InPostPoint} from "@/types/inpost";
 
 export type DeliveryMethod = "standard" | "express" | "inpost"
 
@@ -17,11 +18,8 @@ interface CheckoutContextType {
     setDeliveryMethod: (method: DeliveryMethod) => void
     deliveryPrice: number
     deliveryOptions: Record<DeliveryMethod, DeliveryOption>
-    selectedParcelLocker: {
-        name: string
-        address: string
-    } | null
-    setSelectedParcelLocker: (locker: { name: string; address: string } | null) => void
+    selectedPoint: InPostPoint | null
+    setSelectedPoint: (point: InPostPoint | null) => void
     order: Order
     updateOrder: (updates: Partial<Order>) => void
     setActiveStep: (step: string) => void
@@ -58,37 +56,32 @@ interface CheckoutProviderProps {
 export function CheckoutProvider({ children, initialOrder }: CheckoutProviderProps) {
     // Initialize state from the provided order
     const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>('standard')
-    const [selectedParcelLocker, setSelectedParcelLocker] = useState<{ name: string; address: string } | null>(null)
+    const [selectedPoint, setSelectedPoint] = useState<InPostPoint | null>(null)
     const [order, setOrder] = useState<Order>(initialOrder)
     const [activeStep, setActiveStep] = useState("address")
 
-    // Calculate delivery price based on current method
     const deliveryPrice = useMemo(() => {
         return deliveryOptions[deliveryMethod].price
     }, [deliveryMethod])
 
     // Update order when delivery method or calculations change
     useEffect(() => {
+
+        // FIXME Check if inpost info is enough
         setOrder((prev) => ({
             ...prev,
             deliveryMethod,
             deliveryFee: deliveryPrice,
             total: prev.totalPrice + deliveryPrice,
-            parcelLocker: selectedParcelLocker,
+            parcelLocker: {name: selectedPoint?.name, address: selectedPoint?.address},
         }))
-    }, [deliveryMethod, deliveryPrice, selectedParcelLocker])
+    }, [deliveryMethod, deliveryPrice, selectedPoint])
 
     const updateOrder = useCallback((updates: Partial<Order> | Order) => {
         // Check if updates is a complete Order object or partial updates
         if ("id" in updates && "items" in updates && "status" in updates) {
-            // It's a complete Order object, replace the entire order
             setOrder(updates as Order)
-            // FIXME Should set DeliveryMethod
-            // Update local state to match the new order
-            // setDeliveryMethod(updates.deliveryMethod as DeliveryMethod)
-            // setSelectedParcelLocker(updates.parcelLocker || null)
         } else {
-            // It's partial updates, merge with existing order
             setOrder((prev) => ({ ...prev, ...updates }))
         }
     }, [])
@@ -101,8 +94,8 @@ export function CheckoutProvider({ children, initialOrder }: CheckoutProviderPro
         setActiveStep(step)
     }, [])
 
-    const handleSetSelectedParcelLocker = useCallback((locker: { name: string; address: string } | null) => {
-        setSelectedParcelLocker(locker)
+    const handleSetSelectedPoint = useCallback((point: InPostPoint | null) => {
+        setSelectedPoint(point)
     }, [])
 
     const value = useMemo(
@@ -111,8 +104,8 @@ export function CheckoutProvider({ children, initialOrder }: CheckoutProviderPro
             setDeliveryMethod: handleSetDeliveryMethod,
             deliveryPrice,
             deliveryOptions,
-            selectedParcelLocker,
-            setSelectedParcelLocker: handleSetSelectedParcelLocker,
+            selectedPoint,
+            setSelectedPoint: handleSetSelectedPoint,
             order,
             updateOrder,
             setActiveStep: handleSetActiveStep
@@ -121,8 +114,8 @@ export function CheckoutProvider({ children, initialOrder }: CheckoutProviderPro
             deliveryMethod,
             handleSetDeliveryMethod,
             deliveryPrice,
-            selectedParcelLocker,
-            handleSetSelectedParcelLocker,
+            selectedPoint,
+            handleSetSelectedPoint,
             order,
             updateOrder,
             handleSetActiveStep

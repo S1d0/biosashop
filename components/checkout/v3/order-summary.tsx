@@ -6,7 +6,7 @@ import {formatPricePLN} from "@/lib/utils";
 import {CldImage} from "next-cloudinary";
 
 export default function OrderSummary() {
-    const {deliveryPrice, deliveryMethod, deliveryOptions, selectedParcelLocker, order} = useOrderCheckout()
+    const {deliveryPrice, deliveryMethod, deliveryOptions, selectedPoint, order} = useOrderCheckout()
 
     const subtotal = order.items.reduce((sum, item) => sum + item.totalPrice, 0) // Convert from cents
     const total = subtotal + deliveryPrice
@@ -60,15 +60,23 @@ export default function OrderSummary() {
                         <span>{formatPricePLN(deliveryPrice)} zł</span>
                     </div>
 
-                    {deliveryMethod === "inpost" && selectedParcelLocker && (
+                    {deliveryMethod === "inpost" && selectedPoint
+                    ? (
                         <div className="text-xs text-muted-foreground bg-muted/20 p-2 rounded">
-                            <div className="font-medium">Paczkomat: {selectedParcelLocker.name}</div>
-                            <div>{selectedParcelLocker.address}</div>
+                            <div className="font-medium">Paczkomat: {selectedPoint.name}</div>
+                            <div>{selectedPoint.address.line1}</div>
+                            <div>{selectedPoint.address.line2}</div>
                         </div>
-                    )}
-
+                    )
+                    : (
+                            <div className="text-xs text-muted-foreground bg-muted/20 p-2 rounded">
+                                <div className="font-medium">Adres dostawy:</div>
+                                <div>{order.shippingAddress?.address}</div>
+                                <div>{order.shippingAddress?.postalCode} {order.shippingAddress?.city}</div>
+                            </div>
+                        )
+                    }
                     <Separator/>
-
                     <div className="flex justify-between font-semibold text-lg">
                         <span>Razem:</span>
                         <span>{formatPricePLN(total)} zł</span>

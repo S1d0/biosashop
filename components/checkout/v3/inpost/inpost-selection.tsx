@@ -7,57 +7,16 @@ import { Button } from "@/components/ui/button"
 import { Clock, MapPin } from "lucide-react"
 import { useState } from "react"
 import { getInPostPoints } from "@/lib/actions/inpost/actions"
+import {InPostPoint} from "@/types/inpost";
+import {useOrderCheckout} from "@/components/checkout/v3/checkout-provider";
 
-interface InPostPoint {
-    name: string
-    type: string[]
-    status: string
-    location: {
-        longitude: number
-        latitude: number
-    }
-    location_type: string
-    location_description: string
-    opening_hours: string
-    address: {
-        line1: string
-        line2: string
-    }
-    address_details: {
-        city: string
-        province: string
-        post_code: string
-        street: string
-        building_number: string
-        flat_number: string | null
-    }
-    phone_number: string | null
-    functions: string[]
-    easy_access_zone: boolean
-    location_247: boolean
-    distance?: number
-}
 
-export type InpostPointState = {
-    success: boolean
-    errors: {
-        inpost?: string[] | undefined
-        query?: string[] | undefined
-    } | null
-    message?: string
-    items: InPostPoint[]
-}
-
-interface InpostSelectionProps {
-    onPointSelect?: (point: InPostPoint | null) => void
-    selectedPoint?: InPostPoint | null
-}
-
-export default function InpostSelection({ onPointSelect, selectedPoint }: InpostSelectionProps) {
+export default function InPostSelection() {
     const [searchQuery, setSearchQuery] = useState("")
     const [points, setPoints] = useState<InPostPoint[]>([])
     const [error, setError] = useState("")
     const [isLoading, setIsLoading] = useState(false)
+    const {selectedPoint, setSelectedPoint} = useOrderCheckout()
 
     const handleSearch = async () => {
         if (!searchQuery.trim() || searchQuery.length < 2) {
@@ -130,11 +89,11 @@ export default function InpostSelection({ onPointSelect, selectedPoint }: Inpost
     }
 
     const handlePointSelection = (point: InPostPoint) => {
-        onPointSelect?.(point)
+        setSelectedPoint(point)
     }
 
     const handleClearSelection = () => {
-        onPointSelect?.(null)
+        setSelectedPoint(null)
     }
 
     return (
@@ -234,7 +193,6 @@ export default function InpostSelection({ onPointSelect, selectedPoint }: Inpost
                                                     )}
                                                 </div>
                                             </div>
-                                            {point.distance && <div className="text-xs text-muted-foreground">{point.distance} km</div>}
                                         </div>
                                     </div>
                                 ))}
