@@ -19,7 +19,6 @@ export default function CheckoutForm() {
     const {order} = useOrderCheckout()
 
     useEffect(() => {
-
     }, [activeTab]);
 
     return (

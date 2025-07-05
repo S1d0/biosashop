@@ -22,7 +22,6 @@ interface CheckoutContextType {
     setSelectedPoint: (point: InPostPoint | null) => void
     order: Order
     updateOrder: (updates: Partial<Order>) => void
-    setActiveStep: (step: string) => void
 }
 
 const deliveryOptions: Record<DeliveryMethod, DeliveryOption> = {
@@ -58,7 +57,6 @@ export function CheckoutProvider({ children, initialOrder }: CheckoutProviderPro
     const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>('standard')
     const [selectedPoint, setSelectedPoint] = useState<InPostPoint | null>(null)
     const [order, setOrder] = useState<Order>(initialOrder)
-    const [activeStep, setActiveStep] = useState("address")
 
     const deliveryPrice = useMemo(() => {
         return deliveryOptions[deliveryMethod].price
@@ -90,10 +88,6 @@ export function CheckoutProvider({ children, initialOrder }: CheckoutProviderPro
         setDeliveryMethod(method)
     }, [])
 
-    const handleSetActiveStep= useCallback((step: string) => {
-        setActiveStep(step)
-    }, [])
-
     const handleSetSelectedPoint = useCallback((point: InPostPoint | null) => {
         setSelectedPoint(point)
     }, [])
@@ -108,7 +102,6 @@ export function CheckoutProvider({ children, initialOrder }: CheckoutProviderPro
             setSelectedPoint: handleSetSelectedPoint,
             order,
             updateOrder,
-            setActiveStep: handleSetActiveStep
         }),
         [
             deliveryMethod,
@@ -118,10 +111,8 @@ export function CheckoutProvider({ children, initialOrder }: CheckoutProviderPro
             handleSetSelectedPoint,
             order,
             updateOrder,
-            handleSetActiveStep
         ],
     )
-
     return <CheckoutContext.Provider value={value}>{children}</CheckoutContext.Provider>
 }
 

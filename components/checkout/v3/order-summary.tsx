@@ -36,10 +36,10 @@ export default function OrderSummary() {
                                 </div>
                             </div>
                             <div className="text-right">
-                                <div className="font-medium text-sm">{(item.totalPrice / 100).toFixed(2)} zł</div>
+                                <div className="font-medium text-sm">{formatPricePLN(item.totalPrice)}</div>
                                 {item.quantity > 1 && (
                                     <div
-                                        className="text-xs text-muted-foreground">{(item.price / 100).toFixed(2)} zł/szt</div>
+                                        className="text-xs text-muted-foreground">{formatPricePLN(item.price)}/szt</div>
                                 )}
                             </div>
                         </div>
@@ -52,12 +52,12 @@ export default function OrderSummary() {
                 <div className="space-y-3">
                     <div className="flex justify-between text-sm">
                         <span>Wartość produktów:</span>
-                        <span>{formatPricePLN(subtotal)} zł</span>
+                        <span>{formatPricePLN(order.totalPrice)}</span>
                     </div>
 
                     <div className="flex justify-between text-sm">
                         <span>Dostawa ({deliveryOptions[deliveryMethod].name}):</span>
-                        <span>{formatPricePLN(deliveryPrice)} zł</span>
+                        <span>{formatPricePLN(deliveryPrice)}</span>
                     </div>
 
                     {deliveryMethod === "inpost" && selectedPoint
@@ -79,7 +79,7 @@ export default function OrderSummary() {
                     <Separator/>
                     <div className="flex justify-between font-semibold text-lg">
                         <span>Razem:</span>
-                        <span>{formatPricePLN(total)} zł</span>
+                        <span>{formatPricePLN(total)}</span>
                     </div>
                 </div>
 

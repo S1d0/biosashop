@@ -1,24 +1,28 @@
 'use client'
 
-import {AddressElement, PaymentElement, useCheckout} from "@stripe/react-stripe-js";
+import {PaymentElement, useCheckout} from "@stripe/react-stripe-js";
 import React, {useEffect, useState} from "react";
 import {Alert, AlertDescription} from "@/components/ui/alert";
 import {Button} from "@/components/ui/button";
 import {Loader2} from "lucide-react";
 import {StripeCheckoutConfirmResult} from "@stripe/stripe-js";
+import {useOrderCheckout} from "@/components/checkout/v3/checkout-provider";
+import {formatPricePLN} from "@/lib/utils";
 
 export default function CheckoutForm() {
     const checkout = useCheckout()
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [formattedAmount, setFormattedAmount] = useState<string>("")
+    const { order } = useOrderCheckout()
 
-    // Format the amount from the order directly instead of relying on checkout.total
     useEffect(() => {
-        // Use the order amount directly, which we know is valid
-        const amount = 100
-        setFormattedAmount(`$${amount.toFixed(2)}`)
-    }, [])
+        let amount = order.totalPrice
+        if(order.deliveryInfo) {
+            amount += order.deliveryInfo.price
+        }
+        setFormattedAmount(formatPricePLN(amount))
+    }, [order])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -54,26 +58,8 @@ export default function CheckoutForm() {
                 </Alert>
             )}
             <div>
-                <h4 className="text-lg font-semibold mb-4">Billing Address</h4>
-                <AddressElement options={{
-                    mode: "billing",
-                    fields: {
-                        phone: "always"
-                    }
-                }} />
-            </div>
-
-            <div>
-                <h4 className="text-lg font-semibold mb-4">Payment Information</h4>
-                <PaymentElement id="payment-element" options={{
-                    fields: {
-                        billingDetails: {
-                            email: "auto",
-                            phone: "auto",
-                        }
-                    }
-                }
-                }/>
+                <h4 className="text-lg font-semibold mb-4">Wybierz sposób płatności</h4>
+                <PaymentElement id="payment-element" />
             </div>
 
             <Button type="submit" disabled={isLoading || !checkout } className="w-full" size="lg">
@@ -83,7 +69,7 @@ export default function CheckoutForm() {
                         Processing...
                     </>
                 ) : (
-                    `Pay ${formattedAmount} now`
+                    `Kup i zapłac ${formattedAmount}`
                 )}
             </Button>
         </form>

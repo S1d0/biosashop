@@ -44,7 +44,7 @@ export default function CheckoutAddress({setActiveTabAction}: {setActiveTabActio
             updateOrder(state.updatedOrder)
             setActiveTabAction("delivery")
         }
-    }, [state.success, state.updatedOrder, updateOrder])
+    }, [state.success, state.updatedOrder, updateOrder, setActiveTabAction])
 
     return (
         <>

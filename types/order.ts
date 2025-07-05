@@ -1,6 +1,12 @@
 import { z } from "zod";
 import {shippingAddressSchema} from "@/types/address";
 
+// Schema to transform String date retrieve from DB using Prisma
+export const dateSchema = z.union([
+    z.date(),
+    z.string().transform((str) => new Date(str))
+]);
+
 // OrderItem Zod schema
 export const orderItemSchema = z.object({
     productId: z.string().uuid(),
@@ -11,29 +17,30 @@ export const orderItemSchema = z.object({
     totalPrice: z.number().int()
 });
 
-
-// ParcelLocek
 export const parcelLockerSchema = z.object({
     name: z.string(),
     address: z.string(),
+    city: z.string(),
+    postalCode: z.string(),
 })
 
 // Delivery method information for JSON field in prisma Order model
-export const deliverInfoSchema = z.object({
+export const deliveryInfoSchema = z.object({
     method: z.enum(["standard", "express", "inpost"]),
     price: z.number().int().positive(), // Price in cents
     notes: z.string().optional(),
     parcelLocker: parcelLockerSchema.optional().nullable(),
-    estimatedDeliveryDate: z.date().optional(),
-    trackingNumber: z.string().optional(),
-    carrier: z.string().optional(),
+    estimatedDeliveryDate: dateSchema.optional().nullable(),
+    trackingNumber: z.string().optional().nullable(),
+    carrier: z.string().optional().nullable(),
     delivered: z.boolean().default(false),
-    deliveredAt: z.date().optional(),
+    deliveredAt: dateSchema.optional().nullable()
 })
 
-export const createDeliveryInfoSchema = deliverInfoSchema.omit({
+export const createDeliveryInfoSchema = deliveryInfoSchema.omit({
     delivered: true,
     deliveredAt: true,
+    trackingNumber: true,
 }).extend({
     parcelLocker: parcelLockerSchema.optional().nullable()
 })
@@ -69,13 +76,12 @@ export const orderSchema = z.object({
     totalPrice: z.number().int(),
 
     // Structured information
-    deliverInfo: deliverInfoSchema.optional().nullable(),
+    deliveryInfo: deliveryInfoSchema.optional().nullable(),
     paymentInfo: paymentInfoSchema.optional().nullable(),
 
     createdAt: z.date(),
     updatedAt: z.date()
 });
-
 
 // For creating a new Order (without id which will be generated)
 export const createOrderSchema = orderSchema
@@ -89,7 +95,7 @@ export const createOrderSchema = orderSchema
         shippingAddress: shippingAddressSchema.optional(),
         totalPrice: z.number().int(),
         items: z.array(orderItemSchema),
-        deliverInfo: deliverInfoSchema.optional(),
+        deliveryInfo: deliveryInfoSchema.optional(),
         paymentInfo: paymentInfoSchema.optional(),
     });
 

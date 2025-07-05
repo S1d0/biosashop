@@ -4,6 +4,8 @@ import CheckoutForm from "@/components/checkout/v3/checkout-form";
 import OrderSummary from "@/components/checkout/v3/order-summary";
 import {CheckoutProvider} from "@/components/checkout/v3/checkout-provider";
 import {fetchOrder} from "@/lib/actions/order/action";
+import {fetchDeliveryOption} from "@/lib/actions/shipping/action";
+
 
 export default async function Checkout({params}: { params: Promise<{ id: string }> }) {
     const orderId = (await params).id
@@ -11,6 +13,8 @@ export default async function Checkout({params}: { params: Promise<{ id: string 
         redirect("/")
     }
     const order: Order = await fetchOrder(orderId)
+    const deliveryOptions = await fetchDeliveryOption(order.items)
+    console.log(deliveryOptions)
 
     return (
         <main className="container mx-auto py-10 px-4">

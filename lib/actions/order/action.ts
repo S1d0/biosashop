@@ -3,25 +3,21 @@
 import {prisma} from "@/db/db";
 import {notFound} from "next/navigation";
 import {
-    CreateDeliveryInfo,
     CreateOrder,
-    createOrderSchema, deliverInfoSchema,
-    Order, OrderItem, orderItemSchema, orderSchema, ParcelLocker, parcelLockerSchema, PaymentInfo, paymentInfoSchema,
+    createOrderSchema,
+    Order, OrderItem, orderItemSchema, orderSchema, PaymentInfo, paymentInfoSchema,
 } from "@/types/order";
 import Stripe from "stripe";
 import {AddressState} from "@/components/checkout/v3/address/checkout-address";
-import {DeliveryState} from "@/components/checkout/v3/checkout-delivery";
 import {ShippingAddress, shippingAddressSchema} from "@/types/address";
 import {CartItem} from "@/components/shared/cart/cart-provider";
-import {DeliveryMethod} from "@/components/checkout/v3/checkout-provider";
-import {string} from "zod";
 
 export async function createOrder(items: CartItem[]): Promise<string> {
     // 1. Create order items
     const orderItems: OrderItem[] = fromCartItems(items);
 
     // 2. Create order
-    const totalPrice = orderItems.reduce((total, orderItem) => total = total + orderItem.totalPrice, 0)
+    const totalPrice = orderItems.reduce((total, orderItem) =>  total + orderItem.totalPrice, 0)
     const newOrder: CreateOrder = createOrderSchema.parse({
         items: orderItems,
         totalPrice: totalPrice,
@@ -46,6 +42,7 @@ export async function fetchOrder(id: string): Promise<Order> {
 
         // Convert to zod Order
         return orderSchema.parse(rawOrder);
+
     } catch (error) {
         console.error('Error while fetching order: ', error)
         throw error;
@@ -115,91 +112,10 @@ export async function updateAddress(initialState: AddressState, formData: FormDa
     return { success: true, message: "Adres został zapisany pomyślnie", errors: null, inputs: shippingAddress, updatedOrder: updatedOrder}
 }
 
-function getDeliveryPrice(deliveryMethod: DeliveryMethod): number {
-    switch (deliveryMethod) {
-        case "standard":
-            return 1990
-        case "express":
-            return  2990
-        case "inpost":
-            return 1190
-        default:
-            throw new Error(`Unknown delivery method: ${deliveryMethod}`);
-    }
-}
 const deliveryPriceMap = new Map<string, number>()
 deliveryPriceMap.set("standard", 1990)
 deliveryPriceMap.set("express", 2990)
 deliveryPriceMap.set("inpost", 1990)
-
-const addDays = (date: Date, days: number) => new Date(date.getTime() + days * 24 * 60 * 60 * 1000)
-function getDeliveryDate(deliveryMethod: DeliveryMethod): Date {
-    const now = new Date()
-    switch (deliveryMethod) {
-        case "standard":
-            return addDays(now, 4);
-        case "express":
-            return addDays(now, 2);
-        case "inpost":
-            return addDays(now, 3);
-        default:
-            throw new Error(`Unknown delivery method: ${deliveryMethod}`);
-    }
-}
-
-
-export async function updateShippmentInfo() {
-
-
-
-
-}
-
-export async function updateDelivery(initialState: DeliveryState, formData: FormData): Promise<DeliveryState> {
-    const orderId = formData.get("orderId") as string;
-    const method = formData.get("deliveryMethod") as string;
-
-    const deliveryEta = getDeliveryDate(method as DeliveryMethod)
-    const price =  getDeliveryPrice(method as DeliveryMethod)
-
-    let parcelLocker : ParcelLocker | null = null;
-    if(formData.get("parcelLockerName") instanceof string) {
-        parcelLocker = parcelLockerSchema.parse({
-            name: formData.get("parcelLockerName"),
-            address: formData.get("parcelLockerAddress"),
-        })
-    }
-
-    const rawData: CreateDeliveryInfo = {
-        method: formData.get("deliveryMethod") as DeliveryMethod,
-        price: price,
-        parcelLocker: parcelLocker,
-        estimatedDeliveryDate: deliveryEta,
-        notes: formData.get("deliveryNotes") as string,
-    }
-
-    console.log("Raw data: ", rawData)
-
-    const validatedFields = deliverInfoSchema.safeParse(rawData)
-    if(!validatedFields.success) {
-        throw new Error()
-    }
-
-    const deliveryInfo: CreateDeliveryInfo = validatedFields.data
-    await prisma.order.update({
-        where: {
-            id: orderId,
-        },
-        data: {
-            deliveryInfo: deliveryInfo,
-            updatedAt: new Date(),
-        }
-    })
-
-    const delivery: DeliveryState = {} as DeliveryState;
-    return Promise.resolve(delivery);
-}
-
 
 function fromCartItems(items: CartItem[]): OrderItem[] {
     return items.map(cartItem => {
