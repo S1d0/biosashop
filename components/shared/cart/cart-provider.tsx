@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import {createContext, useContext, useState, useEffect, type ReactNode, useCallback} from "react"
 import type { ProductVariant } from "@/types/product"
 
 export type CartItem = {
@@ -18,6 +18,8 @@ type CartContextType = {
     setIsCartOpen: (isOpen: boolean) => void
     totalItems: number
     totalPrice: number
+    isCheckoutLoading: boolean
+    setCheckoutLoading: (isLoading: boolean) => void
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
@@ -46,6 +48,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const [isCartOpen, setIsCartOpen] = useState(false)
     const [totalItems, setTotalItems] = useState(0)
     const [totalPrice, setTotalPrice] = useState(0)
+    const [isCheckoutLoading, setCheckoutLoading] = useState(false)
 
     // Set items from localstorage
     useEffect(() => {
@@ -101,9 +104,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
 
     // Clear cart
-    const clearCart = () => {
+    const clearCart = useCallback(() => {
         setItems([])
-    }
+    }, [])
 
     return (
         <CartContext.Provider
@@ -117,6 +120,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 setIsCartOpen,
                 totalItems,
                 totalPrice,
+                isCheckoutLoading,
+                setCheckoutLoading
             }}
         >
             {children}

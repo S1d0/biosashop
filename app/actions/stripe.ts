@@ -10,8 +10,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function createCheckoutSession(order: Order) {
     try {
-        // Here you would typically fetch the order details from your database
-        // For now, using static data
         const lineItems = order.items.map((item) => ({
             quantity: item.quantity,
             price_data: {
@@ -25,6 +23,7 @@ export async function createCheckoutSession(order: Order) {
         }))
 
         const orderId = order.id
+        const email = order.shippingAddress?.email || "idzkowski.s@gmail.com"
         const session = await stripe.checkout.sessions.create({
             ui_mode: "custom",
             line_items: lineItems,
@@ -35,6 +34,7 @@ export async function createCheckoutSession(order: Order) {
             metadata: {
                 orderId: orderId || "",
             },
+            customer_email: email
         })
 
         return {
@@ -64,11 +64,15 @@ export async function verifyPayment(sessionId: string, orderId: string): Promise
         }
 
         // Retrieve the checkout session from Stripe
-        const session = await stripe.checkout.sessions.retrieve(sessionId, {})
+        const session = await stripe.checkout.sessions.retrieve(sessionId)
 
         if (session.payment_status === "paid") {
             // Payment was successful
-            const order: Order = await updateOrder(orderId, session)
+            const paymentIntentId = session.payment_intent as string
+            const paymentIntent: Stripe.PaymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId,
+                {expand: ["latest_charge.balance_transaction", "payment_method"]}
+                )
+            const order: Order = await updateOrder(orderId, session, paymentIntent)
             const email: string = session.customer_details?.email || ""
             return {
                 success: true,
@@ -80,7 +84,7 @@ export async function verifyPayment(sessionId: string, orderId: string): Promise
             return {
                 success: false,
                 error: {
-                 error: `Payment not completed. Status: ${session.payment_status}`,
+                 error: `Płatność nie udana. Status: ${session.payment_status}`,
                 }
             }
         }

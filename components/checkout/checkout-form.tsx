@@ -5,7 +5,7 @@ import React, {useEffect, useState} from "react";
 import {Alert, AlertDescription} from "@/components/ui/alert";
 import {Button} from "@/components/ui/button";
 import {Loader2} from "lucide-react";
-import {StripeCheckoutConfirmResult} from "@stripe/stripe-js";
+import { StripeCheckoutConfirmResult} from "@stripe/stripe-js";
 import {useOrderCheckout} from "@/components/checkout/v3/checkout-provider";
 import {formatPricePLN} from "@/lib/utils";
 
@@ -66,10 +66,10 @@ export default function CheckoutForm() {
                 {isLoading ? (
                     <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Processing...
+                        Przetwarzanie...
                     </>
                 ) : (
-                    `Kup i zapłac ${formattedAmount}`
+                    `Kup i zapłać ${formattedAmount}`
                 )}
             </Button>
         </form>

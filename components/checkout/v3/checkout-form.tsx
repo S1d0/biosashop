@@ -37,11 +37,11 @@ export default function CheckoutForm() {
                     </button>
                 <Separator className="w-12 mx-2"/>
                     <button onClick={() => setActiveTab(DELIVERY_TAB)} className="group group-hover:bg-primary">
-                        <div className={`flex items-center ${activeTab === DELIVERY_TAB || activeTab === PAYMENT_TAB ? "text-primary" : ""}`}>
+                        <div className={`flex items-center ${activeTab === DELIVERY_TAB ? "text-primary" : ""}`}>
                                 <div className={`w-8 h-8 hover:bg-primary rounded-full ${activeTab === DELIVERY_TAB || activeTab === PAYMENT_TAB ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"} flex items-center justify-center`}>
                                     <Truck size={16}/>
                                 </div>
-                                <span className="ml-2 font-medium">Dostawa</span>
+                                <span className="ml-2 font-medium text">Dostawa</span>
                         </div>
                     </button>
                     <Separator className="w-12 mx-2"/>

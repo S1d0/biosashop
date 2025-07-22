@@ -44,6 +44,12 @@ export const createDeliveryInfoSchema = deliveryInfoSchema.omit({
 }).extend({
     parcelLocker: parcelLockerSchema.optional().nullable()
 })
+export const paymentMethodDetailsSchema = z
+    .object({
+        type: z.string(), // e.g., card, blik
+        last4: z.string().optional(), // Last 4 digits of card
+        brand: z.string().optional(), // e.g., visa, mastercard
+    })
 
 export const paymentInfoSchema = z.object({
     status: z.enum(["pending", "processing", "succeeded", "failed", "canceled", "requires_action"]),
@@ -51,19 +57,13 @@ export const paymentInfoSchema = z.object({
     currency: z.string().default("pln"),
     paymentIntentId: z.string().optional(),
     sessionId: z.string().optional(),
-    paymentMethodDetails: z
-        .object({
-            type: z.string().optional(), // card, blik, etc.
-            last4: z.string().optional(), // Last 4 digits of card
-            brand: z.string().optional(), // visa, mastercard, etc.
-        })
-        .optional(),
+    paymentMethodDetails: paymentMethodDetailsSchema.nullable(),
     failureReason: z.string().optional(),
-    receiptUrl: z.string().url().optional(),
+    receiptUrl: z.string().url().nullable(),
     payed: z.boolean().default(false),
-    payedAt: z.date().optional(),
-    createdAt: z.date().optional(),
-    updatedAt: z.date().optional(),
+    payedAt: dateSchema.nullable(),
+    createdAt: dateSchema.nullable(),
+    updatedAt: dateSchema.nullable(),
 })
 
 // Order Zod schema
@@ -76,8 +76,8 @@ export const orderSchema = z.object({
     totalPrice: z.number().int(),
 
     // Structured information
-    deliveryInfo: deliveryInfoSchema.optional().nullable(),
-    paymentInfo: paymentInfoSchema.optional().nullable(),
+    deliveryInfo: deliveryInfoSchema.nullable(),
+    paymentInfo: paymentInfoSchema.nullable(),
 
     createdAt: z.date(),
     updatedAt: z.date()
@@ -107,6 +107,8 @@ export type PaymentInfo = z.infer<typeof paymentInfoSchema>;
 
 export type CreateDeliveryInfo = z.infer<typeof createDeliveryInfoSchema>
 export type ParcelLocker = z.infer<typeof parcelLockerSchema>;
+export type DeliveryInfo = z.infer<typeof deliveryInfoSchema>;
+
 
 // Order Summary type for payment verification results
 export type OrderSummary = {
@@ -122,3 +124,5 @@ export type PaymentError = {
     error: string
     details?: string
 }
+
+export type PaymentMethodDetails = z.infer<typeof paymentMethodDetailsSchema>

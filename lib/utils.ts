@@ -5,20 +5,18 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// Convert prisma object into regular JS object
 export function convertToPlain<T>(value: T ):T {
   return JSON.parse(JSON.stringify(value))
-}
-
-export function formatPrice(price: number, currency = "PLN", locale = "pl-PL") {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 2,
-  }).format(price)
 }
 
 export function formatPricePLN(price: number) {
   const plnValue = price/100;
   return plnValue.toString()+" "+"zł"
+}
+
+export function formatPhoneNumber(phone: string | undefined | null): string {
+  if (!phone || !/^\d{9}$/.test(phone)) {
+    return phone || "" // Zwraca oryginalną wartość, jeśli nie jest to 9-cyfrowy numer
+  }
+  return phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3")
 }

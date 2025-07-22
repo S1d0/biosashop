@@ -5,7 +5,7 @@ import {notFound} from "next/navigation";
 import {
     CreateOrder,
     createOrderSchema,
-    Order, OrderItem, orderItemSchema, orderSchema, PaymentInfo, paymentInfoSchema,
+    Order, OrderItem, orderItemSchema, orderSchema, PaymentInfo, paymentInfoSchema
 } from "@/types/order";
 import Stripe from "stripe";
 import {AddressState} from "@/components/checkout/v3/address/checkout-address";
@@ -13,10 +13,8 @@ import {ShippingAddress, shippingAddressSchema} from "@/types/address";
 import {CartItem} from "@/components/shared/cart/cart-provider";
 
 export async function createOrder(items: CartItem[]): Promise<string> {
-    // 1. Create order items
     const orderItems: OrderItem[] = fromCartItems(items);
 
-    // 2. Create order
     const totalPrice = orderItems.reduce((total, orderItem) =>  total + orderItem.totalPrice, 0)
     const newOrder: CreateOrder = createOrderSchema.parse({
         items: orderItems,
@@ -49,10 +47,19 @@ export async function fetchOrder(id: string): Promise<Order> {
     }
 }
 
-export async function updateOrder(orderId: string, session: Stripe.Checkout.Session): Promise<Order> {
+function assertSession(session: Stripe.Checkout.Session) {
+ if (!session || !session.id) {
+     throw new Error("Invalid session provided");
+ }
+}
+
+export async function updateOrder(orderId: string, session: Stripe.Checkout.Session, paymentIntent: Stripe.PaymentIntent): Promise<Order> {
     try {
+        assertSession(session)
+
         // Create Payment Information
-        const paymentInfo: PaymentInfo = createPaymentInfo(session);
+        const paymentInfo: PaymentInfo = createPaymentInfo(session, paymentIntent);
+        const status = paymentInfo.status === "succeeded" ? "paid" : "pending";
 
         // Update the order in the database
         const updatedOrder = await prisma.order.update({
@@ -60,6 +67,7 @@ export async function updateOrder(orderId: string, session: Stripe.Checkout.Sess
                 id: orderId,
             },
             data: {
+                status: status,
                 paymentInfo: paymentInfo,
                 updatedAt: new Date(),
             }
@@ -133,38 +141,50 @@ function fromCartItems(items: CartItem[]): OrderItem[] {
     })
 }
 
-function createPaymentInfo(session: Stripe.Checkout.Session): PaymentInfo {
-    const isPaid = session.payment_status === "paid"
 
-    const mapStripeStatus = (
-        stripeStatus: Stripe.Checkout.Session.PaymentStatus,
-        sessionStatus: Stripe.Checkout.Session.Status | null
-    ): PaymentInfo['status'] => {
-        // Check session status first
-        if (sessionStatus === 'expired' || sessionStatus == null) return 'canceled'
+function mapStripeStatus(stripeStatus: Stripe.Checkout.Session.PaymentStatus,
+                         sessionStatus: Stripe.Checkout.Session.Status | null
+                         ): string {
+    if (sessionStatus === 'expired' || sessionStatus == null) return 'canceled'
 
-        // Then check payment status
-        switch (stripeStatus) {
-            case 'paid':
-                return 'succeeded'
-            case 'unpaid':
-                return 'pending'
-            case 'no_payment_required':
-                return 'succeeded'
-            default:
-                return 'pending'
-        }
+    switch (stripeStatus) {
+        case 'paid':
+            return 'succeeded'
+        case 'unpaid':
+            return 'pending'
+        case 'no_payment_required':
+            return 'succeeded'
+        default:
+            return 'pending'
     }
+}
+
+function getPaymentMethodDetails(paymentMethod: Stripe.PaymentMethod | null) {
+    return paymentMethod
+        ? {
+            type: paymentMethod.type,
+            last4: paymentMethod.card?.last4,
+            brand: paymentMethod.card?.brand,
+        } : null;
+}
+
+function createPaymentInfo(session: Stripe.Checkout.Session, paymentIntent: Stripe.PaymentIntent): PaymentInfo {
+    const isPaid = session.payment_status === "paid"
+    const status = mapStripeStatus(session.payment_status, session.status)
+    const paymentMethod = paymentIntent.payment_method as Stripe.PaymentMethod | null
+    const charge = paymentIntent.latest_charge as Stripe.Charge | undefined
 
     return paymentInfoSchema.parse({
-        status: mapStripeStatus(session.payment_status, session.status),
+        status: status,
         amount: session.amount_total,
         currency: session.currency,
         paymentIntentId: session.payment_intent,
+        paymentMethodDetails: getPaymentMethodDetails(paymentMethod),
         payed: isPaid,
-        payedAt: new Date().toISOString(),
+        payedAt: new Date(),
         createdAt: new Date(session.created * 1000),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date(),
+        receiptUrl: charge?.receipt_url
     })
 }
 

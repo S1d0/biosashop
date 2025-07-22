@@ -26,7 +26,7 @@ function ContinueShoppingButton() {
 
 export function CartSheet() {
     const router = useRouter()
-    const { items, isCartOpen, setIsCartOpen, totalPrice, totalItems } = useCart()
+    const { items, isCartOpen, setIsCartOpen, totalPrice, totalItems, setCheckoutLoading } = useCart()
     const [isLoading, setIsLoading] = useState(false)
 
     const handleCheckout = async () => {
@@ -35,6 +35,7 @@ export function CartSheet() {
         const orderId = await createOrder(items)
         router.push(`/checkout/${orderId}`)
         setIsCartOpen(false)
+        setCheckoutLoading(true)
         } catch (error) {
             console.error('Checkout failed:', error)
         } finally {
