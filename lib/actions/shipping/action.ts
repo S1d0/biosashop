@@ -92,19 +92,22 @@ export async function updateShippingInfo(initState: DeliveryState, formData: For
 
 const deliveryOptions: DeliveryOption[] = [
     {
-        name: "standard",
-        price: 1990,
-        description: "Dostawa standardowa 3-5 dni robocze",
+        method: "standard",
+        price: 1599,
+        name: "Dostawa standardowa",
+        description: "2-3 dni robocze",
     },
     {
-        name: "express",
-        price: 2990,
-        description: "Dostawa standardowa 3-5 dni robocze",
+        method: "express",
+        name: "Dostawa ekspresowa",
+        price: 2999,
+        description: "Następny dzień roboczy",
     },
     {
-        name: "inpost",
-        price: 1190,
-        description: "Dostawa standardowa 3-5 dni robocze",
+        method: "inpost",
+        price: 1299,
+        name: "Paczkomat InPost",
+        description: "1-2 dni robocze",
     },
 ]
 

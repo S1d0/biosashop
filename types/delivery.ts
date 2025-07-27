@@ -3,7 +3,8 @@ import { z } from "zod";
 export const DeliveryName = z.enum(["standard", "express", "inpost"]);
 
 export const deliveryOptionSchema = z.object({
-    name: DeliveryName,
+    method: DeliveryName,
+    name: z.string(),
     price: z.number(),
     description: z.string(),
 })

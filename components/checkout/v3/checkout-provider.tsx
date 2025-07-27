@@ -1,91 +1,60 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, useCallback, useMemo, type ReactNode } from "react"
-import type { Order } from "@/types/order"
+import {createContext, useContext, useState, useEffect, useCallback, useMemo, type ReactNode} from "react"
+import type {Order} from "@/types/order"
 import {InPostPoint} from "@/types/inpost";
-
-export type DeliveryMethod = "standard" | "express" | "inpost"
-
-interface DeliveryOption {
-    method: DeliveryMethod
-    price: number
-    name: string
-    description: string
-}
+import {DeliveryOption} from "@/types/delivery";
 
 interface CheckoutContextType {
-    deliveryMethod: DeliveryMethod
-    setDeliveryMethod: (method: DeliveryMethod) => void
-    deliveryPrice: number
-    deliveryOptions: Record<DeliveryMethod, DeliveryOption>
+    selectedDeliveryOption: DeliveryOption,
+    availableDeliveryOptions: DeliveryOption[],
+    setDeliveryOption: (option: DeliveryOption) => void
     selectedPoint: InPostPoint | null
     setSelectedPoint: (point: InPostPoint | null) => void
     order: Order
     updateOrder: (updates: Partial<Order>) => void
 }
 
-const deliveryOptions: Record<DeliveryMethod, DeliveryOption> = {
-    standard: {
-        method: "standard",
-        price: 1599,
-        name: "Dostawa standardowa",
-        description: "2-3 dni robocze",
-    },
-    express: {
-        method: "express",
-        price: 1999,
-        name: "Dostawa ekspresowa",
-        description: "Następny dzień roboczy",
-    },
-    inpost: {
-        method: "inpost",
-        price: 999,
-        name: "Paczkomat InPost",
-        description: "1-2 dni robocze",
-    },
-}
-
 const CheckoutContext = createContext<CheckoutContextType | undefined>(undefined)
 
 interface CheckoutProviderProps {
-    children: ReactNode
-    initialOrder: Order
+    children: ReactNode,
+    initialOrder: Order,
+    availableDeliveryOptions: DeliveryOption[]
 }
 
-export function CheckoutProvider({ children, initialOrder }: CheckoutProviderProps) {
+export function CheckoutProvider({children, initialOrder, availableDeliveryOptions}: CheckoutProviderProps) {
     // Initialize state from the provided order
-    const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>('standard')
+    const defaultOption: DeliveryOption = availableDeliveryOptions.find(op => op.method === "standard")!
+    const [selectedDeliveryOption, setDeliveryOption] = useState<DeliveryOption>(defaultOption)
     const [selectedPoint, setSelectedPoint] = useState<InPostPoint | null>(null)
     const [order, setOrder] = useState<Order>(initialOrder)
 
-    const deliveryPrice = useMemo(() => {
-        return deliveryOptions[deliveryMethod].price
-    }, [deliveryMethod])
-
     // Update order when delivery method or calculations change
     useEffect(() => {
-
+        const method = selectedDeliveryOption.method as string
+        const deliveryPrice = selectedDeliveryOption.price
         // FIXME Check if inpost info is enough
         setOrder((prev) => ({
             ...prev,
-            deliveryMethod,
+            method,
             deliveryFee: deliveryPrice,
             total: prev.totalPrice + deliveryPrice,
             parcelLocker: {name: selectedPoint?.name, address: selectedPoint?.address},
         }))
-    }, [deliveryMethod, deliveryPrice, selectedPoint])
+    }, [selectedDeliveryOption, selectedPoint])
 
     const updateOrder = useCallback((updates: Partial<Order> | Order) => {
         // Check if updates is a complete Order object or partial updates
         if ("id" in updates && "items" in updates && "status" in updates) {
             setOrder(updates as Order)
         } else {
-            setOrder((prev) => ({ ...prev, ...updates }))
+            setOrder((prev) => ({...prev, ...updates}))
         }
     }, [])
 
-    const handleSetDeliveryMethod = useCallback((method: DeliveryMethod) => {
-        setDeliveryMethod(method)
+    const handleSetDeliveryOption = useCallback((option: DeliveryOption) => {
+        setDeliveryOption(option)
     }, [])
 
     const handleSetSelectedPoint = useCallback((point: InPostPoint | null) => {
@@ -94,19 +63,18 @@ export function CheckoutProvider({ children, initialOrder }: CheckoutProviderPro
 
     const value = useMemo(
         () => ({
-            deliveryMethod,
-            setDeliveryMethod: handleSetDeliveryMethod,
-            deliveryPrice,
-            deliveryOptions,
+            selectedDeliveryOption,
+            availableDeliveryOptions,
+            setDeliveryOption: handleSetDeliveryOption,
             selectedPoint,
             setSelectedPoint: handleSetSelectedPoint,
             order,
             updateOrder,
         }),
         [
-            deliveryMethod,
-            handleSetDeliveryMethod,
-            deliveryPrice,
+            selectedDeliveryOption,
+            availableDeliveryOptions,
+            handleSetDeliveryOption,
             selectedPoint,
             handleSetSelectedPoint,
             order,

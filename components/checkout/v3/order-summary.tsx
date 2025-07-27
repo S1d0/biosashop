@@ -7,10 +7,10 @@ import {CldImage} from "next-cloudinary";
 
 export default function OrderSummary() {
     // TODO Instead of checkout provider take delivery info from Order object, remove delivery details from order checkout
-    const {deliveryPrice, deliveryMethod, deliveryOptions, selectedPoint, order} = useOrderCheckout()
+    const {selectedDeliveryOption, selectedPoint, order} = useOrderCheckout()
     // TODO Instead of calculating subtotal use order.total value
     const subtotal = order.items.reduce((sum, item) => sum + item.totalPrice, 0) // Convert from cents
-    const total = subtotal + deliveryPrice
+    const total = subtotal + selectedDeliveryOption.price
 
     return (
         <div className="sticky top-4">
@@ -57,11 +57,11 @@ export default function OrderSummary() {
                     </div>
 
                     <div className="flex justify-between text-sm">
-                        <span>Sposób dostawy ({deliveryOptions[deliveryMethod].name})</span>
-                        <span>{formatPricePLN(deliveryPrice)}</span>
+                        <span>Sposób dostawy ({selectedDeliveryOption.name})</span>
+                        <span>{formatPricePLN(selectedDeliveryOption.price)}</span>
                     </div>
 
-                    {deliveryMethod === "inpost" && selectedPoint
+                    {selectedDeliveryOption.method === "inpost" && selectedPoint
                     ? (
                         <div className="text-xs text-muted-foreground bg-muted/20 p-2 rounded">
                             <div className="font-medium">Paczkomat: {selectedPoint.name}</div>

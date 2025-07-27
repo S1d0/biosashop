@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useEffect, useState } from "react"
-import { useOrderCheckout, type DeliveryMethod } from "@/components/checkout/v3/checkout-provider"
+import { useOrderCheckout } from "@/components/checkout/v3/checkout-provider"
 import InpostSelection from "@/components/checkout/v3/inpost/inpost-selection"
 import { formatPricePLN } from "@/lib/utils"
 import {Order} from "@/types/order";
@@ -39,20 +39,19 @@ const initialDeliveryState: DeliveryState = {
 
 export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTabAction: (tab: string) => void}) {
     const {
-        deliveryMethod,
-        setDeliveryMethod,
-        deliveryOptions,
+        setDeliveryOption,
+        selectedDeliveryOption,
+        availableDeliveryOptions,
         updateOrder,
         order,
         selectedPoint,
     } = useOrderCheckout()
     const [state, action] = useActionState(updateShippingInfo, initialDeliveryState)
-    const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethod)
+    const [currentDelivery, setDelivery] = useState(selectedDeliveryOption)
 
-    // Update context when delivery method changes
     useEffect(() => {
-        setDeliveryMethod(selectedDeliveryMethod)
-    }, [selectedDeliveryMethod, setDeliveryMethod])
+        setDeliveryOption(currentDelivery)
+    }, [setDelivery, currentDelivery, setDeliveryOption])
 
     // Update context when delivery is successfully saved
     useEffect(() => {
@@ -61,6 +60,11 @@ export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTab
             setActiveTabAction("payment")
         }
     }, [state.success, state.updatedOrder, updateOrder, setActiveTabAction])
+
+    const handleDeliveryChange = (method: string) => {
+        const option = availableDeliveryOptions.find((op) => op.method === method)!
+        setDelivery(option)
+    }
 
     return (
         <div className="space-y-6">
@@ -78,11 +82,11 @@ export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTab
                     <Label>Wybierz metodę dostawy</Label>
                     <RadioGroup
                         name="deliveryMethod"
-                        value={selectedDeliveryMethod}
-                        onValueChange={(value) => setSelectedDeliveryMethod(value as DeliveryMethod)}
+                        value={currentDelivery.method}
+                        onValueChange={(value) => handleDeliveryChange(value)}
                         className="space-y-3"
                     >
-                        {Object.values(deliveryOptions).map((option) => (
+                        {Object.values(availableDeliveryOptions).map((option) => (
                             <div
                                 key={option.method}
                                 className="flex items-center space-x-3 p-4 border border-border rounded-lg hover:bg-muted/30 transition-colors"
@@ -99,7 +103,7 @@ export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTab
                     {state.errors?.method && <p className="text-red-500 text-sm">{state.errors.method[0]}</p>}
                 </div>
 
-                {selectedDeliveryMethod === "inpost" && (
+                { selectedDeliveryOption.method === "inpost" && (
                     <InpostSelection />
                 )}
 
