@@ -1,13 +1,10 @@
 "use client"
 
 import { useActionState } from "react"
-import { useFormStatus } from "react-dom"
 import Form from "next/form"
-import { Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 import { useOrderCheckout, type DeliveryMethod } from "@/components/checkout/v3/checkout-provider"
 import InpostSelection from "@/components/checkout/v3/inpost/inpost-selection"
@@ -15,6 +12,7 @@ import { formatPricePLN } from "@/lib/utils"
 import {Order} from "@/types/order";
 import {InPostPoint} from "@/types/inpost";
 import {updateShippingInfo} from "@/lib/actions/shipping/action";
+import {SubmitButton} from "@/components/checkout/SubmitButton";
 
 export type DeliveryState = {
     success: boolean
@@ -121,25 +119,9 @@ export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTab
                     <div className="text-red-600 text-sm bg-red-50 p-3 rounded-md">{state.message}</div>
                 )}
                 <div className="flex gap-4">
-                    <SubmitButton />
+                    <SubmitButton buttonText={"Zapisz i przejdź dalej"} loadingText={"Zapisywanie metody dostawy"}/>
                 </div>
             </Form>
         </div>
-    )
-}
-
-function SubmitButton() {
-    const { pending } = useFormStatus()
-    return (
-        <Button type="submit" className="w-full flex-1" disabled={pending}>
-            {pending ? (
-                <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    <p>Zapisywanie...</p>
-                </>
-            ) : (
-                <p>Zapisz i przejdź dalej</p>
-            )}
-        </Button>
     )
 }

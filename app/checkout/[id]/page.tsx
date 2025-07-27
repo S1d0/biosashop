@@ -13,8 +13,8 @@ export default async function Checkout({params}: { params: Promise<{ id: string 
         redirect("/")
     }
     const order: Order = await fetchOrder(orderId)
+    // TODO pass this as availableDeliveryOptions in CheckoutProvider context
     const deliveryOptions = await fetchDeliveryOption(order.items)
-    console.log(deliveryOptions)
 
     return (
         <main className="container mx-auto py-10 px-4">

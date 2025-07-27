@@ -23,7 +23,6 @@ export async function createCheckoutSession(order: Order) {
         }))
 
         const orderId = order.id
-        const email = order.shippingAddress?.email || "idzkowski.s@gmail.com"
         const session = await stripe.checkout.sessions.create({
             ui_mode: "custom",
             line_items: lineItems,
@@ -31,10 +30,12 @@ export async function createCheckoutSession(order: Order) {
             return_url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/summary/${orderId}?sid={CHECKOUT_SESSION_ID}`,
             automatic_tax: { enabled: false },
             payment_method_types: ['p24', 'blik', 'klarna', 'link', 'card'],
+            phone_number_collection: {
+                enabled: true,
+            },
             metadata: {
                 orderId: orderId || "",
-            },
-            customer_email: email
+            }
         })
 
         return {

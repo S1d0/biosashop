@@ -1,22 +1,73 @@
 'use client'
 
 import React, {useEffect, useState} from "react";
-import {CreditCard, Truck, User} from "lucide-react";
+import {AlertTriangle, CreditCard, Truck, User} from "lucide-react";
 import {Separator} from "@/components/ui/separator";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import CheckoutAddress from "@/components/checkout/v3/address/checkout-address";
 import CheckoutDelivery from "@/components/checkout/v3/checkout-delivery";
 import StripeCheckout from "@/components/checkout/stripe-checkout";
 import {useOrderCheckout} from "@/components/checkout/v3/checkout-provider";
-
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {Button} from "@/components/ui/button";
 
 const ADDRESS_TAB = "address";
 const DELIVERY_TAB = "delivery";
 const PAYMENT_TAB = "payment";
 
+function MissingInfo({
+                         missingItem,
+                         buttonText,
+                         targetTab,
+                         setActiveTab,
+                     }: {
+    missingItem: string
+    buttonText: string
+    targetTab: string
+    setActiveTab: (tab: string) => void
+}) {
+    return (
+        <Card className="w-full max-w-lg mx-auto border-destructive/50">
+            <CardHeader className="text-center">
+                <div className="mx-auto bg-destructive/10 p-3 rounded-full w-fit">
+                    <AlertTriangle className="h-8 w-8 text-destructive" />
+                </div>
+                <CardTitle className="mt-4 text-xl">Uzupełnij brakujące informacje</CardTitle>
+                <CardDescription>Zanim przejdziesz do płatności uzupełnij {missingItem}.</CardDescription>
+            </CardHeader>
+            <CardContent className="flex justify-center">
+                <Button onClick={() => setActiveTab(targetTab)}>{buttonText}</Button>
+            </CardContent>
+        </Card>
+    )
+}
 export default function CheckoutForm() {
     const [activeTab, setActiveTab] = useState("address")
     const {order} = useOrderCheckout()
+
+   const renderPaymentContent = () => {
+        if (!order.shippingAddress) {
+            return (
+                <MissingInfo
+                    missingItem="dane adresowe"
+                    buttonText="Dodaj addres"
+                    targetTab={ADDRESS_TAB}
+                    setActiveTab={setActiveTab}
+                />
+            )
+        }
+        if (!order.deliveryInfo) {
+            return (
+                <MissingInfo
+                    missingItem="sposób dostawy"
+                    buttonText="Wybierz sposób dostawy"
+                    targetTab={DELIVERY_TAB}
+                    setActiveTab={setActiveTab}
+                />
+            )
+        }
+        return <StripeCheckout order={order} />
+    }
 
     useEffect(() => {
     }, [activeTab]);
@@ -25,7 +76,6 @@ export default function CheckoutForm() {
         <>
             <div className="mb-8">
                 <div className="flex items-center justify-center mb-8">
-                    {/* When hover whole Icon should change bg color for primary and span text to primary*/}
                     <button onClick={() => setActiveTab(ADDRESS_TAB)}>
                         <div className={`flex items-center group-hover:text-primary ${activeTab === ADDRESS_TAB ? "text-primary" : ""}`}>
                             <div
@@ -69,7 +119,7 @@ export default function CheckoutForm() {
                         <CheckoutDelivery setActiveTabAction={setActiveTab}/>
                     </TabsContent>
                     <TabsContent value={PAYMENT_TAB} className="space-y-6 mt-0">
-                        <StripeCheckout order={order} />
+                        {renderPaymentContent()}
                     </TabsContent>
                 </Tabs>
             </div>

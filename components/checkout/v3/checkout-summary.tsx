@@ -26,13 +26,12 @@ function CheckoutError({ error }: { error: OrderSummary["error"] }) {
                 </CardHeader>
                 <CardContent>
                     <p className="text-red-600">{error?.error || "Wystąpił problem z przetwarzaniem płatności"}</p>
-                    {error?.details && <p className="text-sm text-red-500 mt-2">{error.details}</p>}
                 </CardContent>
                 <CardFooter className="flex justify-center pt-0 pb-6">
                     <Button asChild variant="outline">
                         <Link href="/">
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            Wróć do strony głównej
+                            Wróć do strony głównej i spróbuj jeszcze raz
                         </Link>
                     </Button>
                 </CardFooter>
