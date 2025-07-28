@@ -1,14 +1,11 @@
 import { Suspense } from "react"
-import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, ShoppingCart, Leaf, Droplets } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { ArrowLeft, Leaf, Droplets } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ProductSkeleton from "./loading"
-import { formatPrice } from "@/lib/utils"
 import { getProductVariant } from "@/lib/actions/product/actions"
 import ProductImages from "@/components/shared/products/product-images"
 import ProductPrice from "@/components/shared/products/product-price"
@@ -235,40 +232,40 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     </div>
 
                     {/* Related Products */}
-                    <div className="mt-16">
-                        <h2 className="text-2xl font-bold mb-6">Sprawdź również</h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {/* This would be populated with actual related products */}
-                            {[1, 2, 3, 4].map((i) => (
-                                <Card key={i} className="bg-card/80 backdrop-blur-sm border border-white/10 overflow-hidden">
-                                    <div className="aspect-square relative">
-                                        <Image
-                                            src={
-                                                product.familyId === "terra-family"
-                                                    ? "/images/terra5L.png"
-                                                    : "/placeholder.svg?height=300&width=300"
-                                            }
-                                            alt="Related product"
-                                            fill
-                                            className="object-contain p-2"
-                                        />
-                                    </div>
-                                    <CardContent className="p-4">
-                                        <h3 className="font-semibold truncate">
-                                            {product.familyId === "terra-family" ? "Microbiosa Terra" : "Microbiosa Aqua"}{" "}
-                                            {i % 3 === 0 ? "S" : i % 3 === 1 ? "M" : "L"}
-                                        </h3>
-                                        <div className="flex justify-between items-center mt-2">
-                                            <span className="font-bold">{formatPrice(49.99 + i * 20)}</span>
-                                            <Button size="sm" variant="outline">
-                                                <ShoppingCart className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
-                    </div>
+                    {/*<div className="mt-16">*/}
+                    {/*    <h2 className="text-2xl font-bold mb-6">Sprawdź również</h2>*/}
+                    {/*    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">*/}
+                    {/*         This would be populated with actual related products */}
+                    {/*        {[1, 2, 3, 4].map((i) => (*/}
+                    {/*            <Card key={i} className="bg-card/80 backdrop-blur-sm border border-white/10 overflow-hidden">*/}
+                    {/*                <div className="aspect-square relative">*/}
+                    {/*                    <Image*/}
+                    {/*                        src={*/}
+                    {/*                            product.familyId === "terra-family"*/}
+                    {/*                                ? "/images/terra5L.png"*/}
+                    {/*                                : "/placeholder.svg?height=300&width=300"*/}
+                    {/*                        }*/}
+                    {/*                        alt="Related product"*/}
+                    {/*                        fill*/}
+                    {/*                        className="object-contain p-2"*/}
+                    {/*                    />*/}
+                    {/*                </div>*/}
+                    {/*                <CardContent className="p-4">*/}
+                    {/*                    <h3 className="font-semibold truncate">*/}
+                    {/*                        {product.familyId === "terra-family" ? "Microbiosa Terra" : "Microbiosa Aqua"}{" "}*/}
+                    {/*                        {i % 3 === 0 ? "S" : i % 3 === 1 ? "M" : "L"}*/}
+                    {/*                    </h3>*/}
+                    {/*                    <div className="flex justify-between items-center mt-2">*/}
+                    {/*                        <span className="font-bold">{formatPrice(49.99 + i * 20)}</span>*/}
+                    {/*                        <Button size="sm" variant="outline">*/}
+                    {/*                            <ShoppingCart className="h-4 w-4" />*/}
+                    {/*                        </Button>*/}
+                    {/*                    </div>*/}
+                    {/*                </CardContent>*/}
+                    {/*            </Card>*/}
+                    {/*        ))}*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                 </div>
             </section>
         </Suspense>

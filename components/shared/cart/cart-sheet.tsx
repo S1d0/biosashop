@@ -3,9 +3,12 @@
 import { useCart } from "./cart-provider"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
-import { ShoppingBag, AlertCircle } from "lucide-react"
+import {ShoppingBag, AlertCircle, Loader2} from "lucide-react"
 import {formatPricePLN} from "@/lib/utils"
 import CartItemPreview from "@/components/shared/cart/CartItemPreview";
+import {useState} from "react";
+import {createOrder} from "@/lib/actions/order/action";
+import { useRouter } from 'next/navigation'
 
 function ContinueShoppingButton() {
     const {setIsCartOpen} = useCart()
@@ -22,7 +25,23 @@ function ContinueShoppingButton() {
 }
 
 export function CartSheet() {
-    const { items, isCartOpen, setIsCartOpen, totalPrice, totalItems } = useCart()
+    const router = useRouter()
+    const { items, isCartOpen, setIsCartOpen, totalPrice, totalItems, setCheckoutLoading } = useCart()
+    const [isLoading, setIsLoading] = useState(false)
+
+    const handleCheckout = async () => {
+        try {
+        setIsLoading(true)
+        const orderId = await createOrder(items)
+        router.push(`/checkout/${orderId}`)
+        setIsCartOpen(false)
+        setCheckoutLoading(true)
+        } catch (error) {
+            console.error('Checkout failed:', error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     return (
         <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
@@ -77,8 +96,11 @@ export function CartSheet() {
                                 <AlertCircle className="h-3 w-3 mr-1" />
                                 <span>Podatki i koszty dostawy obliczone przy płatności</span>
                             </div>
-                            <Button className="w-full bg-primary/90 hover:bg-primary text-primary-foreground">
-                                Przejdź do płatności
+                            <Button className="w-full bg-primary/90 hover:bg-primary text-primary-foreground"
+                                    onClick={handleCheckout}
+                                    disabled={isLoading}
+                            >
+                                {isLoading ? <>Przetwarzanie <Loader2 className="animate-spin" /> </>: <p>Przejdź do płatności</p>}
                             </Button>
                             <ContinueShoppingButton />
                         </SheetFooter>

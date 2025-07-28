@@ -2,7 +2,6 @@
 
 
 import {CartItem, useCart} from "@/components/shared/cart/cart-provider";
-import Image from "next/image";
 import {Button} from "@/components/ui/button";
 import {Minus, Plus, Trash2} from "lucide-react";
 import {formatPricePLN} from "@/lib/utils";
@@ -10,6 +9,7 @@ import {useState} from "react";
 import {Card, CardContent, CardFooter} from "@/components/ui/card";
 import {Badge} from "@/components/ui/badge";
 import {Input} from "@/components/ui/input";
+import {CldImage} from "next-cloudinary";
 
 export default function CartItemPreview(item: CartItem) {
     const {updateQuantity, removeItem} = useCart()
@@ -35,7 +35,7 @@ export default function CartItemPreview(item: CartItem) {
                 <div className="flex items-start justify-between gap-3">
                     {/* Product Image */}
                     <div className="relative h-20 w-20 rounded-md overflow-hidden flex-shrink-0 bg-slate-800">
-                        <Image
+                        <CldImage
                             src={item.product.images[0] || "/placeholder.svg?height=80&width=80"}
                             alt={item.product.name}
                             fill

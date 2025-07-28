@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 import { cn } from "@/lib/utils"
+import {CldImage} from "next-cloudinary";
 
 interface ProductImagesProps {
     images: string[]
@@ -18,7 +18,7 @@ export default function ProductImages({ images }: ProductImagesProps) {
         <div className="space-y-4">
             {/* Main image */}
             <div className="relative aspect-square overflow-hidden rounded-lg border border-white/10 bg-card/50">
-                <Image
+                <CldImage
                     src={imageUrls[selectedImage] || "/placeholder.svg"}
                     alt="Product image"
                     fill
@@ -39,7 +39,7 @@ export default function ProductImages({ images }: ProductImagesProps) {
                             )}
                             onClick={() => setSelectedImage(index)}
                         >
-                            <Image
+                            <CldImage
                                 src={image || "/placeholder.svg"}
                                 alt={`Product thumbnail ${index + 1}`}
                                 fill

@@ -60,7 +60,7 @@ export default async function Footer() {
                             <Link href="/products" className="text-sm text-muted-foreground hover:underline">
                                 Produkty
                             </Link>
-                            <Link href="/about" className="text-sm text-muted-foreground hover:underline">
+                            <Link href="/#about" className="text-sm text-muted-foreground hover:underline">
                                 O Nas
                             </Link>
                             <Link href="/faq" className="text-sm text-muted-foreground hover:underline">

@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link"; // Import Link from Next.js
 import { Badge } from "@/components/ui/badge";
 import { ProductVariant } from "@prisma/client";
 import AddCartButton from "@/components/shared/cart/add-cart-button";
+import {CldImage} from "next-cloudinary";
 
 export default function ProductListItem({ product }: { product: ProductVariant }) {
     return (
@@ -11,7 +11,7 @@ export default function ProductListItem({ product }: { product: ProductVariant }
             <div className="w-1/4 flex-shrink-0">
                 <Link href={`/products/${product.slug}`} className="block">
                     <div className="aspect-square overflow-hidden rounded-lg cursor-pointer">
-                        <Image
+                        <CldImage
                             src={product.images[0] || "/placeholder.svg"}
                             alt={product.name}
                             width={200}

@@ -32,6 +32,7 @@ model ProductVariant {
   stock       Int           @default(0)
   size        String
   createdAt   DateTime      @default(now()) @db.Timestamp(6)
+  cldImage    String        @default("")
 
   @@index([familyId])
 }
@@ -71,4 +72,48 @@ model Cart {
 
   @@index([userId])
   @@index([sessionCartId])
+}
+
+enum OrderStatus {
+  pending
+  paid
+  shipped
+  delivered
+  cancelled
+}
+
+model Order {
+  id              String      @id @default(uuid()) @db.Uuid
+  status          OrderStatus @default(pending) // pending, paid, shipped, delivered, cancelled
+  userId          String?     @db.Uuid
+  shippingAddress Json?       @db.Json
+  items           Json        @db.Json // Array of OrderItem objects
+  totalPrice      Int
+  deliveryInfo    Json?       @db.Json // DeliveryInfo object
+  paymentInfo     Json?       @db.Json // PaymentInfo object
+  createdAt       DateTime    @default(now()) @db.Timestamp(6)
+  updatedAt       DateTime    @updatedAt @db.Timestamp(6)
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model DeliveryOption {
+  id          String         @id @default(uuid()) @db.Uuid
+  method      DeliveryMethod
+  price       Int // Price in cents/grosze
+  name        String
+  description String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum DeliveryMethod {
+  pickup
+  standard
+  express
+  parcel_locker
+  company
 }
