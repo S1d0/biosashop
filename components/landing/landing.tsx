@@ -9,7 +9,6 @@ import LandingProducts from "@/components/landing/landing-products";
 import CtaPage from "@/components/landing/cta";
 import AboutPage from "@/components/landing/about";
 import TerraSection from "@/components/landing/terra-section";
-import BenefitSection from "@/components/landing/benefits-section";
 import AquaSection from "@/components/landing/aqua-section";
 
 interface LandingPage2Props {
@@ -35,9 +34,6 @@ export default function LandingPage({products}: LandingPage2Props) {
 
             {/* Product Section */}
             <LandingProducts products={products} />
-
-            {/* Product Benefits Overview */}
-            <BenefitSection />
 
             {/* Terra Product Section */}
             <TerraSection />
