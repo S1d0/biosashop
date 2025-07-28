@@ -1,6 +1,7 @@
 "use server"
 
-import {InpostPointState} from "@/components/checkout/v3/inpost/inpost-selection";
+
+import {InpostPointState} from "@/types/inpost";
 
 interface InPostPoint {
     name: string
@@ -68,6 +69,7 @@ export async function getInPostPoints(query: string, locationQuery: string | nul
     return {
         success: true,
         errors: null,
+        message: null,
         items: data.items
     }
 

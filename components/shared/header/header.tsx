@@ -35,8 +35,11 @@ export function Header() {
                         <Link href="/products" className="font-medium text-foreground hover:text-primary transition-colors">
                             Produkty
                         </Link>
-                        <Link href="/#about" className="font-medium text-foreground hover:text-primary transition-colors">
-                            O nas
+                        <Link href="/contact" className="font-medium text-foreground hover:text-primary transition-colors">
+                           Kontakt
+                        </Link>
+                        <Link href="/faq" className="font-medium text-foreground hover:text-primary transition-colors">
+                           FAQ
                         </Link>
                     </nav>
 
@@ -68,11 +71,11 @@ export function Header() {
                                 Produkty
                             </Link>
                             <Link
-                                href="/#about"
+                                href="/contact"
                                 className="block py-2 text-foreground hover:bg-muted rounded-md px-3"
                                 onClick={() => setMobileMenuOpen(false)}
                             >
-                                O nas
+                               Kontakt
                             </Link>
                         </nav>
                     </div>

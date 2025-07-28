@@ -10,7 +10,6 @@ import { getInPostPoints } from "@/lib/actions/inpost/actions"
 import {InPostPoint} from "@/types/inpost";
 import {useOrderCheckout} from "@/components/checkout/v3/checkout-provider";
 
-
 export default function InPostSelection() {
     const [searchQuery, setSearchQuery] = useState("")
     const [points, setPoints] = useState<InPostPoint[]>([])

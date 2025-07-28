@@ -6,10 +6,8 @@ import {formatPricePLN} from "@/lib/utils";
 import {CldImage} from "next-cloudinary";
 
 export default function OrderSummary() {
-    // TODO Instead of checkout provider take delivery info from Order object, remove delivery details from order checkout
     const {selectedDeliveryOption, selectedPoint, order} = useOrderCheckout()
-    // TODO Instead of calculating subtotal use order.total value
-    const subtotal = order.items.reduce((sum, item) => sum + item.totalPrice, 0) // Convert from cents
+    const subtotal = order.totalPrice;
     const total = subtotal + selectedDeliveryOption.price
 
     return (
@@ -61,7 +59,7 @@ export default function OrderSummary() {
                         <span>{formatPricePLN(selectedDeliveryOption.price)}</span>
                     </div>
 
-                    {selectedDeliveryOption.method === "inpost" && selectedPoint
+                    {selectedDeliveryOption.method === "parcel_locker" && selectedPoint
                     ? (
                         <div className="text-xs text-muted-foreground bg-muted/20 p-2 rounded">
                             <div className="font-medium">Paczkomat: {selectedPoint.name}</div>

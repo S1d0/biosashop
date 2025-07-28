@@ -1,6 +1,7 @@
-import ProductsFiltersServer from "@/components/shared/products/products-filters-server";
 import {getProductFamilies} from "@/lib/actions/product/actions";
 import ProductDisplay from "@/components/shared/products/product-display";
+import Link from "next/link";
+import {ArrowLeft} from "lucide-react";
 
 export default async function ProductsPage() {
     const mainTitle = "Wszystkie Produkty";
@@ -18,6 +19,12 @@ export default async function ProductsPage() {
         <main className="flex min-h-screen flex-col bg-background">
             <section className="w-full py-12 md:py-24">
                 <div className="container px-4 md:px-6">
+                    <div className="mb-6">
+                        <Link href="/" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                            <ArrowLeft className="mr-2 h-4 w-4" />
+                            Wróć do sklepu
+                        </Link>
+                    </div>
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
                         <div>
                             <h1 className="text-3xl font-bold tracking-tighter">{mainTitle}</h1>
@@ -26,18 +33,7 @@ export default async function ProductsPage() {
                             </p>
                         </div>
                     </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        {/* Sidebar with filters */}
-                        <div className="md:col-span-1">
-                            <ProductsFiltersServer/>
-                        </div>
-
-                        {/* Products grid */}
-                        <div className="md:col-span-3">
-                            <ProductDisplay products={mergeProducts} />
-                        </div>
-                    </div>
+                    <ProductDisplay products={mergeProducts} />
                 </div>
             </section>
         </main>

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {shippingAddressSchema} from "@/types/address";
+import {DeliveryMethod} from "@/types/delivery";
 
 // Schema to transform String date retrieve from DB using Prisma
 export const dateSchema = z.union([
@@ -26,7 +27,7 @@ export const parcelLockerSchema = z.object({
 
 // Delivery method information for JSON field in prisma Order model
 export const deliveryInfoSchema = z.object({
-    method: z.enum(["standard", "express", "inpost"]),
+    method: DeliveryMethod.default("standard"),
     price: z.number().int().positive(), // Price in cents
     notes: z.string().optional(),
     parcelLocker: parcelLockerSchema.optional().nullable(),

@@ -98,3 +98,22 @@ model Order {
   @@index([status])
   @@index([createdAt])
 }
+
+model DeliveryOption {
+  id          String         @id @default(uuid()) @db.Uuid
+  method      DeliveryMethod
+  price       Int // Price in cents/grosze
+  name        String
+  description String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum DeliveryMethod {
+  pickup
+  standard
+  express
+  parcel_locker
+  company
+}

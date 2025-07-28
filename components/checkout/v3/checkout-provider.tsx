@@ -34,7 +34,6 @@ export function CheckoutProvider({children, initialOrder, availableDeliveryOptio
     useEffect(() => {
         const method = selectedDeliveryOption.method as string
         const deliveryPrice = selectedDeliveryOption.price
-        // FIXME Check if inpost info is enough
         setOrder((prev) => ({
             ...prev,
             method,

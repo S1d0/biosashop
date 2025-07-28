@@ -27,3 +27,10 @@ export interface InPostPoint {
     location_247: boolean
     distance?: number
 }
+
+export type InpostPointState = {
+    success: boolean
+    items: InPostPoint[]
+    errors: string | null
+    message: string | null
+}

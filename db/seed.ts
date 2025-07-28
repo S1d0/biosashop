@@ -1,6 +1,7 @@
-import {PrismaClient} from "@prisma/client"
-import {contactInquries, productFamilies} from "@/db/sample-data";
+import {Prisma, PrismaClient} from "@prisma/client"
+import {contactInquries, deliveryOptions, productFamilies} from "@/db/sample-data";
 import dotenv from "dotenv";
+import DeliveryOptionCreateManyInput = Prisma.DeliveryOptionCreateManyInput;
 
 const prismaClient = new PrismaClient();
 dotenv.config();
@@ -42,7 +43,11 @@ export async function seed() {
         data: contactInquries
     })
 
-    console.log("[+] Success seeding customers:");
+    console.log("Seeding delivery options");
+    await prismaClient.deliveryOption.createMany({
+        data: deliveryOptions as DeliveryOptionCreateManyInput[]
+    })
+
     console.log("Database seeded successfully.");
 }
 

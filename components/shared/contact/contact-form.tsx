@@ -2,16 +2,14 @@
 
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import {sendContact} from "@/lib/actions/contact/contact"
-import { useFormStatus } from "react-dom"
 import { Textarea } from "@/components/ui/textarea"
-import { Loader2 } from "lucide-react"
 import { useActionState } from "react"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { toast } from "sonner"
 import {ContactEnquiryState} from "@/types/customer-enquiry";
+import {SubmitButton} from "@/components/checkout/SubmitButton";
 
 
 const initialState: ContactEnquiryState = {
@@ -20,7 +18,7 @@ const initialState: ContactEnquiryState = {
     message: ""
 }
 
-export function EnquiryForm({ onSuccess }: { onSuccess?: () => void }) {
+export function EnquiryForm() {
     const [state, formAction] = useActionState(sendContact, initialState)
     const router = useRouter()
     const navigationTriggeredRef = useRef(false)
@@ -36,14 +34,9 @@ export function EnquiryForm({ onSuccess }: { onSuccess?: () => void }) {
                 description: "Dziękujemy za wiadomość! Odpowiemy najszybciej jak to możliwe.",
                 duration: 2000,
             })
-
-            if(onSuccess) {
-                onSuccess()
-            } else {
-                router.push("/")
-            }
+            router.push("/")
         }
-    }, [state.success, router, onSuccess])
+    }, [state.success, router])
 
     return (
         <div className="w-full">
@@ -94,25 +87,8 @@ export function EnquiryForm({ onSuccess }: { onSuccess?: () => void }) {
                         </p>
                     )}
                 </div>
-                <SubmitButton />
+                <SubmitButton buttonText={"Wyślij wiadomość"} loadingText={"Wysyłanie..."} />
             </form>
         </div>
     )
 }
-
-function SubmitButton() {
-    const { pending } = useFormStatus()
-    return (
-        <Button type="submit" className="w-full" disabled={pending}>
-            {pending ? (
-                <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Wysyłanie...
-                </>
-            ) : (
-                "Wyślij wiadomość"
-            )}
-        </Button>
-    )
-}
-

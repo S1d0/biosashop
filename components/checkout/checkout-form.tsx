@@ -1,16 +1,15 @@
-'use client'
-
-import {PaymentElement, useCheckout} from "@stripe/react-stripe-js";
-import React, {useEffect, useState} from "react";
-import {Button} from "@/components/ui/button";
-import {AlertTriangle, Loader2} from "lucide-react";
-import { StripeCheckoutConfirmResult} from "@stripe/stripe-js";
-import {useOrderCheckout} from "@/components/checkout/v3/checkout-provider";
-import {formatPricePLN} from "@/lib/utils";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "../ui/card";
-import Link from "next/link";
-import {SubmitButton} from "@/components/checkout/SubmitButton";
-
+"use client"
+import { PaymentElement, useCheckout } from "@stripe/react-stripe-js"
+import type React from "react"
+import { useEffect, useState } from "react"
+import { Button } from "@/components/ui/button"
+import { AlertTriangle } from "lucide-react"
+import type { StripeCheckoutConfirmResult } from "@stripe/stripe-js"
+import { useOrderCheckout } from "@/components/checkout/v3/checkout-provider"
+import { formatPricePLN } from "@/lib/utils"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import Link from "next/link"
+import { SubmitButton } from "@/components/checkout/SubmitButton"
 
 function ErrorInfo() {
     return (
@@ -33,14 +32,13 @@ function ErrorInfo() {
 
 export default function CheckoutForm() {
     const checkout = useCheckout()
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+    const [paymentError, setPaymentError] = useState<string | null>(null)
     const [formattedAmount, setFormattedAmount] = useState<string>("")
     const { order } = useOrderCheckout()
 
     useEffect(() => {
         let amount = order.totalPrice
-        if(order.deliveryInfo) {
+        if (order.deliveryInfo) {
             amount += order.deliveryInfo.price
         }
         setFormattedAmount(formatPricePLN(amount))
@@ -49,19 +47,9 @@ export default function CheckoutForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
-        if (!order.shippingAddress || !order.deliveryInfo) {
-            let msg = "";
-            if (!order.shippingAddress) {
-                msg += "Ups brakuje jeszcze adresu dostawy!"
-            }
-            if (!order.deliveryInfo) {
-                msg += "\nUps brakuje jeszcze informacji o dostawie"
-            }
-            setError(msg)
-            return
-        }
+        // Clear previous errors
+        setPaymentError(null)
 
-        setIsLoading(true)
         try {
             const confirmResult: StripeCheckoutConfirmResult = await checkout.confirm({
                 email: order.shippingAddress?.email,
@@ -69,34 +57,37 @@ export default function CheckoutForm() {
                 shippingAddress: {
                     name: order.shippingAddress?.fullName,
                     address: {
-                        country: 'PL',
+                        country: "PL",
                         line1: order.shippingAddress?.address,
                         city: order.shippingAddress?.city,
-                        postal_code: order.shippingAddress?.postalCode
-                    }
-                }
-                }
-            )
+                        postal_code: order.shippingAddress?.postalCode,
+                    },
+                },
+            })
 
-            if (confirmResult.type == "error") {
-                setError(confirmResult.error.message || "Payment failed")
+            if (confirmResult.type == "error" && confirmResult.error.code !== null) {
+                console.log(confirmResult)
+                setPaymentError(confirmResult.error.message || "Płatność nie udana")
             }
         } catch (err) {
-            setError("An unexpected error occurred")
+            setPaymentError("Ups wygląda na to że coś się nie udało wróć na stronę główną i spróbuj jeszcze raz")
             console.error("Payment error:", err)
-        } finally {
-            setIsLoading(false)
         }
+    }
+
+    if(paymentError) {
+        return (
+            <ErrorInfo />
+        )
     }
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
-            {error && (<ErrorInfo/>)}
             <div>
                 <h4 className="text-lg font-semibold mb-4">Wybierz sposób płatności</h4>
                 <PaymentElement id="payment-element" />
             </div>
-            <SubmitButton buttonText={`Kup i zapłać ${order.totalPrice} delivery: ${order.deliveryInfo?.price}`} loadingText={"Przetwarzanie płatności"} />
+            <SubmitButton buttonText={`Kup i zapłać ${formattedAmount}`} loadingText={"Przetwarzanie płatności"} />
         </form>
     )
 }

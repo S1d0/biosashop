@@ -7,12 +7,12 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useEffect, useState } from "react"
 import { useOrderCheckout } from "@/components/checkout/v3/checkout-provider"
-import InpostSelection from "@/components/checkout/v3/inpost/inpost-selection"
+import InPostSelection from "@/components/checkout/v3/inpost/inpost-selection"
 import { formatPricePLN } from "@/lib/utils"
 import {Order} from "@/types/order";
 import {InPostPoint} from "@/types/inpost";
-import {updateShippingInfo} from "@/lib/actions/shipping/action";
 import {SubmitButton} from "@/components/checkout/SubmitButton";
+import {updateDeliveryInfo} from "@/lib/actions/delivery/action";
 
 export type DeliveryState = {
     success: boolean
@@ -46,7 +46,7 @@ export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTab
         order,
         selectedPoint,
     } = useOrderCheckout()
-    const [state, action] = useActionState(updateShippingInfo, initialDeliveryState)
+    const [state, action] = useActionState(updateDeliveryInfo, initialDeliveryState)
     const [currentDelivery, setDelivery] = useState(selectedDeliveryOption)
 
     useEffect(() => {
@@ -103,8 +103,8 @@ export default function CheckoutDeliveryForm({setActiveTabAction}: {setActiveTab
                     {state.errors?.method && <p className="text-red-500 text-sm">{state.errors.method[0]}</p>}
                 </div>
 
-                { selectedDeliveryOption.method === "inpost" && (
-                    <InpostSelection />
+                { selectedDeliveryOption.method === "parcel_locker" && (
+                    <InPostSelection />
                 )}
 
                 <div className="space-y-2">

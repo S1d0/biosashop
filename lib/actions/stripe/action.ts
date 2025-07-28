@@ -49,7 +49,6 @@ export async function createPaymentIntent(order: Order ) {
         metadata: {
             items: JSON.stringify(
                 order.items.map((item) => ({
-                    id: item.id,
                     name: item.name,
                     quantity: item.quantity,
                 })),

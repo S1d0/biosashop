@@ -19,7 +19,6 @@ export default function StripeCheckout({ order }: {order: Order}) {
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
-    // Fetch the client secret on component mount
     useEffect(() => {
         const getCheckout = async () => {
             try {
@@ -41,10 +40,7 @@ export default function StripeCheckout({ order }: {order: Order}) {
         getCheckout()
     }, [order])
 
-    // Create a fetchClientSecret function that returns the stored client secret
     const fetchClientSecret = useCallback(() => {
-        // We'll only render the CheckoutProvider when clientSecret is available,
-        // so this should always resolve successfully
         return Promise.resolve(clientSecret as string)
     }, [clientSecret])
 

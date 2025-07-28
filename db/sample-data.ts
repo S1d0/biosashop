@@ -131,3 +131,36 @@ export const contactInquries = [
         message: "Witam co polecacie na kwiatki i bluszcze? Ogrodek wielkosci 100 m2"
     }
 ]
+
+export const deliveryOptions = [
+    {
+        method: "standard",
+        price: 2999,
+        name: "Dostawa standardowa",
+        description: "5-7 dni robocze",
+    },
+    {
+        method: "express",
+        name: "Dostawa ekspresowa",
+        price: 3999,
+        description: "2-3 dni robocze",
+    },
+    {
+        method: "parcel_locker",
+        price: 1599,
+        name: "Paczkomat InPost",
+        description: "3-5 dni robocze",
+    },
+    {
+        method: "pickup",
+        price: 0,
+        name: "Odbiór osobisty",
+        description: "Odbierz swoje zamówienie osobiście"
+    },
+    {
+        method: "company",
+        price: 24900,
+        name: "Dostawa firmowa",
+        description: "Twoje zamówienie dostarczymy sami"
+    }
+]
