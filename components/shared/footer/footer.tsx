@@ -1,4 +1,4 @@
-import {DropletIcon, Globe, Leaf} from "lucide-react";
+import {DropletIcon, Leaf} from "lucide-react";
 import Link from "next/link";
 import {headers} from "next/headers";
 
@@ -7,6 +7,7 @@ type Category = {
     name: string;
     icon: React.ReactElement;
     description: string;
+    link: string;
 }
 
 const categories: Category[] = [
@@ -15,24 +16,21 @@ const categories: Category[] = [
         name: "Gleba",
         icon: <Leaf className="h-6 w-6 text-green-600" />,
         description: "Bogate w składniki odżywcze rozwiązania dla optymalnego wzrostu roślin",
+        link: "/terra"
     },
     {
         id: "water",
         name: "Woda",
         icon: <DropletIcon className="h-6 w-6 text-blue-600" />,
         description: "Produkty do oczyszczania i uzdatniania wody",
+        link: "/aqua"
     },
     {
         id: "garden",
         name: "Ogród",
         icon: <Leaf className="h-6 w-6 text-emerald-600" />,
         description: "Produkty do pielęgnacji ogrodu dla zdrowych roślin",
-    },
-    {
-        id: "eco",
-        name: "Ekologiczne",
-        icon: <Globe className="h-6 w-6 text-teal-600" />,
-        description: "Zrównoważone rozwiązania dla bardziej zielonej planety",
+        link: "/terra"
     },
 ]
 export default async function Footer() {
@@ -44,8 +42,8 @@ export default async function Footer() {
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
                     <div className="space-y-4">
                         <div className="flex items-center gap-2">
-                            <Leaf className="h-6 w-6 text-green-600"/>
-                            <span className="text-xl font-bold">Eco Family</span>
+                            <Leaf className="h-6 w-6 text-emerald-600"/>
+                            <span className="text-xl font-bold">Mikrobiosa</span>
                         </div>
                         <p className="text-sm text-muted-foreground">
                             Rodzinna firma tworząca produkty premium dla gleby i wody od 2000 roku.
@@ -60,9 +58,6 @@ export default async function Footer() {
                             <Link href="/products" className="text-sm text-muted-foreground hover:underline">
                                 Produkty
                             </Link>
-                            <Link href="/#about" className="text-sm text-muted-foreground hover:underline">
-                                O Nas
-                            </Link>
                             <Link href="/faq" className="text-sm text-muted-foreground hover:underline">
                                 FAQ
                             </Link>
@@ -72,7 +67,7 @@ export default async function Footer() {
                         <h3 className="text-lg font-medium">Kategorie</h3>
                         <nav className="flex flex-col gap-2">
                             {categories.map((category) => (
-                                <Link key={category.id} href="#"
+                                <Link key={category.id} href={category.link}
                                       className="text-sm text-muted-foreground hover:underline">
                                     {category.name}
                                 </Link>
@@ -82,9 +77,8 @@ export default async function Footer() {
                     <div className="space-y-4">
                         <h3 className="text-lg font-medium">Kontakt</h3>
                         <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                            <p>ul. Zielona 123</p>
-                            <p>Ekograd, 12-345</p>
-                            <p>kontakt@ecofamily.com</p>
+                            <p>ul. Zielona 123, Ekograd 12-345</p>
+                            <p>kontakt@mikroogranizmy.pl</p>
                             <p>+48 123 456 789</p>
                         </div>
                     </div>

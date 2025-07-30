@@ -135,8 +135,8 @@ function fromCartItems(items: CartItem[]): OrderItem[] {
             image: image,
             price: cartItem.product.price,
             quantity: cartItem.quantity,
+            size: cartItem.product.size,
             totalPrice: total,
-
         })
     })
 }

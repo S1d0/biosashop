@@ -25,7 +25,7 @@ interface CheckoutProviderProps {
 
 export function CheckoutProvider({children, initialOrder, availableDeliveryOptions}: CheckoutProviderProps) {
     // Initialize state from the provided order
-    const defaultOption: DeliveryOption = availableDeliveryOptions.find(op => op.method === "standard")!
+    const defaultOption: DeliveryOption = availableDeliveryOptions.find(op => op.method === "pickup")!
     const [selectedDeliveryOption, setDeliveryOption] = useState<DeliveryOption>(defaultOption)
     const [selectedPoint, setSelectedPoint] = useState<InPostPoint | null>(null)
     const [order, setOrder] = useState<Order>(initialOrder)

@@ -15,6 +15,10 @@ function getDeliveryDate(deliveryMethod: DeliveryMethod) {
             return addDays(now, 2)
         case "parcel_locker":
             return addDays(now, 3)
+        case "company":
+            return addDays(now, 3)
+        case "pickup":
+            return null
         default: throw new Error(`Unknown delivery method: ${deliveryMethod}`)
     }
 }
@@ -39,7 +43,7 @@ export async function updateDeliveryInfo(initState: DeliveryState, formData: For
     }
 
     const order = orderSchema.parse(rawOrderWithItems)
-    const rawDeliveryOption = await fetchDeliveryOption(order.items)
+    const rawDeliveryOption = await filterDeliveryOption(order.items)
         .then(options => options.find(option => option.method === deliveryMethod))
     if(!rawDeliveryOption) {
         return {
@@ -48,7 +52,6 @@ export async function updateDeliveryInfo(initState: DeliveryState, formData: For
             message: "Przykro nam ale tego dostawcy nie obsługujemy",
             inputs: null,
         }
-
     }
 
     const deliveryOption = deliveryInfoSchema.parse(rawDeliveryOption)
@@ -102,72 +105,121 @@ export async function updateDeliveryInfo(initState: DeliveryState, formData: For
     } as DeliveryState
 }
 
-export async function fetchDeliveryOption(orderItems: OrderItem[]): Promise<DeliveryOption[]> {
-    // Check if any item has name containing M, L, or XL
-    const hasLargeItems = orderItems.some(item =>
-        /\b(M|L|XL)\b/i.test(item.name)
-    );
+export async function getDeliveryOptions(): Promise<DeliveryOption[]> {
+    return prisma.deliveryOption.findMany();
+}
 
-    // Check if there are 5 or more items
-    const hasTooManyItems = orderItems.length >= 5;
-    const onlySpecialDelivery = orderItems.length >= 5 && hasLargeItems
+function containsLargeItems(orderItems: OrderItem[]) {
+    const largeSizes = ["5L", "10L", "20L"]
+    return orderItems.some(item => largeSizes.includes(item.size))
+}
 
-    // Filter delivery options based on conditions
-    let availableOptions = await prisma.deliveryOption.findMany();
+function containsManyItemWithSize(orderItems: OrderItem[], size: string, limit: number = 4) {
+    // should count all quantity for items size
+    return orderItems
+        .filter(item => item.size === size)
+        .reduce((total, item) => total + item.quantity, 0) > limit
+}
 
-    if(onlySpecialDelivery) {
-        return availableOptions.filter(option => option.method === "pickup" || option.method === "company")
-    }
+function qualifiesForParcelLocker(orderItems: OrderItem[]) {
+    return orderItems.every(item => item.size === "1L" && item.quantity <= 20)
+}
+function extractLiters(sizeStr: string): number {
+    const match = sizeStr.match(/(\d+(?:\.\d+)?)L/i);
+    return match ? parseFloat(match[1]) : 0;
+}
 
-    if(!hasTooManyItems && !hasLargeItems) {
-        return availableOptions
-            .filter(option => option.method !== "company")
-            .map(option => {
-                if(option.method !== "pickup" && option.method !== "parcel_locker") {
-                    return  {
-                        ...option,
-                        price: option.price - 1000
-                    }
-                } else return option
-            });
-    }
+function qualifiesForCompanyDelivery(orderItems: OrderItem[], limit: number): boolean {
+    return orderItems
+        .map(item => extractLiters(item.size) * item.quantity)
+        .reduce((total, liters) => total + liters, 0) > limit;
+}
 
-    // If has 5 or more items, remove express and inpost
-    if (hasTooManyItems) {
-        availableOptions = availableOptions.filter(option =>
-            option.method !== "parcel_locker" && option.method !== "company"
-        );
+function containsTotalVolumeBiggerThan(orderItems: OrderItem[], limit: number): boolean {
+    return orderItems
+        .map(item => extractLiters(item.size) * item.quantity)
+        .reduce((total, liters) => total + liters, 0) >= limit;
+}
 
-        if(hasLargeItems) {
-            availableOptions = availableOptions
-                .filter(option => option.method !== "express")
-                .map(option => {
-                        if(option.method !== "pickup") {
-                            return  {
-                                ...option,
-                                price: option.price + 1000
-                            }
-                        } else return option
-                    }
-                )
+function qualifiesForLargeOptionFee(orderItems: OrderItem[]) {
+    return containsLargeItems(orderItems) && (
+        containsManyItemWithSize(orderItems, "5L", 10)
+        || containsManyItemWithSize(orderItems, "10L", 5)
+        || containsManyItemWithSize(orderItems, "20L", 3)
+        || containsTotalVolumeBiggerThan(orderItems, 50)
+    )
+}
+
+function qualifiesForAdditionalFee2(orderItems: OrderItem[], limit: number = 50) {
+    return containsTotalVolumeBiggerThan(orderItems, limit)
+}
+
+function adjustDeliveryFee(options: DeliveryOption[], priceAdjust: number = 2500, excluded: DeliveryMethod[] = ["parcel_locker", "company", "pickup"]): DeliveryOption[] {
+    const adjusted: DeliveryOption[] =
+    options
+        .filter(op => !excluded.includes(op.method as DeliveryMethod))
+        .map(o => ({
+            ...o,
+            price: o.price + priceAdjust
+         })
+        )
+    const notAdjusted: DeliveryOption[] = options.filter(option => excluded.includes(option.method as DeliveryMethod));
+    return adjusted.concat(...notAdjusted);
+}
+
+export async function filterDeliveryOption(orderItems: OrderItem[]): Promise<DeliveryOption[]> {
+    const ADDITIONAL_FEE= 2500;
+    const ADDITIONAL_FEE_FOR_LARGE_ORDER = 4900;
+    const COMPANY_DELIVER_LITER_LIMIT = 250;
+    const allOptions = await getDeliveryOptions();
+    const canUseParcelLocker = qualifiesForParcelLocker(orderItems)
+    const canUseCompanyDelivery = qualifiesForCompanyDelivery(orderItems, COMPANY_DELIVER_LITER_LIMIT)
+    const canUseLargeOptionFee = qualifiesForLargeOptionFee(orderItems)
+
+    if(canUseParcelLocker) {
+        let optionsFitForParcel: DeliveryOption[] = [
+            allOptions.find(option => option.method === "pickup") as DeliveryOption,
+            allOptions.find(option => option.method === "parcel_locker") as DeliveryOption,
+            allOptions.find(option => option.method === "standard") as DeliveryOption,
+            allOptions.find(option => option.method === "express") as DeliveryOption,
+        ]
+        if(qualifiesForAdditionalFee2(orderItems, 10)) {
+            optionsFitForParcel = adjustDeliveryFee(optionsFitForParcel, 1000,  ["pickup"])
         }
-        return availableOptions;
+
+        return Promise.resolve(optionsFitForParcel)
     }
 
-    // If has large items (M, L, XL), remove inpost and company
-    if (hasLargeItems) {
-        availableOptions = availableOptions
-            .filter(option => option.method !== "parcel_locker" && option.method !== "company")
-            .map(option => {
-                if(option.method !== "pickup") {
-                    return  {
-                        ...option,
-                        price: option.price + 1000
-                    }
-                } else return option
-            });
+    if(canUseCompanyDelivery) {
+        const optionsForCompanyDelivery = [
+            allOptions.find(option => option.method === "pickup") as DeliveryOption,
+            allOptions.find(option => option.method === "company") as DeliveryOption,
+        ]
+
+        return Promise.resolve(optionsForCompanyDelivery)
     }
 
+    if(canUseLargeOptionFee) {
+        const options = [
+            allOptions.find(option => option.method === "pickup") as DeliveryOption,
+            allOptions.find(option => option.method === "standard") as DeliveryOption,
+            allOptions.find(option => option.method === "express") as DeliveryOption,
+        ]
+        const adjustedOptions: DeliveryOption[] = adjustDeliveryFee(options, ADDITIONAL_FEE_FOR_LARGE_ORDER, ["pickup"])
+        return Promise.resolve(adjustedOptions)
+    }
 
-    return Promise.resolve(availableOptions);
+    if(containsTotalVolumeBiggerThan(orderItems, 21)) {
+        const options = [
+            allOptions.find(option => option.method === "pickup") as DeliveryOption,
+            allOptions.find(option => option.method === "standard") as DeliveryOption,
+            allOptions.find(option => option.method === "express") as DeliveryOption,
+        ]
+
+        const adjustedOptions: DeliveryOption[] = adjustDeliveryFee(options, ADDITIONAL_FEE, ["pickup"])
+        return Promise.resolve(adjustedOptions)
+    }
+
+    const standardOptions: DeliveryOption[] = allOptions.filter(option => option.method !== "company" && option.method !== "parcel_locker")
+    return Promise.resolve(standardOptions)
 }

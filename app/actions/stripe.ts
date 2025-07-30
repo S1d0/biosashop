@@ -23,6 +23,8 @@ export async function createCheckoutSession(order: Order) {
         }))
 
         const orderId = order.id
+        const url = `https://${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}`
+        console.log(url)
         const session = await stripe.checkout.sessions.create({
             ui_mode: "custom",
             line_items: lineItems,

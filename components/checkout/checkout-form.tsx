@@ -3,13 +3,12 @@ import { PaymentElement, useCheckout } from "@stripe/react-stripe-js"
 import type React from "react"
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { AlertTriangle } from "lucide-react"
+import {AlertTriangle, Loader2} from "lucide-react"
 import type { StripeCheckoutConfirmResult } from "@stripe/stripe-js"
 import { useOrderCheckout } from "@/components/checkout/v3/checkout-provider"
 import { formatPricePLN } from "@/lib/utils"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import Link from "next/link"
-import { SubmitButton } from "@/components/checkout/SubmitButton"
 
 function ErrorInfo() {
     return (
@@ -35,6 +34,7 @@ export default function CheckoutForm() {
     const [paymentError, setPaymentError] = useState<string | null>(null)
     const [formattedAmount, setFormattedAmount] = useState<string>("")
     const { order } = useOrderCheckout()
+    const [isLoadind, setIsLoading] = useState(false)
 
     useEffect(() => {
         let amount = order.totalPrice
@@ -49,6 +49,7 @@ export default function CheckoutForm() {
 
         // Clear previous errors
         setPaymentError(null)
+        setIsLoading(true)
 
         try {
             const confirmResult: StripeCheckoutConfirmResult = await checkout.confirm({
@@ -72,6 +73,8 @@ export default function CheckoutForm() {
         } catch (err) {
             setPaymentError("Ups wygląda na to że coś się nie udało wróć na stronę główną i spróbuj jeszcze raz")
             console.error("Payment error:", err)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -87,7 +90,16 @@ export default function CheckoutForm() {
                 <h4 className="text-lg font-semibold mb-4">Wybierz sposób płatności</h4>
                 <PaymentElement id="payment-element" />
             </div>
-            <SubmitButton buttonText={`Kup i zapłać ${formattedAmount}`} loadingText={"Przetwarzanie płatności"} />
+            <Button type="submit" className="w-full" disabled={isLoadind}>
+                {isLoadind ? (
+                    <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+                        <p>Przetwarzanie płatności</p>
+                    </>
+                ) : (
+                    <p>Kup i zapłać {formattedAmount}</p>
+                )}
+            </Button>
         </form>
     )
 }

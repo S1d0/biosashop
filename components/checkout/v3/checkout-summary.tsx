@@ -1,7 +1,7 @@
 "use client"
 
-import {AlertTriangle, ArrowLeft, CheckCircle, MapPin, Phone, Truck} from "lucide-react"
-import {formatPhoneNumber, formatPricePLN} from "@/lib/utils"
+import {AlertTriangle, ArrowLeft, CheckCircle} from "lucide-react"
+import {formatPricePLN} from "@/lib/utils"
 import type {DeliveryInfo, OrderSummary, PaymentInfo} from "@/types/order"
 import { CldImage } from "next-cloudinary"
 import {Button} from "@/components/ui/button";
@@ -9,6 +9,8 @@ import Link from "next/link";
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {useCart} from "@/components/shared/cart/cart-provider";
 import {useEffect} from "react";
+import ShippingSummary from "@/components/summary/shipping-summary";
+import {ShippingAddress} from "@/types/address";
 
 interface CheckoutSummaryProps {
     summary: OrderSummary
@@ -42,7 +44,7 @@ function CheckoutError({ error }: { error: OrderSummary["error"] }) {
 
 export default function CheckoutSummary({ summary }: CheckoutSummaryProps) {
     const {clearCart} = useCart()
-    const { order, paymentStatus, customerEmail } = summary
+    const { order, paymentStatus } = summary
 
     useEffect(() => {
         clearCart()
@@ -56,16 +58,6 @@ export default function CheckoutSummary({ summary }: CheckoutSummaryProps) {
 
     if(!order) {
         throw new Error("Order not found")
-    }
-
-    const getStatusColor = (delivered: boolean) => {
-        return delivered ? "text-green-500" : "text-orange-500"
-    }
-
-    const getStatusText = (delivered: boolean, payed: boolean) => {
-        if (delivered) return "Dostarczony"
-        if (payed) return "W trakcie realizacji"
-        return "Oczekuje na płatność"
     }
 
     const getImage = (cldImg: string) => {
@@ -123,72 +115,12 @@ export default function CheckoutSummary({ summary }: CheckoutSummaryProps) {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 {/* Shipping Information - Left Side */}
                 <div className="lg:col-span-2 space-y-6">
-                    {/* Shipping Address */}
-                    {order.shippingAddress && (
-                        <div className="bg-gray-50 p-6 rounded-lg">
-                            <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                                <MapPin size={20} />
-                                Adres dostawy
-                            </h3>
-                            <div className="space-y-3">
-                                <div>
-                                    <p className="font-medium text-gray-900">{order.shippingAddress.fullName}</p>
-                                    {order.shippingAddress.phone && (
-                                    <p className="text-gray-600 mt-1 flex items-center gap-2">
-                                        <Phone size={14} className="text-gray-500" />
-                                        {formatPhoneNumber(order.shippingAddress.phone)}
-                                    </p>
-                                    )}
-                                </div>
-                                <div>
-                                    <p className="text-gray-600">{order.shippingAddress.address}</p>
-                                    <p className="text-gray-600">
-                                        {order.shippingAddress.postalCode} {order.shippingAddress.city}
-                                    </p>
-                                </div>
-                                {customerEmail && (
-                                    <div>
-                                        <p className="text-gray-600">{customerEmail}</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Shipping Status */}
-                    <div className="bg-gray-50 p-6 rounded-lg">
-                        <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                            <Truck size={20} />
-                            Status wysyłki
-                        </h3>
-                        <div className="space-y-4">
-                            <div>
-                                <p className="text-sm text-gray-500">Status</p>
-                                <p className={`font-bold text-lg ${getStatusColor(deliveryInfo.delivered)}`}>
-                                    {getStatusText(deliveryInfo.delivered, paymentInfo.payed)}
-                                </p>
-                            </div>
-
-                            {paymentInfo.paymentMethodDetails && (
-                                <div>
-                                    <p className="text-sm text-gray-500">Metoda płatności</p>
-                                    <p className="font-medium text-gray-900">{paymentInfo.paymentMethodDetails.type}</p>
-                                </div>
-                            )}
-
-                            {deliveryInfo.deliveredAt && (
-                                <div>
-                                    <p className="text-sm text-gray-500">Data dostawy</p>
-                                    <p className="font-medium text-green-600">{formatDate(deliveryInfo.deliveredAt)}</p>
-                                </div>
-                            )}
-
-                            <div>
-                                <p className="text-sm text-gray-500">Ostatnia aktualizacja</p>
-                                <p className="text-gray-600">{formatDate(order.updatedAt)}</p>
-                            </div>
-                        </div>
-                    </div>
+                    {/* Shipping Summary*/}
+                    <ShippingSummary deliveryInfo={order.deliveryInfo as DeliveryInfo}
+                                     paymentInfo={order.paymentInfo as PaymentInfo}
+                                     shippingAddress={order.shippingAddress as ShippingAddress}
+                                     updatedAt={order.updatedAt}
+                    />
                 </div>
 
                 {/* Order Details - Right Side */}
@@ -236,17 +168,19 @@ export default function CheckoutSummary({ summary }: CheckoutSummaryProps) {
 
                         <div className="p-6 border-t">
                             <div className="space-y-2">
-                                <div className="flex justify-between">
-                                    <span>Wartość produktów:</span>
-                                    <span>{formatPricePLN(order.totalPrice - (deliveryInfo.price || 0))} zł</span>
-                                </div>
-                                {deliveryInfo.price && (
+                                {deliveryInfo.price > 0 && (
+                                <>
+                                    <div className="flex justify-between">
+                                        <span>Wartość produktów:</span>
+                                        <span>{formatPricePLN(order.totalPrice - (deliveryInfo.price || 0))} zł</span>
+                                    </div>
                                     <div className="flex justify-between">
                                         <span>Koszt wysyłki:</span>
                                         <span>{formatPricePLN(deliveryInfo.price)}</span>
                                     </div>
+                                </>
                                 )}
-                                <div className="flex justify-between text-lg font-bold border-t pt-2">
+                                <div className="flex justify-between text-lg font-bold pt-2">
                                     <span>Łączna kwota:</span>
                                     <span className="text-primary">{formatPricePLN(order.totalPrice)} zł</span>
                                 </div>

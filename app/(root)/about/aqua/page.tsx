@@ -1,13 +1,13 @@
 "use client"
 
 import { motion } from "framer-motion"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Droplets, Fish, Sparkles, ArrowRight, Shield, Clock } from "lucide-react"
 import Link from "next/link";
 import {Variants} from "motion";
+import {CldImage} from "next-cloudinary";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -73,8 +73,9 @@ export default function AquaProductPage() {
 
                         <motion.div variants={itemVariants} className="relative">
                             <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
-                                <Image
-                                    src="/placeholder.svg?height=500&width=600&text=Aqua+Biosa+Product"
+
+                                <CldImage
+                                    src={"https://res.cloudinary.com/doxpruso9/image/upload/v1753854195/aqua1_anydf4.jpg"}
                                     alt="Aqua Biosa - Czysta woda z roślinami wodnymi"
                                     fill
                                     className="object-cover"
@@ -193,24 +194,24 @@ export default function AquaProductPage() {
                                 title: "Stawy i Jeziora",
                                 description:
                                     "Oczyszcza naturalne zbiorniki wodne, eliminuje zakwity glonów i przywraca przejrzystość wody",
-                                image: "pond with clear water and fish",
+                                image: "https://res.cloudinary.com/doxpruso9/image/upload/v1753854387/aqua2_swqml8.jpg"
                             },
                             {
                                 title: "Akwaria",
                                 description: "Utrzymuje zdrowe środowisko dla ryb, redukuje potrzebę częstych wymian wody",
-                                image: "beautiful aquarium with tropical fish",
+                                image: "https://res.cloudinary.com/doxpruso9/image/upload/v1753854934/fish_xdtbhu.jpg",
                             },
                             {
                                 title: "Baseny Kąpielowe",
                                 description: "Naturalna alternatywa dla chloru, bezpieczna dla skóry i oczu",
-                                image: "natural swimming pool with plants",
+                                image: "https://res.cloudinary.com/doxpruso9/image/upload/v1753855379/swim2_iweymt.jpg",
                             },
                         ].map((application, index) => (
                             <motion.div key={index} variants={itemVariants}>
                                 <Card className="overflow-hidden hover:shadow-lg transition-shadow">
                                     <div className="relative h-48">
-                                        <Image
-                                            src={`/placeholder.svg?height=200&width=300&text=${application.image}`}
+                                        <CldImage
+                                            src={application.image}
                                             alt={application.title}
                                             fill
                                             className="object-cover"

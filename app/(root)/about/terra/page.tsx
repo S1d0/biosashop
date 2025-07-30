@@ -1,13 +1,13 @@
 "use client"
 
 import { motion } from "framer-motion"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Leaf, TrendingUp, Shield, Clock, CheckCircle, ArrowRight, Beaker, Sprout, Globe } from "lucide-react"
 import {Variants} from "motion";
 import Link from "next/link";
+import {CldImage} from "next-cloudinary";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -36,7 +36,7 @@ export default function TerraProductPage() {
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section */}
-            <section className="py-20 bg-gradient-to-br from-green-50/50 to-emerald-50/30 dark:from-green-950/20 dark:to-emerald-950/10">
+            <section className="py-20 bg-gradient-to-br from-reen-50/50 to-emerald-50/30 dark:from-green-950/20 dark:to-emerald-950/10">
                 <div className="container px-4 md:px-6">
                     <motion.div
                         variants={containerVariants}
@@ -55,7 +55,7 @@ export default function TerraProductPage() {
                                 </Badge>
                             </div>
                             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-                                <span className="text-green-600">Terra Biosa</span>
+                                <span className="text-emerald-800/75">Terra Biosa</span>
                                 <br />
                                 <span className="text-2xl md:text-3xl text-muted-foreground font-normal">Przyszłość Uprawy Gleby</span>
                             </h1>
@@ -73,8 +73,8 @@ export default function TerraProductPage() {
 
                         <motion.div variants={itemVariants} className="relative">
                             <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
-                                <Image
-                                    src="/placeholder.svg?height=500&width=600&text=Terra+Biosa+Product"
+                                <CldImage
+                                    src={"https://res.cloudinary.com/doxpruso9/image/upload/v1753853745/soil2_yiif1q.jpg"}
                                     alt="Terra Biosa - Zdrowa gleba z rosnącymi roślinami"
                                     fill
                                     className="object-cover"
@@ -116,8 +116,8 @@ export default function TerraProductPage() {
                                 icon: TrendingUp,
                                 title: "Zwiększa Żyzność",
                                 description: "Do 300% wzrost produktywności gleby",
-                                color: "text-green-600",
-                                bgColor: "bg-green-100 dark:bg-green-900/30",
+                                color: "text-emerald-600",
+                                bgColor: "bg-emerald-100 dark:bg-emerald-900/30",
                             },
                             {
                                 icon: Shield,
@@ -191,8 +191,8 @@ export default function TerraProductPage() {
                                     },
                                 ].map((benefit, index) => (
                                     <motion.div key={index} variants={itemVariants} className="flex items-start space-x-4">
-                                        <div className="flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
-                                            <benefit.icon className="h-6 w-6 text-green-600" />
+                                        <div className="flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
+                                            <benefit.icon className="h-6 w-6 text-emerald-600" />
                                         </div>
                                         <div>
                                             <h3 className="text-lg font-semibold mb-2">{benefit.title}</h3>
@@ -205,9 +205,9 @@ export default function TerraProductPage() {
 
                         <motion.div variants={itemVariants}>
                             <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl">
-                                <Image
-                                    src="/placeholder.svg?height=400&width=500&text=Soil+Microorganisms"
-                                    alt="Mikroorganizmy w glebie"
+                                <CldImage
+                                    src={"https://res.cloudinary.com/doxpruso9/image/upload/v1753853307/soil_bfbbyd.jpg"}
+                                    alt={"Mikroorganizmy dla gleby"}
                                     fill
                                     className="object-cover"
                                 />
@@ -218,7 +218,7 @@ export default function TerraProductPage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-20 bg-gradient-to-br from-green-800/75 to-emerald-100/50 dark:from-green-950/20 dark:to-emerald-950/10 text-white">
+            <section className="py-20 bg-gradient-to-br from-emerald-800/75 to-emerald-100/50 dark:from-emerald-950/20 dark:to-emerald-950/10 text-white">
                 <div className="container px-4 md:px-6">
                     <motion.div
                         variants={containerVariants}
@@ -243,7 +243,7 @@ export default function TerraProductPage() {
                             <Button
                                 size="lg"
                                 variant="outline"
-                                className="border-white text-white hover:bg-white hover:text-green-600 bg-transparent"
+                                className="border-white text-white hover:bg-white hover:text-emerald-600 bg-transparent"
                                 asChild
                             >
                                 <Link href='/contact'>

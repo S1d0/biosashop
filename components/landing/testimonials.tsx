@@ -61,7 +61,7 @@ export default function TestimonialsPage({ className }: TestimonialsPageProps) {
                                             <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
                                         ))}
                                     </div>
-                                    <p className="text-muted-foreground mb-4">"{testimonial.content}"</p>
+                                    <p className="text-muted-foreground mb-4">&ldquo;{testimonial.content}&ldquo;</p>
                                     <div>
                                         <div className="font-semibold">{testimonial.name}</div>
                                         <div className="text-sm text-muted-foreground">{testimonial.role}</div>

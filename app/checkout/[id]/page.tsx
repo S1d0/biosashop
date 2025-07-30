@@ -5,7 +5,7 @@ import OrderSummary from "@/components/checkout/v3/order-summary";
 import {CheckoutProvider} from "@/components/checkout/v3/checkout-provider";
 import {fetchOrder} from "@/lib/actions/order/action";
 import {DeliveryOption} from "@/types/delivery";
-import {fetchDeliveryOption} from "@/lib/actions/delivery/action";
+import {filterDeliveryOption} from "@/lib/actions/delivery/action";
 import Link from "next/link";
 import {ArrowLeft} from "lucide-react";
 
@@ -16,7 +16,7 @@ export default async function Checkout({params}: { params: Promise<{ id: string 
         redirect("/")
     }
     const order: Order = await fetchOrder(orderId)
-    const deliveryOptions: DeliveryOption[] = await fetchDeliveryOption(order.items)
+    const deliveryOptions: DeliveryOption[] = await filterDeliveryOption(order.items)
 
     return (
         <main className="container mx-auto py-10 px-4">

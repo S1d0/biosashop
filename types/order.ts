@@ -15,7 +15,8 @@ export const orderItemSchema = z.object({
     image: z.string(),
     price: z.number(),
     quantity: z.number().int().positive(),
-    totalPrice: z.number().int()
+    totalPrice: z.number().int(),
+    size: z.string()
 });
 
 export const parcelLockerSchema = z.object({
@@ -28,7 +29,7 @@ export const parcelLockerSchema = z.object({
 // Delivery method information for JSON field in prisma Order model
 export const deliveryInfoSchema = z.object({
     method: DeliveryMethod.default("standard"),
-    price: z.number().int().positive(), // Price in cents
+    price: z.number().int().nonnegative(), // Price in cents
     notes: z.string().optional(),
     parcelLocker: parcelLockerSchema.optional().nullable(),
     estimatedDeliveryDate: dateSchema.optional().nullable(),
@@ -107,7 +108,6 @@ export type CreateOrder = z.infer<typeof createOrderSchema>;
 export type PaymentInfo = z.infer<typeof paymentInfoSchema>;
 
 export type CreateDeliveryInfo = z.infer<typeof createDeliveryInfoSchema>
-export type ParcelLocker = z.infer<typeof parcelLockerSchema>;
 export type DeliveryInfo = z.infer<typeof deliveryInfoSchema>;
 
 
@@ -125,5 +125,3 @@ export type PaymentError = {
     error: string
     details?: string
 }
-
-export type PaymentMethodDetails = z.infer<typeof paymentMethodDetailsSchema>
