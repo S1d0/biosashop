@@ -1,38 +1,12 @@
-import {DropletIcon, Leaf} from "lucide-react";
+import {Leaf} from "lucide-react";
 import Link from "next/link";
 import {headers} from "next/headers";
 
-type Category = {
-    id: string;
-    name: string;
-    icon: React.ReactElement;
-    description: string;
-    link: string;
-}
+const email = "kontakt@mikroorganizmy.pl"
+const phone = "+48 123 456 789"
+const companyName = "Mikroorganizmy";
+const address = "ul. Zielona 123, Ekograd 12-345"
 
-const categories: Category[] = [
-    {
-        id: "soil",
-        name: "Gleba",
-        icon: <Leaf className="h-6 w-6 text-green-600" />,
-        description: "Bogate w składniki odżywcze rozwiązania dla optymalnego wzrostu roślin",
-        link: "/terra"
-    },
-    {
-        id: "water",
-        name: "Woda",
-        icon: <DropletIcon className="h-6 w-6 text-blue-600" />,
-        description: "Produkty do oczyszczania i uzdatniania wody",
-        link: "/aqua"
-    },
-    {
-        id: "garden",
-        name: "Ogród",
-        icon: <Leaf className="h-6 w-6 text-emerald-600" />,
-        description: "Produkty do pielęgnacji ogrodu dla zdrowych roślin",
-        link: "/terra"
-    },
-]
 export default async function Footer() {
     const headerList = await headers()
     const currentDate = new Date(headerList.get('x-timestamp') || Date.now().toString())
@@ -64,27 +38,30 @@ export default async function Footer() {
                         </nav>
                     </div>
                     <div className="space-y-4">
-                        <h3 className="text-lg font-medium">Kategorie</h3>
-                        <nav className="flex flex-col gap-2">
-                            {categories.map((category) => (
-                                <Link key={category.id} href={category.link}
-                                      className="text-sm text-muted-foreground hover:underline">
-                                    {category.name}
-                                </Link>
-                            ))}
-                        </nav>
-                    </div>
-                    <div className="space-y-4">
                         <h3 className="text-lg font-medium">Kontakt</h3>
                         <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                            <p>ul. Zielona 123, Ekograd 12-345</p>
-                            <p>kontakt@mikroogranizmy.pl</p>
-                            <p>+48 123 456 789</p>
+                            <p>{address}</p>
+                            <p>{email}</p>
+                            <p>{phone}</p>
+                        </div>
+                    </div>
+                    <div className="space-y-4">
+                        <h3 className="text-lg font-medium">Regulamin</h3>
+                        <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+                            <Link href="/terms#privacy" className="text-sm text-muted-foreground hover:underline">
+                                Polityka prywatności
+                            </Link>
+                            <Link href="/terms" className="text-sm text-muted-foreground hover:underline">
+                                Regulamin
+                            </Link>
+                            <Link href="/terms#withdrawal" className="text-sm text-muted-foreground hover:underline">
+                               Odstąpienie od umowy
+                            </Link>
                         </div>
                     </div>
                 </div>
                 <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-                    <p>&copy; {currentDate.getFullYear()} Eco Family. Wszelkie prawa zastrzeżone.</p>
+                    <p>&copy; {currentDate.getFullYear()} {companyName}. Wszelkie prawa zastrzeżone.</p>
                 </div>
             </div>
         </footer>

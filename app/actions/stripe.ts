@@ -23,13 +23,13 @@ export async function createCheckoutSession(order: Order) {
         }))
 
         const orderId = order.id
-        const url = `https://${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}`
+        const url = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}`
         console.log(url)
         const session = await stripe.checkout.sessions.create({
             ui_mode: "custom",
             line_items: lineItems,
             mode: "payment",
-            return_url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/summary/${orderId}?sid={CHECKOUT_SESSION_ID}`,
+            return_url: `${url}/summary/${orderId}?sid={CHECKOUT_SESSION_ID}`,
             automatic_tax: { enabled: false },
             payment_method_types: ['p24', 'blik', 'klarna', 'link', 'card'],
             phone_number_collection: {

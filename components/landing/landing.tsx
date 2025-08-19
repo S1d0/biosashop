@@ -31,7 +31,7 @@ export default function LandingPage({products}: LandingPage2Props) {
     return (
         <>
             <ReactCookieBot language={"PL"} domainGroupId={"4fb4efaf-0ad6-4d46-8661-c5fe0b97ff02"} />
-            
+
             {/* Hero Section */}
             <Hero />
 
