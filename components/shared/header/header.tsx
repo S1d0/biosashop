@@ -3,11 +3,14 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ShoppingCart, Menu, X } from "lucide-react"
+import {ShoppingCart, Menu, X, User, Settings, History, LogOut, LogIn} from "lucide-react"
 import { ThemeToggle } from "@/components/theme/theme-toggle"
 import { useCart } from "@/components/shared/cart/cart-provider"
 import { ChevronDown, Leaf, Droplets } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import {DropdownMenu, DropdownMenuContent,
+    DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
+import {Button} from "@/components/ui/button";
 
 export function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -124,6 +127,7 @@ export function Header() {
                             <ShoppingCart className="h-5 w-5" />
                             <CartItems totalItems={totalItems} />
                         </button>
+                        <UserAccount />
                     </div>
                 </div>
             </div>
@@ -214,5 +218,69 @@ function CartItems({ totalItems }: { totalItems: number }) {
         >
             {totalItems}
         </motion.span>
+    )
+}
+
+function UserAccount() {
+    const [loggedIn, setLoggedIn] = useState(true)
+
+    return (
+        <section id="user-account">
+            {
+                loggedIn
+                    ? (<DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-full">
+                                <User className="h-5 w-5" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-56" align="end" forceMount>
+                            <DropdownMenuLabel className="font-normal">
+                                <div className="flex flex-col space-y-1">
+                                    <p className="text-sm font-medium leading-none">
+                                        {"Użytkownik"}
+                                    </p>
+                                    <p className="text-xs leading-none text-muted-foreground">{"test@test.pl"}</p>
+                                </div>
+                            </DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild>
+                                <Link href="/dashboard">
+                                    <User className="mr-2 h-4 w-4" />
+                                    <span>Panel klienta</span>
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href="/orders">
+                                    <History className="mr-2 h-4 w-4" />
+                                    <span>Historia zamówień</span>
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href="/profile">
+                                    <Settings className="mr-2 h-4 w-4" />
+                                    <span>Ustawienia profilu</span>
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => setLoggedIn(false)}>
+                                <LogOut className="mr-2 h-4 w-4" />
+                                <span>Wyloguj się</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>)
+                    : (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9"
+                            onClick={() => setLoggedIn(true)}
+                            aria-label="Zaloguj się"
+                        >
+                            <LogIn className="h-5 w-5" />
+                        </Button>
+                    )
+            }
+        </section>
     )
 }

@@ -72,7 +72,6 @@ export const paymentInfoSchema = z.object({
 export const orderSchema = z.object({
     id: z.string().uuid(),
     status: z.enum(["pending", "paid", "shipped", "delivered", "cancelled"]).default("pending"),
-    userId: z.string().uuid().optional().nullable(),
     shippingAddress: shippingAddressSchema.optional().nullable(),
     items: z.array(orderItemSchema),
     totalPrice: z.number().int(),
@@ -81,6 +80,9 @@ export const orderSchema = z.object({
     deliveryInfo: deliveryInfoSchema.nullable(),
     paymentInfo: paymentInfoSchema.nullable(),
 
+    stripeCustomerId: z.string().nullable(),
+    email: z.string().email().nullable(),
+    orderNumber: z.number(),
     createdAt: z.date(),
     updatedAt: z.date()
 });
@@ -91,9 +93,11 @@ export const createOrderSchema = orderSchema
         id: true,
         createdAt: true,
         updatedAt: true,
+        orderNumber: true,
+        stripeCustomerId: true,
+        email: true,
     })
     .extend({
-        userId: z.string().uuid().optional(),
         shippingAddress: shippingAddressSchema.optional(),
         totalPrice: z.number().int(),
         items: z.array(orderItemSchema),

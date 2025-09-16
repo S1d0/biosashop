@@ -47,6 +47,16 @@ export async function fetchOrder(id: string): Promise<Order> {
     }
 }
 
+export async function fetchOrdersByEmail(email: string): Promise<Order[]> {
+    const rawOrders = await prisma.order.findMany({
+        where: {
+            email: email
+        }
+    })
+
+    return rawOrders.map(order => orderSchema.parse(order))
+}
+
 function assertSession(session: Stripe.Checkout.Session) {
  if (!session || !session.id) {
      throw new Error("Invalid session provided");
@@ -60,7 +70,8 @@ export async function updateOrder(orderId: string, session: Stripe.Checkout.Sess
         // Create Payment Information
         const paymentInfo: PaymentInfo = createPaymentInfo(session, paymentIntent);
         const status = paymentInfo.status === "succeeded" ? "paid" : "pending";
-
+        const stripeCustomerId = session.customer as string
+        const email = session.customer_details?.email as string
         // Update the order in the database
         const updatedOrder = await prisma.order.update({
             where: {
@@ -70,6 +81,8 @@ export async function updateOrder(orderId: string, session: Stripe.Checkout.Sess
                 status: status,
                 paymentInfo: paymentInfo,
                 updatedAt: new Date(),
+                stripeCustomerId: stripeCustomerId,
+                email: email
             }
         })
 

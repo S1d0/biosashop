@@ -3,29 +3,90 @@
 import Stripe from "stripe"
 import {Order, OrderSummary} from "@/types/order";
 import {updateOrder} from "@/lib/actions/order/action";
+import {ShippingAddress} from "@/types/address";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2025-03-31.basil",
 })
 
+async function createOrGetCustomer(shippingAddress: ShippingAddress) {
+    const customerList = await stripe.customers.list({
+        email: shippingAddress.email,
+        limit: 1, // We only need to know if at least one exists
+    }).then((res) => res.data)
+
+    if (customerList.length > 0) {
+        return customerList[0].id
+    }
+
+    const newCustomer = await stripe.customers.create({
+        email: shippingAddress.email,
+        phone: shippingAddress.phone,
+        name: shippingAddress.fullName,
+        address: {
+            country: "PL",
+            line1: shippingAddress.address,
+            city: shippingAddress.city,
+            postal_code: shippingAddress.postalCode,
+        }
+    })
+
+    return newCustomer.id
+}
+
+function mapFromOrder(order: Order) {
+    return order.items.map((item) => ({
+        quantity: item.quantity,
+        price_data: {
+            currency: "pln",
+            unit_amount: item.price,
+            product_data: {
+                name: item.name,
+                images: [item.image]
+            }
+        }
+    }))
+}
+
+export interface BasicCustomer {
+    id: string
+    email: string
+    phone: string
+    name: string
+    address: {
+        country: string
+        line1: string
+        city: string
+        postal_code: string
+    }
+}
+
+export async function getCustomer(customerId: string): Promise<BasicCustomer> {
+    const customer = await stripe.customers.retrieve(customerId)
+    console.log(customer)
+    // return {
+    //     id: customer.id,
+    //     email: customer,
+    //     phone: customer.phone,
+    //     name: customer.name,
+    //     address: {
+    //         country: customer.address.country,
+    //         line1: customer.address.line1,
+    //         city: customer.address.city,
+    //         postal_code: customer.address.postal_code,
+    //     }
+    // }
+    return {} as BasicCustomer
+}
+
 export async function createCheckoutSession(order: Order) {
     try {
-        const lineItems = order.items.map((item) => ({
-            quantity: item.quantity,
-            price_data: {
-                currency: "pln",
-                unit_amount: item.price,
-                product_data: {
-                    name: item.name,
-                    images: [item.image]
-                }
-            }
-        }))
-
+        const customerId = await createOrGetCustomer(order.shippingAddress!)
+        const lineItems = mapFromOrder(order)
         const orderId = order.id
         const url = `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}`
-        console.log(url)
         const session = await stripe.checkout.sessions.create({
+            customer: customerId,
             ui_mode: "custom",
             line_items: lineItems,
             mode: "payment",
@@ -35,8 +96,12 @@ export async function createCheckoutSession(order: Order) {
             phone_number_collection: {
                 enabled: true,
             },
+            locale: "pl",
             metadata: {
                 orderId: orderId || "",
+                customerEmail: order.shippingAddress?.email || "",
+                customerPhone: order.shippingAddress?.phone || "",
+                customerName: order.shippingAddress?.fullName || ""
             }
         })
 
