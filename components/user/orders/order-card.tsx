@@ -27,34 +27,13 @@ export default function OrderCard({ order }: OrderCardProps) {
     const [statusIcon, setStatusIcon] = useState<JSX.Element>(<Package className="h-4 w-4" />)
     const [status, setStatus] = useState<string>("Zamówienie w przygotowaniu")
     const [deliveryMethod, setDeliveryMethod] = useState<string>("")
-    const [paymentStatus, setPaymentStatus] = useState<string>("")
 
     useEffect(() => {
         setStatus(getStatus(order.status, order.deliveryInfo!.method))
         setStatusIcon(getStatusIcon(order.status))
         setStatusColor(getStatusColor(order.status))
         setDeliveryMethod(getDeliveryMethod(order.deliveryInfo!.method))
-        setPaymentStatus(getPaymentStatus(order.paymentInfo!.status))
     }, [order])
-
-    function getPaymentStatus(status: string) {
-        switch (status) {
-            case "pending":
-                return "Oczekująca płatność"
-            case "processing":
-                return "Procesowanie płatności"
-            case "succeeded":
-                return "Opłacone"
-            case "failed":
-                return "Niepowodzenie"
-            case "canceled":
-                return "Anulowana"
-            case "requires_action":
-                return "Wymaga akcji"
-            default:
-                return "Wymaga akcji"
-        }
-    }
 
     function getDeliveryMethod(method: string) {
         switch (method) {

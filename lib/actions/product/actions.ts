@@ -10,12 +10,14 @@ export const getProductFamilies: () => Promise<ProductFamily[]> = cache(async ()
     const rawData = await prisma.productFamily.findMany({
         orderBy: { createdAt: "desc" },
         include: {
-            variants: true,
+            variants: {
+                orderBy: { createdAt: "asc" },
+            },
         },
-    })
+    });
 
-    return convertToPlain(rawData)
-})
+    return convertToPlain(rawData);
+});
 
 export async function getProductVariant(slug: string): Promise<ProductVariant> {
     const rawData = await prisma.productVariant.findFirst({

@@ -1,7 +1,7 @@
 'use client'
 
 import {Button} from "@/components/ui/button";
-import {Package, User} from "lucide-react";
+import {Package} from "lucide-react";
 import {useState} from "react";
 import UserOrders from "@/components/user/orders/ordes";
 import {Order} from "@/types/order";
@@ -33,18 +33,9 @@ export default function UserDashboard({orders, userProfile}: UserDashboardProps)
                         <Package className="mr-2 h-4 w-4"/>
                         Historia zamówień
                     </Button>
-                    {/**/}
-                    {/*<Button*/}
-                    {/*    onClick={() => setActiveSection("profile")}*/}
-                    {/*    className="w-full justify-start"*/}
-                    {/*    variant={activeSection === "profile" ? "default" : "ghost"}>*/}
-                    {/*    <User className="mr-2 h-4 w-4"/>*/}
-                    {/*    Profil*/}
-                    {/*</Button>*/}
                 </nav>
             </div>
 
-            {/*  Main Content  */}
             <div className="flex-1 p-8">
                 {activeSection === "orders" && <UserOrders orders={orders}/>}
             </div>
