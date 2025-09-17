@@ -26,12 +26,10 @@ export default function Home() {
       {/* Hero loads immediately */}
       <Hero />
       
-      {/* Products section with loading state */}
       <Suspense fallback={<ProductsSectionSkeleton />}>
         <ProductsSection />
       </Suspense>
       
-      {/* Other sections */}
       <TerraSection />
       <AquaSection />
       <AboutPage />

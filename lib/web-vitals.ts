@@ -1,8 +1,8 @@
 'use client'
 
-import { onCLS, onFCP, onINP, onLCP, onTTFB } from 'web-vitals'
+import { Metric, onCLS, onFCP, onINP, onLCP, onTTFB } from 'web-vitals'
 
-function sendToAnalytics(metric: any) {
+function sendToAnalytics(metric: Metric) {
   // You can integrate this with your analytics service
   // For now, we'll just log to console in development
   if (process.env.NODE_ENV === 'development') {
