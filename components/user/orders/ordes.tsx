@@ -59,15 +59,6 @@ export default function UserOrders({ orders }: UserOrdersProps) {
                         <div className="text-2xl font-bold">{orders.length}</div>
                     </CardContent>
                 </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Suma zakupów</CardTitle>
-                        <PiggyBank className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">{totalPrice}</div>
-                    </CardContent>
-                </Card>
                 <Card
                     className={`cursor-pointer transition-colors hover:bg-accent/50 ${
                         activeFilter === "delivered" ? "ring-2 ring-primary bg-accent/30" : ""
@@ -94,6 +85,15 @@ export default function UserOrders({ orders }: UserOrdersProps) {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{numberOfNotDelivered}</div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Suma zakupów</CardTitle>
+                        <PiggyBank className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">{totalPrice}</div>
                     </CardContent>
                 </Card>
             </div>

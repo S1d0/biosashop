@@ -6,7 +6,7 @@ export type SignInFormData = {
 }
 // Define the sign-in form schema
 export const SignInSchema = z.object({
-    email: z.string().email({ message: "Please enter a valid email address" }),
+    email: z.string().email({ message: "Please enter a valid [email] address" }),
     password: z.string().min(8, { message: "Password must be at least 8 characters" }),
 })
 
@@ -24,7 +24,7 @@ export type SignInFormState = {
 
 // Define the sign-in form schema
 export const SignUpSchema = z.object({
-    email: z.string().email({ message: "Please enter a valid email address" }),
+    email: z.string().email({ message: "Please enter a valid [email] address" }),
     password: z
         .string()
         .min(8, { message: 'Hasło musi mieć co najmniej 8 znaków' })

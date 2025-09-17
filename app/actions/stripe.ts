@@ -66,7 +66,7 @@ export async function getCustomer(customerId: string): Promise<BasicCustomer> {
     console.log(customer)
     // return {
     //     id: customer.id,
-    //     email: customer,
+    //     [email]: customer,
     //     phone: customer.phone,
     //     name: customer.name,
     //     address: {

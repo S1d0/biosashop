@@ -3,13 +3,14 @@
 import {SignInFormData, SignInFormState, SignInSchema} from "@/lib/actions/auth/types";
 import {createClient} from "@/supabase/server";
 import {redirect} from "next/navigation";
-
+import {headers} from "next/headers";
 
 export async function signInAction(state: SignInFormState, formData: FormData) {
     const rawData: SignInFormData = {
         email: formData.get("email") as string,
         password: formData.get("password") as string,
     }
+    const origin = (await headers()).get('origin')
     const validatedFormFields = SignInSchema.safeParse(rawData);
     const supabase = await createClient()
 
@@ -29,9 +30,9 @@ export async function signInAction(state: SignInFormState, formData: FormData) {
     if (error) {
         return {
             success: false,
-            message: "Błędny email lub hasło"
+            message: "Błędny [email] lub hasło"
         } 
     }
 
-    redirect('/private')
+    redirect(`${origin}/`)
 }

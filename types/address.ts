@@ -6,7 +6,7 @@ export const shippingAddressSchema = z.object({
         .string()
         .min(2, "Imię i nazwisko musi mieć co najmniej 2 znaki")
         .max(100, "Imię i nazwisko nie może być dłuższe niż 100 znaków"),
-    email: z.string().email("Nieprawidłowy format adresu email").min(1, "Email jest wymagany"),
+    email: z.string().email("Nieprawidłowy format adresu [email]").min(1, "Email jest wymagany"),
     address: z
         .string()
         .min(5, "Adres musi mieć co najmniej 5 znaków")

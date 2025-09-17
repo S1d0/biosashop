@@ -1,4 +1,4 @@
-"use server"
+"use cache"
 
 import {prisma} from "@/db/db";
 import {notFound} from "next/navigation";
@@ -46,6 +46,7 @@ export async function fetchOrder(id: string): Promise<Order> {
         throw error;
     }
 }
+
 
 export async function fetchOrdersByEmail(email: string): Promise<Order[]> {
     const rawOrders = await prisma.order.findMany({
