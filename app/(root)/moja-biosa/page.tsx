@@ -13,7 +13,6 @@ export default async function Page() {
         redirect('/login')
     }
 
-    console.log(data)
     const orders: Order[] = await fetchOrdersByEmail(data.user.email!)
     return (
         <UserDashboard orders={orders} userProfile={data.user}/>

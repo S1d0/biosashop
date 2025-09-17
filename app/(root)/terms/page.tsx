@@ -69,7 +69,7 @@ export default function TermsPage() {
                         <div className="space-y-8">
                             {/* Definitions */}
                             <section id="definitions">
-                                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
+                                <h2 className="text-3xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
                                     1. Definicje
                                 </h2>
                                 <div className="prose prose-gray max-w-none font-sans">
@@ -128,7 +128,7 @@ export default function TermsPage() {
 
                             {/* General Provisions */}
                             <section id="general">
-                                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
+                                <h2 className="text-3xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
                                     2. Postanowienia ogólne
                                 </h2>
                                 <div className="prose prose-gray max-w-none font-sans">
@@ -173,7 +173,7 @@ export default function TermsPage() {
 
                             {/* Usage Rules */}
                             <section id="usage">
-                                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
+                                <h2 className="text-3xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
                                     3. Zasady korzystania ze Sklepu Internetowego
                                 </h2>
                                 <div className="prose prose-gray max-w-none font-sans">
@@ -209,7 +209,7 @@ export default function TermsPage() {
 
                             {/* Contract Procedure */}
                             <section id="contract">
-                                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
+                                <h2 className="text-3xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
                                     4. Procedura zawarcia Umowy sprzedaży
                                 </h2>
                                 <div className="prose prose-gray max-w-none font-sans">
@@ -276,7 +276,7 @@ export default function TermsPage() {
 
                             {/* Delivery */}
                             <section id="delivery">
-                                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
+                                <h2 className="text-3xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
                                     5. Dostawa
                                 </h2>
                                 <div className="prose prose-gray max-w-none font-sans">
@@ -301,7 +301,7 @@ export default function TermsPage() {
 
                             {/* Prices and Payment */}
                             <section id="payment">
-                                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
+                                <h2 className="text-3xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
                                     6. Ceny i metody płatności
                                 </h2>
                                 <div className="prose prose-gray max-w-none font-sans">
@@ -323,7 +323,7 @@ export default function TermsPage() {
 
                             {/* Right to Withdraw */}
                             <section id="withdrawal">
-                                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
+                                <h2 className="text-3xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
                                     7. Prawo do odstąpienia od umowy
                                 </h2>
                                 <Card>
@@ -367,7 +367,7 @@ export default function TermsPage() {
 
                             {/* Complaints */}
                             <section id="complaints">
-                                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
+                                <h2 className="text-3xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
                                     9. Reklamacje dotyczące Towarów
                                 </h2>
                                 <div className="prose prose-gray max-w-none font-sans">
@@ -395,7 +395,7 @@ export default function TermsPage() {
 
                             {/* Privacy Policy */}
                             <section id="privacy">
-                                <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border font-sans">
+                                <h2 className="text-3xl font-bold text-foreground my-16 mb-4 pb-2 border-b border-border font-sans">
                                     POLITYKA PRYWATNOŚCI
                                 </h2>
                                 <div className="prose prose-gray max-w-none font-sans">
@@ -432,7 +432,7 @@ export default function TermsPage() {
                                                     <CardContent>
                                                         <p className="text-foreground leading-relaxed">
                                                             Przetwarzamy dane osobowe w celu świadczenia usług, w tym prowadzenia rejestracji i
-                                                            prowadzenia konta za pomocą strony www.dobryfarmer.pl. Podstawą przetwarzania danych
+                                                            prowadzenia konta za pomocą strony {companyWebsite}. Podstawą przetwarzania danych
                                                             osobowych jest wykonanie umowy o świadczenie usług drogą elektroniczną, zgodnie z
                                                             regulaminem (art. 6 ust. 1 lit. b RODO).
                                                         </p>
@@ -591,15 +591,6 @@ export default function TermsPage() {
                                             </Card>
                                         </div>
 
-                                        <div>
-                                            <h3 className="text-xl font-bold text-foreground mb-3 font-sans">Integracja z Trusted Shops</h3>
-                                            <p className="text-foreground leading-relaxed">
-                                                W celu prezentacji naszego Znaku Jakości Trusted Shops oraz zebranych opinii klientów, z naszą
-                                                stroną internetową zintegrowany jest Trustbadge firmy Trusted Shops. Służy to realizacji naszego
-                                                prawnie uzasadnionego interesu w optymalnym prezentowaniu oferty na rynku.
-                                            </p>
-                                        </div>
-
                                         <Card className="bg-primary/5 border-primary/20">
                                             <CardContent className="pt-6">
                                                 <div className="text-center">
@@ -608,7 +599,7 @@ export default function TermsPage() {
                                                     </h4>
                                                     <p className="text-foreground">
                                                         W przypadku pytań dotyczących niniejszej Polityki prywatności lub w celu skorzystania z
-                                                        przysługujących praw, prosimy o kontakt na adres email: <strong>info@dobryfarmer.pl</strong>
+                                                        przysługujących praw, prosimy o kontakt na adres email: <strong>{companyEmail}</strong>
                                                     </p>
                                                 </div>
                                             </CardContent>

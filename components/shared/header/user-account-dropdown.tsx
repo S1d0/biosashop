@@ -14,12 +14,14 @@ import {createClient} from "@/supabase/client";
 import {useRouter} from "next/navigation";
 import {LogIn, LogOut, Package, User} from "lucide-react";
 import Link from "next/link";
+import LoginModal from "@/components/auth/login-modal";
 
 export default function UserAccountDropdown() {
     const [user, setUser] = useState<SupabaseUser | null>()
     const [isLoading, setIsLoading] = useState(true)
     const router = useRouter()
     const supabaseClient = createClient()
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
 
     useEffect(() => {
         const getUser = async () => {
@@ -67,13 +69,14 @@ export default function UserAccountDropdown() {
 
     if (!user && !isLoading) {
         return (
-            <Button asChild variant="ghost" size="sm">
-                <Link href="/login" className="flex items-center gap-2">
+            <>
+                <Button variant="ghost" size="sm" onClick={() => setIsLoginModalOpen(true)} className="flex items-center gap-2">
                     <LogIn className="h-4 w-4" />
                     Zaloguj się
-                </Link>
-            </Button>
-        )
+                </Button>
+                <LoginModal open={isLoginModalOpen} onOpenChange={setIsLoginModalOpen} />
+            </>
+    )
     }
 
     return (
