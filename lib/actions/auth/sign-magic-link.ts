@@ -34,7 +34,7 @@ export default async function signWithMagicLink(state: SignWithMagicLinkState, f
             email: email,
             options: {
                 shouldCreateUser: true,
-                emailRedirectTo: `${origin}/auth/confirm`
+                emailRedirectTo: `${origin}/oauth/confirm`
             }
         })
 

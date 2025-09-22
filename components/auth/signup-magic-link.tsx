@@ -1,7 +1,7 @@
 'use client'
 import Form from "next/form";
 import React, {useActionState} from "react";
-import signWithMagicLink from "@/components/auth/sign-magic-link";
+import signWithMagicLink from "@/lib/actions/auth/sign-magic-link";
 import {SignWithMagicLinkState} from "@/lib/actions/auth/types";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
