@@ -1,5 +1,4 @@
 import Footer from "@/components/shared/footer/footer";
-import {Toaster} from "@/components/ui/toaster";
 import React from "react";
 import {Header} from "@/components/shared/header/header";
 import {CartProvider} from "@/components/shared/cart/cart-provider";
@@ -19,7 +18,6 @@ export default function RootLayout({
                     <div className="flex-grow">{children}</div>
                     <Footer/>
                 </div>
-                <Toaster/>
                 <CartSheet />
                 <CheckoutOverlay />
             </CartProvider>

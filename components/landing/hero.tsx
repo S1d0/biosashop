@@ -1,3 +1,5 @@
+'use client'
+
 import Image from "next/image";
 import {
      ChevronDown,
@@ -22,7 +24,17 @@ export default function Hero() {
         <section className="relative h-[90vh] flex items-center justify-center overflow-hidden scroll-auto">
             {/* Background Image */}
             <div className="absolute inset-0 z-0">
-                <Image src="/hero/hero.jpg" alt="Wheat Field" fill className="object-cover" priority/>
+                <Image 
+                    src="/hero/hero.jpg" 
+                    alt="Wheat Field" 
+                    fill 
+                    className="object-cover" 
+                    priority
+                    quality={85}
+                    sizes="100vw"
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                />
             </div>
 
             {/* Glass Effect Container */}

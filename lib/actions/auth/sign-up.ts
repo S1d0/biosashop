@@ -2,6 +2,7 @@
 
 import {SignUpFormData, SignUpFormState, SignUpSchema} from "@/lib/actions/auth/types";
 import {createClient} from "@/supabase/server";
+import {redirect} from "next/navigation";
 
 
 export async function signUpAction(signUpFormState: SignUpFormState, formData: FormData) {
@@ -24,7 +25,7 @@ export async function signUpAction(signUpFormState: SignUpFormState, formData: F
     const {email, password} = validationResult.data;
 
     const supabase = await createClient()
-    const {error} = await supabase.auth.signUp({
+    const {error, data} = await supabase.auth.signUp({
         email: email,
         password: password,
     })
@@ -36,9 +37,5 @@ export async function signUpAction(signUpFormState: SignUpFormState, formData: F
         }
     }
 
-    return {
-        success: true,
-        message: `Super! Konto dla ${email} zostało utworzone.`,
-        inputs: rawData
-    } as SignUpFormState
+    redirect(`/notification/email/${data.user?.email}`)
 }

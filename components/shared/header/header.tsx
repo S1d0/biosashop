@@ -3,11 +3,12 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ShoppingCart, Menu, X } from "lucide-react"
+import {ShoppingCart, Menu, X } from "lucide-react"
 import { ThemeToggle } from "@/components/theme/theme-toggle"
 import { useCart } from "@/components/shared/cart/cart-provider"
 import { ChevronDown, Leaf, Droplets } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import UserAccountDropdown from "@/components/shared/header/user-account-dropdown";
 
 export function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -124,6 +125,7 @@ export function Header() {
                             <ShoppingCart className="h-5 w-5" />
                             <CartItems totalItems={totalItems} />
                         </button>
+                        <UserAccountDropdown />
                     </div>
                 </div>
             </div>

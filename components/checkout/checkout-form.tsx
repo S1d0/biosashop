@@ -53,7 +53,6 @@ export default function CheckoutForm() {
 
         try {
             const confirmResult: StripeCheckoutConfirmResult = await checkout.confirm({
-                email: order.shippingAddress?.email,
                 phoneNumber: order.shippingAddress?.phone,
                 shippingAddress: {
                     name: order.shippingAddress?.fullName,
@@ -71,7 +70,7 @@ export default function CheckoutForm() {
                 setPaymentError(confirmResult.error.message || "Płatność nie udana")
             }
         } catch (err) {
-            setPaymentError("Ups wygląda na to że coś się nie udało wróć na stronę główną i spróbuj jeszcze raz")
+            setPaymentError("Ups wygląda na to że coś się nie udało, wróć na stronę główną i spróbuj jeszcze raz")
             console.error("Payment error:", err)
         } finally {
             setIsLoading(false)

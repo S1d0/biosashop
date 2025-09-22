@@ -5,42 +5,23 @@ import {Button} from "@/components/ui/button"
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,} from "@/components/ui/card"
 import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
-import React, {useActionState, useEffect, useState} from "react";
+import React, {useActionState, useState} from "react";
 import {Eye, EyeOff, Loader2} from "lucide-react";
 import Form from "next/form";
 import {SignGoogle} from "@/components/auth/signin-google";
 import Link from "next/link";
 import {Separator} from "@/components/ui/separator";
 import {signUpAction} from "@/lib/actions/auth/sign-up";
-import {useToast} from "@/hooks/use-toast";
-import {useRouter} from "next/navigation";
 import {SignUpFormState} from "@/lib/actions/auth/types";
 
 export function SignUpForm({
                                className,
                                ...props
                            }: React.ComponentPropsWithoutRef<"div">) {
-    const router = useRouter();
 
     const [showPassword, setShowPassword] = useState(false)
     const initState: SignUpFormState = {}
     const [state, action, pending] = useActionState(signUpAction, initState)
-
-    const {toast} = useToast()
-
-    useEffect(() => {
-        if (state?.success) {
-            toast({
-                title: "Twoje konto zostało utworzone",
-                description: `${state.message}`,
-            })
-            const redirectTimer = setTimeout(() => {
-                router.push("/private")
-            }, 500)
-            return () => clearTimeout(redirectTimer)
-        }
-
-    }, [state?.success, state.message, router, toast])
 
     return (
         <div className={cn("flex flex-col gap-6", className)} {...props}>

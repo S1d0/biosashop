@@ -32,61 +32,32 @@ const itemVariants = {
 export default function CtaPage() {
     return (
         <section className="py-20 bg-primary text-primary-foreground relative overflow-hidden">
-            {/* Animated background elements */}
+            {/* Simplified background elements - reduced for performance */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <motion.div
                     animate={{
-                        y: [-20, 20, -20],
+                        y: [-10, 10, -10],
                         rotate: [0, 180, 360],
-                        scale: [1, 1.2, 1],
-                    }}
-                    transition={{
-                        duration: 8,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: "easeInOut",
-                    }}
-                    className="absolute top-16 left-16 w-32 h-32 bg-primary-foreground/10 rounded-full"
-                />
-                <motion.div
-                    animate={{
-                        y: [30, -30, 30],
-                        rotate: [360, 180, 0],
-                        scale: [1.2, 1, 1.2],
-                    }}
-                    transition={{
-                        duration: 10,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: "easeInOut",
-                        delay: 2,
-                    }}
-                    className="absolute top-32 right-20 w-24 h-24 bg-primary-foreground/5 rounded-full"
-                />
-                <motion.div
-                    animate={{
-                        y: [-15, 15, -15],
-                        x: [-10, 10, -10],
-                        rotate: [0, -90, -180],
-                    }}
-                    transition={{
-                        duration: 6,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: "easeInOut",
-                        delay: 4,
-                    }}
-                    className="absolute bottom-20 left-1/4 w-20 h-20 bg-primary-foreground/8 rounded-full"
-                />
-                <motion.div
-                    animate={{
-                        y: [25, -25, 25],
-                        rotate: [0, 270, 360],
                     }}
                     transition={{
                         duration: 12,
                         repeat: Number.POSITIVE_INFINITY,
-                        ease: "easeInOut",
-                        delay: 1,
+                        ease: "linear",
                     }}
-                    className="absolute bottom-32 right-1/3 w-16 h-16 bg-primary-foreground/6 rounded-full"
+                    className="absolute top-16 left-16 w-32 h-32 bg-primary-foreground/10 rounded-full will-change-transform"
+                />
+                <motion.div
+                    animate={{
+                        y: [15, -15, 15],
+                        rotate: [360, 180, 0],
+                    }}
+                    transition={{
+                        duration: 15,
+                        repeat: Number.POSITIVE_INFINITY,
+                        ease: "linear",
+                        delay: 3,
+                    }}
+                    className="absolute bottom-32 right-1/3 w-20 h-20 bg-primary-foreground/8 rounded-full will-change-transform"
                 />
             </div>
 

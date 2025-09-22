@@ -60,20 +60,6 @@ enum EnquiryStatus {
   SPAM
 }
 
-model Cart {
-  id            String   @id @default(uuid()) @db.Uuid
-  userId        String?
-  sessionCartId String
-  items         Json[]   @default([]) @db.Json
-  itemsPrice    Int
-  totalPrice    Int
-  shippingPrice Int
-  createdAt     DateTime @default(now()) @db.Timestamp(6)
-
-  @@index([userId])
-  @@index([sessionCartId])
-}
-
 enum OrderStatus {
   pending
   paid
@@ -83,20 +69,24 @@ enum OrderStatus {
 }
 
 model Order {
-  id              String      @id @default(uuid()) @db.Uuid
-  status          OrderStatus @default(pending) // pending, paid, shipped, delivered, cancelled
-  userId          String?     @db.Uuid
-  shippingAddress Json?       @db.Json
-  items           Json        @db.Json // Array of OrderItem objects
-  totalPrice      Int
-  deliveryInfo    Json?       @db.Json // DeliveryInfo object
-  paymentInfo     Json?       @db.Json // PaymentInfo object
-  createdAt       DateTime    @default(now()) @db.Timestamp(6)
-  updatedAt       DateTime    @updatedAt @db.Timestamp(6)
+  id               String      @id @default(uuid()) @db.Uuid
+  status           OrderStatus @default(pending)
+  email            String?     @db.VarChar(254)
+  stripeCustomerId String?     @db.VarChar(254)
+  orderNumber      Int? // Trigger will set this automatically
+  shippingAddress  Json?       @db.Json
+  items            Json        @db.Json
+  totalPrice       Int
+  deliveryInfo     Json?       @db.Json
+  paymentInfo      Json?       @db.Json
+  createdAt        DateTime    @default(now()) @db.Timestamp(6)
+  updatedAt        DateTime    @updatedAt @db.Timestamp(6)
 
-  @@index([userId])
+  @@unique([email, orderNumber])
+  @@index([email])
   @@index([status])
   @@index([createdAt])
+  @@index([orderNumber])
 }
 
 model DeliveryOption {

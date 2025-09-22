@@ -89,7 +89,7 @@ export default function CheckoutSummary({ summary }: CheckoutSummaryProps) {
 
                 <div className="mt-6 flex flex-col items-center justify-center">
                     <p className="font-medium">
-                        Numer zamówienia: <span className="text-gray-900 font-bold">#{order.id}</span>
+                        Numer zamówienia: <span className="text-gray-900 font-bold">#{order.orderNumber}</span>
                     </p>
                     {paymentInfo?.payedAt && (
                         <p className="font-medium">

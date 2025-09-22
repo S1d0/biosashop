@@ -19,7 +19,7 @@ export default function LandingProducts({products}: LandingProductsProps) {
                             Nasze <span className="text-primary">Produkty</span>
                         </h2>
                         <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                            Wybierz rozmiar, który odpowiada Twoim potrzebomRetryClaude can make mistakes.
+                            Wybierz rozmiar, który odpowiada Twoim potrzebom.
                         </p>
                     </div>
                 </div>

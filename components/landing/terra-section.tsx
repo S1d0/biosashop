@@ -137,12 +137,20 @@ export default function TerraSection() {
                         </motion.div>
 
                         <motion.div variants={itemVariants}>
-                            <Button size="lg" className="group" asChild>
-                                <Link href="/about/terra">
-                                    Poznaj Terra
-                                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                </Link>
-                            </Button>
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <Button size="lg" className="group" asChild>
+                                    <Link href="/products?filter=terra">
+                                        Zobacz produkty Terra
+                                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                    </Link>
+                                </Button>
+                                <Button size="lg" variant="outline" className="group" asChild>
+                                    <Link href="/about/terra">
+                                        Poznaj Terra
+                                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                    </Link>
+                                </Button>
+                            </div>
                         </motion.div>
                     </div>
 

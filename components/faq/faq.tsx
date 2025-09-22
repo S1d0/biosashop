@@ -20,7 +20,7 @@ const faqData: FAQItem[] = [
         id: "1",
         question: "Jak mogę złożyć zamówienie?",
         answer:
-            "Zamówienie możesz złożyć na kilka sposobów: przez naszą stronę internetową, telefonicznie pod numerem +48 123 456 789, lub wysyłając email na kontakt@firma.pl. Proces zamówienia online jest bardzo prosty - wystarczy wybrać produkty, dodać je do koszyka i przejść przez proces płatności.",
+            "Zamówienie możesz złożyć na kilka sposobów: przez naszą stronę internetową, telefonicznie pod numerem +48 123 456 789, lub wysyłając [email] na kontakt@firma.pl. Proces zamówienia online jest bardzo prosty - wystarczy wybrać produkty, dodać je do koszyka i przejść przez proces płatności.",
         category: "Zamówienia",
     },
     {
@@ -34,7 +34,7 @@ const faqData: FAQItem[] = [
         id: "3",
         question: "Ile czasu trwa dostawa?",
         answer:
-            "Standardowa dostawa trwa 2-3 dni robocze. Dostawa ekspresowa (następny dzień roboczy) jest dostępna za dodatkową opłatą. Wysyłamy zamówienia od poniedziałku do piątku. Otrzymasz numer śledzenia przesyłki na email.",
+            "Standardowa dostawa trwa 2-3 dni robocze. Dostawa ekspresowa (następny dzień roboczy) jest dostępna za dodatkową opłatą. Wysyłamy zamówienia od poniedziałku do piątku. Otrzymasz numer śledzenia przesyłki na [email].",
         category: "Dostawa",
     },
     {
@@ -48,7 +48,7 @@ const faqData: FAQItem[] = [
         id: "5",
         question: "Jak sprawdzić status mojego zamówienia?",
         answer:
-            "Status zamówienia możesz sprawdzić logując się na swoje konto na naszej stronie. Dodatkowo wysyłamy automatyczne powiadomienia email o każdej zmianie statusu zamówienia oraz numer do śledzenia przesyłki.",
+            "Status zamówienia możesz sprawdzić logując się na swoje konto na naszej stronie. Dodatkowo wysyłamy automatyczne powiadomienia [email] o każdej zmianie statusu zamówienia oraz numer do śledzenia przesyłki.",
         category: "Zamówienia",
     },
     {
@@ -69,7 +69,7 @@ const faqData: FAQItem[] = [
         id: "8",
         question: "Jak skontaktować się z obsługą klienta?",
         answer:
-            "Obsługa klienta jest dostępna od poniedziałku do piątku w godzinach 9:00-17:00. Możesz skontaktować się z nami telefonicznie (+48 123 456 789), przez email (kontakt@firma.pl) lub chat na stronie internetowej.",
+            "Obsługa klienta jest dostępna od poniedziałku do piątku w godzinach 9:00-17:00. Możesz skontaktować się z nami telefonicznie (+48 123 456 789), przez [email] (kontakt@firma.pl) lub chat na stronie internetowej.",
         category: "Kontakt",
     },
 ]

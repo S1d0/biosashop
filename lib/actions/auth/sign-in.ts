@@ -4,34 +4,57 @@ import {SignInFormData, SignInFormState, SignInSchema} from "@/lib/actions/auth/
 import {createClient} from "@/supabase/server";
 import {redirect} from "next/navigation";
 
+export async function signInAction(state: SignInFormState, formData: FormData): Promise<SignInFormState> {
+    const supabase = await createClient()
 
-export async function signInAction(state: SignInFormState, formData: FormData) {
     const rawData: SignInFormData = {
         email: formData.get("email") as string,
         password: formData.get("password") as string,
     }
-    const validatedFormFields = SignInSchema.safeParse(rawData);
-    const supabase = await createClient()
 
-    if(validatedFormFields.error) {
+    const validateFormFields = SignInSchema.safeParse(rawData)
+
+    if (!validateFormFields.success) {
+        const fieldErrors = validateFormFields.error.flatten().fieldErrors
         return {
             success: false,
-            errors: validatedFormFields.error.flatten().fieldErrors,
-            inputs: rawData
-        } as SignInFormState
+            errors: {
+                email: fieldErrors.email,
+                password: fieldErrors.password,
+            },
+            inputs: rawData,
+        }
     }
-    const { password, email } = validatedFormFields.data
+
+    const { email, password } = validateFormFields.data
+
     const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
     })
 
     if (error) {
+        let errorMessage = error.message
+
+        // Handle common authentication errors with user-friendly messages
+        if (error.message.includes("Invalid login credentials")) {
+            errorMessage = "Nieprawidłowy email lub hasło. Sprawdź swoje dane i spróbuj ponownie."
+        } else if (error.message.includes("Email not confirmed")) {
+            errorMessage = "Twoje konto nie zostało jeszcze potwierdzone. Sprawdź swoją skrzynkę email."
+        } else if (error.message.includes("Too many requests")) {
+            errorMessage = "Zbyt wiele prób logowania. Spróbuj ponownie za kilka minut."
+        } else if (error.message.includes("User not found")) {
+            errorMessage = "Nie znaleziono konta z tym adresem email. Sprawdź email lub zarejestruj się."
+        }
+
         return {
             success: false,
-            message: "Błędny email lub hasło"
-        } 
+            errors: {
+                _form: [errorMessage],
+            },
+            inputs: rawData,
+        }
     }
 
-    redirect('/private')
+    redirect("/moja-biosa")
 }
