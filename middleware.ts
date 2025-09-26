@@ -14,6 +14,7 @@ export const config = {
          * - Auth-related pages
          * Exclude static files, images, and public pages
          */
+        "/admin/:path*",
         "/moja-biosa/:path*",
         "/api/:path*", 
         "/auth/:path*",

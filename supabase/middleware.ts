@@ -36,9 +36,22 @@ export async function updateSession(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     if (request.nextUrl.pathname.startsWith("/moja-biosa") && !user) {
-        console.log("Middleware - Redirecting to login")
         const url = request.nextUrl.clone()
         url.pathname = "/login"
+        return NextResponse.redirect(url)
+    }
+
+    if(request.nextUrl.pathname.startsWith("/admin") && !user) {
+        const url = request.nextUrl.clone()
+        url.pathname = "/"
+        return NextResponse.redirect(url)
+    }
+
+    // Take from .env SUPER_USER_IDS and split or set empty ""
+    const superUserIds = process.env.SUPER_USER_IDS?.split(",") || []
+    if(request.nextUrl.pathname.startsWith("/admin") && !superUserIds.includes(user!.id)) {
+        const url = request.nextUrl.clone()
+        url.pathname = "/"
         return NextResponse.redirect(url)
     }
 

@@ -83,6 +83,8 @@ export const orderSchema = z.object({
     stripeCustomerId: z.string().nullable(),
     email: z.string().email().nullable(),
     orderNumber: z.number(),
+    userId: z.string().uuid().nullable(),
+    
     createdAt: z.date(),
     updatedAt: z.date()
 });
@@ -96,6 +98,7 @@ export const createOrderSchema = orderSchema
         orderNumber: true,
         stripeCustomerId: true,
         email: true,
+        userId: true
     })
     .extend({
         shippingAddress: shippingAddressSchema.optional(),
